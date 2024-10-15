@@ -25,7 +25,7 @@ const chartData = [{ month: "january", desktop: 1260, mobile: 570 }]
 const chartConfig = {
   desktop: {
     label: "Completed",
-    color: "#8B",
+    color: "red",
   },
   mobile: {
     label: "In Progress",
