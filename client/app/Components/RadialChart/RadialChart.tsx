@@ -24,8 +24,8 @@ const chartData = [{ month: "january", desktop: 1260, mobile: 570 }]
 
 const chartConfig = {
   desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+    label: "Completed",
+    color: "#8B",
   },
   mobile: {
     label: "Mobile",
@@ -45,7 +45,7 @@ function RadialChart() {
       <CardContent className="flex flex-1 items-center pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[250px] h-5"
+          className="mx-auto aspect-square w-full max-w-[250px] h-23"
         >
           <RadialBarChart
             data={chartData}
@@ -100,14 +100,6 @@ function RadialChart() {
           </RadialBarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   )
 }
