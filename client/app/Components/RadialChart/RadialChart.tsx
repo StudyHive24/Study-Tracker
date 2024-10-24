@@ -41,8 +41,8 @@ const chartConfig = {
     label: "Chrome",
     color: "hsl(var(--chart-1))",
   },
-  safari: {
-    label: "Safari",
+  mobile: {
+    label: "Mobile",
     color: "hsl(var(--chart-2))",
   },
   firefox: {
