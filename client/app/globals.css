@@ -59,7 +59,7 @@
 }
 
 body {
-  background-color: #cce8f1;
+  background-color: #f9f9f9;
   height: 100vh;
   position: relative;
 }
@@ -87,6 +87,7 @@ body {
 
 .main-layout::-webkit-scrollbar {
   width: 0;
+  height: 100vh;
 }
 
 /* Utilities */
@@ -102,11 +103,9 @@ body {
   border-right: 8px solid #3aafae;
   transform: translateY(-50%);
 }
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+
+.sideBar {
+  height: 50vh;
+  width: 20rem;
+  position: fixed;
 }
