@@ -1,3 +1,0 @@
-// middleware
-
-console.log(xxxx);
