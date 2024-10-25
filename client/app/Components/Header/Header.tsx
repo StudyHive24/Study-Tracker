@@ -21,7 +21,7 @@ function Header() {
         </h1>
         <p className='text-sm '>
           {userId ? (
-            <>You have <span className='font-bold text-[#3aafae]'>5</span> active tasks
+            <>You have <span className='font-bold text-[#3aafae]'>10</span> active tasks
             </>
           ) : (
             "Please login or register to view your tasks"
