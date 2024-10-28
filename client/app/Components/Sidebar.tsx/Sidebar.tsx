@@ -1,10 +1,11 @@
 "use client"
 
-import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList } from "lucide-react"
+import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList, User2, ChevronUp } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -13,6 +14,10 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import { Button } from "@/components/ui/button"
+import { UserProfile } from "../User-Profile/UserProfile"
 
 // Menu items.
 const items = [
@@ -66,6 +71,17 @@ export function SideBar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem className="flex ">
+                <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" className="w-[70px]"/>
+                    <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <UserProfile />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
     </Sidebar>
     </SidebarProvider>
   )
