@@ -19,10 +19,20 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+// import { useUserContext } from "@/context/userContext"
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
 export default function UserAuth() {
+
+  // const { registerUser, userState, handleUserInput } = useUserContext()
+  // const { name, email, password } = userState;
+  // const [showPassword, setShowPassword] = React.useState(false)
+
+  // const togglePassword = () => setShowPassword(!showPassword)
+
   return (
-    <div className="flex justify-center place-content-center">
+    <div className="">
     <Tabs defaultValue="login" className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="login">Login</TabsTrigger>
@@ -62,15 +72,21 @@ export default function UserAuth() {
           <CardContent className="space-y-2">
           <div className="space-y-1">
               <Label htmlFor="username">Username</Label>
-              <Input id="email" placeholder="madhukaabhishek" />
+              <Input id="email" placeholder="madhukaabhishek"
+              // onChange={(e) => handleUserInput("name")(e)} 
+              />
             </div>
           <div className="space-y-1">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="user@gmail.com" />
+              <Input id="email" placeholder="user@gmail.com" 
+              // onChange={(e) => handleUserInput("email")(e)}
+              />
             </div>
             <div className="space-y-1">
               <Label htmlFor="password">Password</Label>
-              <Input id="pass" type="password" />
+              <Input id="pass" type="password" 
+              // onChange={(e) => handleUserInput("password")(e)}
+              />
             </div>
             <div className="space-y-1">
               <Label htmlFor="new">Confirm password</Label>
@@ -78,7 +94,11 @@ export default function UserAuth() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button>Register</Button>
+            <Button
+            type="submit"
+            // disabled={!name || !email || !password}
+            // onClick={registerUser}
+            >Register</Button>
           </CardFooter>
         </Card>
       </TabsContent>
