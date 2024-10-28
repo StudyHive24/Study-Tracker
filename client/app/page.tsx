@@ -1,12 +1,10 @@
-"use client";
-import useRedirect from "@/hooks/useUserRedirect";
-
-
+import Image from "next/image";
+import UserAuth from "./Components/UserAuth";
 
 export default function Home() {
-  useRedirect("/login");
-
   return (
-    <main></main>
+    <div>
+      <UserAuth />
+    </div>
   );
 }

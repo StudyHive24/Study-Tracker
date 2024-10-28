@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
-import { Toaster } from "react-hot-toast";
-import UserProvider from "@/providers/UserProvider";
-import { Inter } from "next/font/google";
-import MiniSidebar from "./Components/MiniSidebar/MiniSidebar";
-import Header from "./Components/Header/Header";
-import MainContentLayout from "@/providers/MainContentLayout";
-import SidebarProvider from "@/providers/SidebarProvider";
-import MainLayout from "@/providers/MainLayout";
 
-const inter = Inter({
-  subsets: ["latin"],
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
 });
 
 export const metadata: Metadata = {
@@ -25,24 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossOrigin="anonymous" referrerPolicy="no-referrer" />
-      </head>
-      <body className={inter.className}>
-        <UserProvider>
-          <Toaster position="top-center" />
-
-          <div className="h-full flex overflow-hidden">
-            <MiniSidebar />
-            <div className="flex-1 flex flex-col">
-              <Header />
-              <MainContentLayout>
-                <MainLayout>{children}</MainLayout>
-                <SidebarProvider />
-              </MainContentLayout>
-            </div>
-          </div>
-        </UserProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
       </body>
     </html>
   );
