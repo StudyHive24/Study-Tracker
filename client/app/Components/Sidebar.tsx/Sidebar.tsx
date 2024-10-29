@@ -23,27 +23,27 @@ import { UserProfile } from "../User-Profile/UserProfile"
 const items = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/dashboard",
     icon: CircleGauge,
   },
   {
     title: "Timer",
-    url: "#",
+    url: "/timer",
     icon: Timer,
   },
   {
     title: "Tasks",
-    url: "#",
+    url: "/tasks",
     icon: ClipboardList,
   },
   {
     title: "Time table",
-    url: "#",
+    url: "/time-table",
     icon: Calendar,
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
 ]
