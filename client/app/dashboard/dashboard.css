@@ -1,0 +1,23 @@
+/* Dashboard.css */
+.dashboard-container {
+    display: flex;
+}
+
+.dashboard-sidebar {
+    width: 200px;  /* Fixed width for the sidebar */
+}
+
+.dashboard-content {
+    flex-grow: 1;  /* Allows content to take remaining space */
+    padding: 20px;
+    display: grid; /* Set up grid layout */
+    grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+    gap: 20px; /* Space between grid items */
+}
+
+.grid-item {
+    padding: 15px;
+    background-color: #f0f0f0; /* Example styling for items */
+    border-radius: 8px;
+    text-align: center;
+}
