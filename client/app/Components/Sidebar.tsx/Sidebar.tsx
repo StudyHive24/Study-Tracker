@@ -1,7 +1,7 @@
 "use client"
 
 import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList, User2, ChevronUp } from "lucide-react"
-
+import Link from "next/link";
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +18,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Button } from "@/components/ui/button"
 import { UserProfile } from "../User-Profile/UserProfile"
+
+
 
 // Menu items.
 const items = [
