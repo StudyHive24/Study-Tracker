@@ -52,8 +52,7 @@ const items = [
 
 export function SideBar() {
   return (
-    <SidebarProvider>
-    <Sidebar>
+    <Sidebar variant="inset">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>StudyHive</SidebarGroupLabel>
@@ -85,6 +84,5 @@ export function SideBar() {
           </SidebarMenu>
         </SidebarFooter>
     </Sidebar>
-    </SidebarProvider>
   )
 }
