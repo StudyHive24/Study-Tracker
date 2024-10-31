@@ -18,7 +18,7 @@ import {
 
 export function UserProfileTab() {
   return (
-    <Tabs defaultValue="account" className="w-full">
+    <Tabs defaultValue="account" className="w-full ">
       <TabsList className="grid w-full grid-cols-3">
       <TabsTrigger value="account">Account Info</TabsTrigger>
         <TabsTrigger value="account">Account</TabsTrigger>

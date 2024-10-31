@@ -23,12 +23,12 @@ import { UserProfile } from "../User-Profile/UserProfile"
 const items = [
   {
     title: "Dashboard",
-    url: "#",
+    url: "/dashboard",
     icon: CircleGauge,
   },
   {
     title: "Timer",
-    url: "#",
+    url: "/timer",
     icon: Timer,
   },
   {
