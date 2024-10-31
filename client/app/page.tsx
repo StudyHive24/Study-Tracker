@@ -7,8 +7,9 @@ export default function Home() {
 
   return (
     <div>
-      <Button>Sign out</Button>
+     
       
+      <SideBar />
     </div>
 
   );
