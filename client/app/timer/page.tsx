@@ -1,4 +1,4 @@
-import { SideBar } from "../Components/Sidebar.tsx/Sidebar";
+
 
 // app/timer/page.tsx
 export default function Timer() {

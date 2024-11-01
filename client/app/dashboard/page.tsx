@@ -1,6 +1,5 @@
 import React from 'react';
 import './dashboard.css';
-import { SideBar } from '../Components/Sidebar.tsx/Sidebar';
 
 
 const Dashboard = () => {

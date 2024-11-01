@@ -1,4 +1,4 @@
-import { SideBar } from "../Components/Sidebar.tsx/Sidebar";
+
 
 // app/time-table/page.tsx
 export default function TimeTable() {

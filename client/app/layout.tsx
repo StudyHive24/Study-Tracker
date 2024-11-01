@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { SideBar } from "./Components/Sidebar.tsx/Sidebar";
+import { SideBarL} from "./Components/Sidebar left/SidebarL";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Sidebar } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
+import { SideBarR } from "./Components/Sidebar right/SidebarR";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,14 +35,16 @@ export default function RootLayout({
       >
         <div className="flex h-screen">
     <SidebarProvider>
-      <SideBar />
+      <SideBarL />
      
       <SidebarInset>
       <main className="flex-1 p-4 bg-white overflow-auto">
         {children}
       </main>
       </SidebarInset>
+      <SideBarR />
       </SidebarProvider>
+      
     </div>
 
       </body>

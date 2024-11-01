@@ -50,7 +50,7 @@ const items = [
   },
 ]
 
-export function SideBar() {
+export function SideBarL() {
   return (
     <Sidebar variant="inset">
       <SidebarContent>

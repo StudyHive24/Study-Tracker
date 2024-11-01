@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { SideBar } from "./Components/Sidebar.tsx/Sidebar";
+import { SideBarL } from "./Components/Sidebar left/SidebarL";
 
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
     <div>
      
       
-      <SideBar />
+      <SideBarL />
     </div>
 
   );
