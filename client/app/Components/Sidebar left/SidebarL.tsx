@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList, User2, ChevronUp } from "lucide-react"
+import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList, User2, ChevronUp, Loader } from "lucide-react"
 import Link from "next/link";
 import {
   Sidebar,
@@ -18,16 +18,13 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Button } from "@/components/ui/button"
 import { UserProfile } from "../User-Profile/UserProfile"
+import { TaskAccordion } from "./Component/TaskAccordion";
 
 
 
 // Menu items.
 const items = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: CircleGauge,
-  },
+
   {
     title: "Timer",
     url: "/timer",
@@ -53,21 +50,54 @@ const items = [
 export function SideBarL() {
   return (
     <Sidebar variant="inset">
-      <SidebarContent>
+      <SidebarContent className="bg-[#f3f8ff]">
         <SidebarGroup>
-          <SidebarGroupLabel>StudyHive</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+          <SidebarGroupLabel className="text-lg">StudyHive</SidebarGroupLabel>
+          <SidebarGroupContent className="mt-10">
+            <SidebarMenu className="gap-5 ">
+                <SidebarMenuItem >
+                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
+                    <Link href="/dashboard" className="flex flex-row gap-5 ml-5">
+                      <CircleGauge />
+                      <span>Dashboard</span>
+                    </Link>
+                  </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
+                    <Link href="/timer" className="flex flex-row gap-5 ml-5">
+                        <Timer />
+                        <span>Timer</span>
+                      </Link>
+                  </SidebarMenuButton >
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <TaskAccordion/>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
+                    <Link href="/time-table" className="flex flex-row gap-5 ml-5">
+                        <Calendar />
+                        <span>Time Table</span>
+                      </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
+                    <Link href="/progress" className="flex flex-row gap-5 ml-5">
+                        <Loader />
+                        <span>Progress</span>
+                      </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
+                    <Link href="/settings" className="flex flex-row gap-5 ml-5">
+                        <Settings />
+                        <span>Settings</span>
+                      </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -75,11 +105,7 @@ export function SideBarL() {
       <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem className="flex ">
-                <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" className="w-[70px]"/>
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <UserProfile />
+                
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>

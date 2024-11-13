@@ -15,22 +15,25 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import User from "../Sidebar right/Components/User"
 
 export function UserProfileTab() {
   return (
     <Tabs defaultValue="account" className="w-full ">
       <TabsList className="grid w-full grid-cols-3">
-      <TabsTrigger value="account">Account Info</TabsTrigger>
-        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="account">Account Info</TabsTrigger>
         <TabsTrigger value="password">Password</TabsTrigger>
+        <TabsTrigger value="account-settings">Account Settings</TabsTrigger>
 
       </TabsList>
       <TabsContent value="account">
         <Card>
           <CardHeader>
-            <CardTitle>Account</CardTitle>
+            <CardTitle>
+              <User width={150} height={60}/>
+            </CardTitle>
             <CardDescription>
-              Make changes to your account here. Click save when you're done.
+              
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -69,6 +72,21 @@ export function UserProfileTab() {
           <CardFooter>
             <Button>Save password</Button>
           </CardFooter>
+        </Card>
+      </TabsContent>
+      <TabsContent value="account-settings">
+        <Card>
+          <CardHeader>
+            <CardTitle>Account Settings</CardTitle>
+            <CardDescription>
+              Change your password here. After saving, you'll be logged out.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2 justify-center flex flex-col items-center">
+              <Button className="w-[20vw]">Deactivate Account</Button>
+              <Button className="w-[20vw]">Delete Account</Button>
+          </CardContent>
+
         </Card>
       </TabsContent>
     </Tabs>

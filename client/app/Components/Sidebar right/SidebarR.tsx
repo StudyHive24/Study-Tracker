@@ -18,6 +18,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Button } from "@/components/ui/button"
 import { UserProfile } from "../User-Profile/UserProfile"
+import User from "./Components/User";
+import LogoutButton from "./Components/LogoutButton";
 
 
 
@@ -53,33 +55,13 @@ const items = [
 export function SideBarR() {
   return (
     <Sidebar variant="inset" side="right">
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>StudyHive</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+      <SidebarContent className="bg-[#f3f8ff]">
+        <UserProfile />
       </SidebarContent>
       <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem className="flex ">
-                <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" className="w-[70px]"/>
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <UserProfile />
+              <LogoutButton/>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
