@@ -1,7 +1,7 @@
 /* Dashboard.css */
 .dashboard-container {
     font-family: 'Arial', sans-serif;
-    background-color: #ffffff;
+    background-color: #ffffff00;
     
 }
 
@@ -17,7 +17,7 @@
 }
 
 .reminder-button {
-    background-color: #ffffff;
+    background-color: #ffffff00;
     padding: 10px 10px;
     border: none;
     cursor: pointer;
@@ -48,7 +48,7 @@
     display: flex;
     padding:10px;
     align-items: center;
-    background-color: #ffffff;
+    background-color: #ffffff00;
     grid-column: span 0;
 }
 
@@ -95,7 +95,7 @@
 
 /* Upcoming Events */
 .upcoming-events {
-    background-color: #d3d3d3;
+    background-color: #d3d3d300;
 }
 
 
@@ -104,5 +104,5 @@
 
 /* Upcoming Tasks */
 .upcoming-tasks {
-    background-color: #a9a9a9;
+    background-color: #a9a9a900;
 }
