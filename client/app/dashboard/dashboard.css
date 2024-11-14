@@ -1,19 +1,108 @@
 /* Dashboard.css */
 .dashboard-container {
-   
+    font-family: 'Arial', sans-serif;
+    background-color: #ffffff;
+    
 }
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #ffffff00;
+    padding: 0 10px;
+    border: 2px solid rgb(0, 0, 0);
+    border-radius: 8px;
+}
 
-.dashboard-content { 
-    padding: 20px;
-    display: grid; /* Set up grid layout */
-    grid-template-columns: 1fr 1fr; /* Two equal-width columns */
-    gap: 50px; /* Space between grid items */
+.reminder-button {
+    background-color: #ffffff;
+    padding: 10px 10px;
+    border: none;
+    cursor: pointer;
+    
+}
+.bell-icon {
+    width: 20px;   /* Adjust the size of the bell icon */
+    height: 20px;
+    margin-right: 8px;  
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
 }
 
 .grid-item {
-    padding: 100px;
-    background-color: #f0f0f0; /* Example styling for items */
+    padding:0px;
+    background-color: #ffffff00;
     border-radius: 8px;
-    text-align: center;
+    border: 2px solid rgb(0, 0, 0);
+    
+}
+
+/* Chatbot */
+.chatbot {
+    display: flex;
+    padding:10px;
+    align-items: center;
+    background-color: #ffffff;
+    grid-column: span 0;
+}
+
+.chatbot-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Tasks Complete */
+.tasks-complete {
+    background-color: #c5c5c500;
+    padding:10px;
+}
+
+.progress-bar {
+    height: 20px;
+    width: 100%;
+    background-color: #bdbdbd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.37);
+}
+
+.progress {
+    height: 100%;
+    background-color: #727272;
+}
+
+/* Today's Time Table */
+.today-timetable {
+    background-color: #99a8a700;
+}
+
+/* Calendar */
+.calendar {
+    background-color: #ffffff00;
+    padding-left:0px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* Upcoming Events */
+.upcoming-events {
+    background-color: #d3d3d3;
+}
+
+
+
+
+
+/* Upcoming Tasks */
+.upcoming-tasks {
+    background-color: #a9a9a9;
 }
