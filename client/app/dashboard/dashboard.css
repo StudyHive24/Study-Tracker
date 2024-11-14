@@ -40,6 +40,8 @@
     background-color: #ffffff00;
     border-radius: 8px;
     border: 2px solid rgb(0, 0, 0);
+    overflow-x: auto; /* Ensures table is scrollable */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     
 }
 
@@ -80,10 +82,59 @@
     background-color: #727272;
 }
 
-/* Today's Time Table */
-.today-timetable {
-    background-color: #99a8a700;
+/* Today's Time Table _____________________________________________________*/
+.today-timetable{
+    padding: 10px;
+    grid-column: span 0;
+    grid-row: span 2;
 }
+
+.grid-item h2 {
+    font-family: 'Arial', sans-serif;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden; /* Ensures borders stay rounded */
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Row divider */
+}
+
+.styled-table th {
+    background-color: #4CAF50; /* Green background */
+    color: #ffffff; /* White text */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.styled-table tr {
+    background-color: #f9f9f9; /* Alternating row color */
+    transition: background-color 0.2s ease-in-out;
+}
+
+.styled-table tr:hover {
+    background-color: #f1f1f1; /* Hover effect */
+}
+
+.styled-table td {
+    color: #333;
+}
+
+.styled-table-head th {
+    background-color: #585858; /* Change the head color to blue */
+}
+
 
 /* Calendar */
 .calendar {
@@ -93,16 +144,112 @@
     font-weight: bold;
 }
 
-/* Upcoming Events */
-.upcoming-events {
-    background-color: #d3d3d300;
-}
 
-
-
-
-
-/* Upcoming Tasks */
+/* Container for Upcoming Tasks ________________________________________*/
 .upcoming-tasks {
-    background-color: #a9a9a900;
+    background-color: #f4f4f900; /* Light background */
+    grid-row: span 2;
+    padding: 10px;
+
 }
+
+.upcoming-tasks h2 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Styling for the tasks table */
+.styled-tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    border-radius: 10px;
+    overflow: hidden; /* Ensures borders stay rounded */
+}
+
+.styled-tasks-table th,
+.styled-tasks-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Row divider */
+}
+
+.styled-tasks-table th {
+    background-color: #585858; /* Green background */
+    color: #ffffff; /* White text */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.styled-tasks-table tr {
+    background-color: #f9f9f9; /* Alternating row color */
+    transition: background-color 0.2s ease-in-out;
+}
+
+.styled-tasks-table tr:hover {
+    background-color: #f1f1f1; /* Hover effect */
+}
+
+.styled-tasks-table td {
+    color: #333;
+}
+
+
+
+/* Upcoming Events____________________________________________ */
+.upcoming-events {
+    background-color: #f4f4f900; /* Light background */
+    padding: 10px;
+}
+
+.upcoming-events h2 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Styling for the events table */
+.styled-events-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    border-radius: 10px;
+    overflow: hidden; /* Ensures borders stay rounded */
+}
+
+.styled-events-table th,
+.styled-events-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* Row divider */
+}
+
+.styled-events-table th {
+    background-color: #585858; /* Green background */
+    color: #ffffff; /* White text */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.styled-events-table tr {
+    background-color: #f9f9f9; /* Alternating row color */
+    transition: background-color 0.2s ease-in-out;
+}
+
+.styled-events-table tr:hover {
+    background-color: #f1f1f1; /* Hover effect */
+}
+
+.styled-events-table td {
+    color: #333;
+}
+
+
+
+
+
+
+
