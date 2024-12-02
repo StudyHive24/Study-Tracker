@@ -91,8 +91,7 @@ const Dashboard = () => {
                 {/* Calendar Section */}
                 <div className="grid-item calendar">
                     <Calendar
-                        onChange={onDateChange}
-                        value={date}
+                        
                     />
                     
                 </div>
