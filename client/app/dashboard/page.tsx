@@ -9,7 +9,7 @@ import './dashboard.css';
 const Dashboard = () => {
     let Username = "Yahan";
     const [date, setDate] = useState(new Date());
-    const [progress, setProgress] = useState(85); // Task completion progress
+    const [progress, setProgress] = useState(86); // Task completion progress
     const chatbotMessage = "Hi, I am your Study instructor. You have assignments due in 3 days. Check the Time Table.";
 
     const onDateChange = (newDate: Date) => {
