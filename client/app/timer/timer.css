@@ -1,0 +1,115 @@
+/* Container Styles */
+.container {
+    display: flex;
+    justify-content: center; /* Centers the content horizontally */
+    align-items: center; /* Centers the content vertically */
+    height: 100vh; /* Full viewport height */
+    background: none; /* Remove the white background */
+    background-color: transparent; /* Ensure the background is fully transparent */
+}
+
+/* Timer Box Styles */
+.timer-box {
+    background: none;
+    border: 1px solid rgba(7, 7, 7, 0.4); /* Border color and opacity */
+    backdrop-filter: blur(10px); /* Blur the background */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px 30px; /* Spacing inside the box */
+    text-align: center; /* Center the text */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Box shadow for depth */
+    max-width: 400px; /* Maximum width */
+    width: 90%; /* Responsive width */
+}
+
+/* Title Styling */
+.title {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Time Display Styling */
+.time-display {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #00509e; /* Blue color */
+    margin: 20px 0;
+}
+
+/* Dropdown Container */
+.dropdown-container {
+    margin: 15px 0;
+}
+
+/* Duration dropdown styling */
+.duration-dropdown {
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: rgba(240, 240, 255, 0.8);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+/* Button Styles */
+.button {
+    font-size: 1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Start Button */
+.start-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+/* Reset Button */
+.reset-button {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Modal Buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* Modal Button Styling */
+.confirm-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+}
