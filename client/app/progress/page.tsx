@@ -21,17 +21,18 @@ function ProgressPage() {
 
       {/* Bottom Section */}
       <div className="flex space-x-6">
+        {/* Study Guide */}
+        <div className="flex-1 bg-gray-200 p-6 rounded-lg">
+          <h3 className="text-lg font-semibold mb-4">Study Guide</h3>
+          <div className="h-32 bg-gray-400 rounded-lg"></div>
+        </div>
         {/* Time Spent on Each Task */}
         <div className="flex-1 bg-gray-200 p-6 rounded-lg">
           <h3 className="text-lg font-semibold mb-4">Time spent on Each Task</h3>
           <div className="h-32 bg-gray-400 rounded-lg"></div>
         </div>
 
-        {/* Study Guide */}
-        <div className="flex-1 bg-gray-200 p-6 rounded-lg">
-          <h3 className="text-lg font-semibold mb-4">Study Guide</h3>
-          <div className="h-32 bg-gray-400 rounded-lg"></div>
-        </div>
+        
       </div>
     </div>
   );
