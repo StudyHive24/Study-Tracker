@@ -22,7 +22,9 @@ function LogoutButton() {
                 from StudyHive.
               </DialogDescription>
               <DialogDescription className='h-[13vh] mb-8'>
-                <User width={80} height={100}/>
+                <div>
+                  <User width={80} height={100}/>
+                </div>               
               </DialogDescription>
               <div className='flex items-center justify-center'>
                 <DialogPrimitive.Close className='mr-3'>

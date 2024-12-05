@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList, User2, ChevronUp, Loader } from "lucide-react"
+import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList, User2, ChevronUp, Loader, FileX } from "lucide-react"
 import Link from "next/link";
 import {
   Sidebar,
@@ -64,14 +64,6 @@ export function SideBarL() {
                   </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-                    <Link href="/timer" className="flex flex-row gap-5 ml-5">
-                        <Timer />
-                        <span>Timer</span>
-                      </Link>
-                  </SidebarMenuButton >
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
                     <TaskAccordion/>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
@@ -82,6 +74,14 @@ export function SideBarL() {
                       </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
+                    <Link href="/timer" className="flex flex-row gap-5 ml-5">
+                        <Timer />
+                        <span>Timer</span>
+                      </Link>
+                  </SidebarMenuButton >
+                  </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
                     <Link href="/progress" className="flex flex-row gap-5 ml-5">
@@ -104,8 +104,9 @@ export function SideBarL() {
       </SidebarContent>
       <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem className="flex ">
-                
+            <SidebarMenuItem className="flex ml-7 cursor-pointer">
+                <FileX width={30} height={30} color="red"/>
+                <span className="mt-1 ml-2 mb-2 text-red-500">Delete All Tasks</span>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>

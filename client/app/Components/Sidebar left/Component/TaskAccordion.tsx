@@ -5,7 +5,7 @@ import {
     AccordionTrigger,
   } from "@/components/ui/accordion"
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
-import { CircleGauge, CirclePlus, ClipboardList, ClipboardMinus, ClipboardPlus, FilePenLine, View } from "lucide-react"
+import { CircleGauge, CirclePlus, ClipboardList, ClipboardMinus, ClipboardPlus, FilePenLine, View, LayoutList, ClipboardCheck, ClockAlert, Clock9 } from "lucide-react"
 import Link from "next/link"
   
   export function TaskAccordion() {
@@ -20,27 +20,27 @@ import Link from "next/link"
           </AccordionTrigger>
           <AccordionContent>
           <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-                <Link href="/tasks/add-tasks" className="flex flex-row gap-5 ml-8">
-                    <View width={20} height={20}/>
-                    <span className="text-[13px]">View Tasks</span>
+                <Link href="/tasks/all-tasks" className="flex flex-row gap-5 ml-8">
+                    <LayoutList width={20} height={20}/>
+                    <span className="text-[13px]">All Tasks</span>
                 </Link>
             </SidebarMenuButton >
             <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-                <Link href="/tasks/add-tasks" className="flex flex-row gap-5 ml-8">
-                    <ClipboardPlus width={20} height={20}/>
-                    <span className="text-[13px]">Add Tasks</span>
+                <Link href="/tasks/completed-tasks" className="flex flex-row gap-5 ml-8">
+                    <ClipboardCheck width={20} height={20}/>
+                    <span className="text-[13px]">Completed Tasks</span>
                 </Link>
             </SidebarMenuButton >
             <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-                <Link href="/tasks/remove-tasks" className="flex flex-row gap-5 ml-8">
-                    <ClipboardMinus width={20} height={20}/>
-                    <span className="text-[13px]">Remove Tasks</span>
+                <Link href="/tasks/pending-tasks" className="flex flex-row gap-5 ml-8">
+                    <Clock9 width={20} height={20}/>
+                    <span className="text-[13px]">Pending Tasks</span>
                 </Link>
             </SidebarMenuButton >
             <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-                <Link href="/tasks/edit-tasks" className="flex flex-row gap-5 ml-8">
-                    <FilePenLine width={20} height={20}/>
-                    <span className="text-[13px]">Edit Tasks</span>
+                <Link href="/tasks/overdue-tasks" className="flex flex-row gap-5 ml-8">
+                    <ClockAlert width={20} height={20}/>
+                    <span className="text-[13px]">Overdue Tasks</span>
                 </Link>
             </SidebarMenuButton >
           </AccordionContent>
