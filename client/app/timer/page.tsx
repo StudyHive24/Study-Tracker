@@ -1,143 +1,137 @@
 // app/timer/page.tsx
-
 "use client"; // Enables client-side rendering
 
 import { useState, useEffect } from "react"; // Importing React hooks
 import "./Timer.css"; // Importing the CSS file for styling
 
-// Timer component
-export default function Timer() {
-    // State hooks for managing timer state, including time left, whether it's running, and the message to display
-    const [timeLeft, setTimeLeft] = useState(25 * 60); // Default timer: 25 minutes (in seconds)
-    const [isRunning, setIsRunning] = useState(false); // State for running status of the timer
-    const [isBreak, setIsBreak] = useState(false); // Whether it's study or break time
-    const [selectedDuration, setSelectedDuration] = useState(25 * 60); // Selected study time duration
-    const [selectedBreakDuration, setSelectedBreakDuration] = useState(5 * 60); // Default break duration (5 minutes)
-    const [showResetModal, setShowResetModal] = useState(false); // Whether to show the reset modal
-    const [message, setMessage] = useState(""); // Message to show during transitions (study/break)
+export default function TimerPage() {
+  const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)
+  const [breakTime, setBreakTime] = useState(5 * 60); // Default break time (5 mins)
+  const [time, setTime] = useState(studyTime); // Current time in seconds
+  const [isRunning, setIsRunning] = useState(false);
+  const [isStudyPhase, setIsStudyPhase] = useState(true); // Toggle between study and break
+  const [message, setMessage] = useState(""); // Display message
+  const [showResetConfirm, setShowResetConfirm] = useState(false); // Reset confirmation
 
-    // Helper function to format time (in seconds) as MM:SS
-    const formatTime = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60); // Get minutes from seconds
-        const secs = seconds % 60; // Get remaining seconds
-        
-        // Return formatted string as MM:SS where both minutes and seconds are padded to 2 digits
-        return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-    };
+  const timeOptions = [
+    { label: "25 Minutes", study: 25 * 60, break: 5 * 60 },
+    { label: "50 Minutes", study: 50 * 60, break: 10 * 60 },
+    { label: "1 Hour", study: 60 * 60, break: 15 * 60 },
+    { label: "2 Hours", study: 2 * 60 * 60, break: 20 * 60 },
+    { label: "15 Seconds (Test)", study: 15, break: 5 }, // For testing
+  ];
 
-    // useEffect hook to handle timer countdown when the timer is running
-    useEffect(() => {
-        let timer: NodeJS.Timeout | null = null; // Timer reference
-        if (isRunning) {
-            // Start the timer if it is running
-            timer = setInterval(() => {
-                setTimeLeft((prev) => {
-                    if (prev <= 0) {
-                        clearInterval(timer!); // Stop the timer when it reaches 0
-                        const nextPhase = !isBreak; // Switch between study and break phases
-                        setMessage(nextPhase ? "Switching to Break Time!" : "Switching to Study Time!"); // Transition message
-                        
-                        // Set new time for the next phase
-                        const newDuration = nextPhase ? selectedBreakDuration : selectedDuration;
-                        setTimeLeft(newDuration); // Reset timer to new duration
-                        setIsBreak(nextPhase); // Toggle between study and break phases
-                        setTimeout(() => setMessage(""), 2000); // Clear transition message after 2 seconds
-                        return newDuration; // Set the new time for the next phase
-                    }
-                    return prev - 1; // Decrease the time left by 1 second
-                });
-            }, 1000); // Interval to update every second
-        }
-        return () => {
-            if (timer) clearInterval(timer); // Clean up the timer when the component is unmounted
-        };
-    }, [isRunning, isBreak, selectedDuration, selectedBreakDuration]); // Add both selectedDuration and selectedBreakDuration to the dependencies
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
-    // Start the timer when the "Start" button is clicked
-    const handleStart = () => setIsRunning(true);
+  const handleStart = () => {
+    setIsRunning(true);
+  };
 
-    // Reset the timer to the selected duration and stop the countdown
-    const handleReset = () => {
-        setIsRunning(false); // Stop the timer
-        setTimeLeft(selectedDuration); // Reset time to the selected duration
-        setMessage(""); // Clear any messages
-        setShowResetModal(false); // Close the reset confirmation modal
-    };
+  const handleReset = () => {
+    setShowResetConfirm(true); // Show confirmation
+  };
 
-    // Handle the change in the selected study duration (dropdown change)
-    const handleDurationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const newDuration = parseInt(event.target.value) * 60; // Convert minutes to seconds
-        setSelectedDuration(newDuration); // Set the new study duration
-        setTimeLeft(newDuration); // Reset the timer to the new duration
-        setIsRunning(false); // Stop the timer
-        setMessage(""); // Clear any messages
+  const confirmReset = () => {
+    setIsRunning(false);
+    setIsStudyPhase(true);
+    setTime(studyTime);
+    setMessage(""); // Clear any messages
+    setShowResetConfirm(false); // Hide confirmation modal
+  };
 
-        // Adjust break duration based on selected study duration
-        switch (newDuration) {
-            case 1:
-                setSelectedBreakDuration(1 * 60); // 1 min study = 1 min break
-                break;
-            case 25 * 60:
-                setSelectedBreakDuration(5 * 60); // 25 min study = 5 min break
-                break;
-            case 50 * 60:
-                setSelectedBreakDuration(10 * 60); // 50 min study = 10 min break
-                break;
-            case 60 * 60:
-                setSelectedBreakDuration(15 * 60); // 60 min study = 15 min break
-                break;
-            case 120 * 60:
-                setSelectedBreakDuration(20 * 60); // 120 min study = 20 min break
-                break;
-            default:
-                setSelectedBreakDuration(5 * 60); // Default to 5 min break
-                break;
-        }
-    };
+  const cancelReset = () => {
+    setShowResetConfirm(false); // Close confirmation modal
+  };
 
-    // Simulate saving the duration spent on a task (could be used for logging or analytics)
-    const saveTimerDuration = async (durationSpent: number) => {
-        console.log("Saving duration:", durationSpent); // Log the duration spent on the task
-    };
-
-    return (
-        <div className="container">
-            {/* Main timer box */}
-            <div className="timer-box">
-                <h1 className="title">{isBreak ? "Break Time" : "Study Time"}</h1> {/* Display title depending on break or study */}
-                <div className="time-display">{formatTime(timeLeft)}</div> {/* Display the formatted time */}
-                {message && <p className="transition-message">{message}</p>} {/* Show the transition message */}
-                
-                {/* Dropdown for selecting study duration */}
-                <div className="dropdown-container">
-                    <select className="duration-dropdown" onChange={handleDurationChange} disabled={isRunning}>
-                        <option value="25">25 Minutes</option>
-                        <option value="1">1 Minute</option>
-                        <option value="50">50 Minutes</option>
-                        <option value="60">1 Hour</option>
-                        <option value="120">2 Hours</option>
-                    </select>
-                </div>
-                
-                {/* Start and Reset buttons */}
-                <div>
-                    <button className="button start-button" onClick={handleStart} disabled={isRunning}>Start</button>
-                    <button className="button reset-button" onClick={() => setShowResetModal(true)}>Reset</button>
-                </div>
-            </div>
-
-            {/* Reset modal confirmation */}
-            {showResetModal && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <p>Are you sure you want to reset the timer? Unsaved progress will be lost.</p>
-                        <div className="modal-buttons">
-                            <button className="button confirm-button" onClick={handleReset}>Yes</button>
-                            <button className="button cancel-button" onClick={() => setShowResetModal(false)}>No</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+  const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOption = timeOptions.find(
+      (option) => option.label === e.target.value
     );
+    if (selectedOption) {
+      setStudyTime(selectedOption.study);
+      setBreakTime(selectedOption.break);
+      setTime(selectedOption.study);
+      setIsStudyPhase(true);
+      setIsRunning(false);
+    }
+  };
+
+  // Timer logic
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+    if (isRunning) {
+      timer = setInterval(() => {
+        setTime((prevTime) => {
+          if (prevTime === 1) {
+            clearInterval(timer!);
+            setIsRunning(false);
+
+            // Switch between study and break
+            const nextPhase = isStudyPhase ? "Break" : "Study";
+            setMessage(`Time's up! Switching to ${nextPhase} Time.`);
+            setTimeout(() => setMessage(""), 1000); // Clear message after 1 second
+
+            setIsStudyPhase(!isStudyPhase);
+            return isStudyPhase ? breakTime : studyTime;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isRunning, isStudyPhase, studyTime, breakTime]);
+
+  return (
+    <div className="timer-page">
+      <div className="timer-container">
+        <h1>{isStudyPhase ? "Study Time" : "Break Time"}</h1>
+        <h2 className="timer-display">{formatTime(time)}</h2>
+        <p className="timer-message">{message}</p>
+        <select
+          className="time-selector"
+          onChange={handleTimeChange}
+          defaultValue="25 Minutes"
+        >
+          {timeOptions.map((option) => (
+            <option key={option.label} value={option.label}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <div className="timer-controls">
+          <button
+            className="start-button"
+            onClick={handleStart}
+            disabled={isRunning}
+          >
+            Start
+          </button>
+          <button className="reset-button" onClick={handleReset}>
+            Reset
+          </button>
+        </div>
+      </div>
+      {showResetConfirm && (
+        <div className="reset-modal">
+          <div className="reset-modal-content">
+            <p>Are you sure you want to reset?</p>
+            <button className="confirm-button" onClick={confirmReset}>
+              Yes
+            </button>
+            <button className="cancel-button" onClick={cancelReset}>
+              No
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
