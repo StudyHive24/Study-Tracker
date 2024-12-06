@@ -89,7 +89,7 @@
 
 .progress {
     height: 100%;
-    background-color: #72727260;
+    background-color: #72727233;
 }
 
 /* Today's Time Table _____________________________________________________*/
@@ -130,7 +130,7 @@
 }
 
 .styled-table tr {
-    background-color: #bbbbbb7c; /* Alternating row color */
+    background-color: #bbbbbb31; /* Alternating row color */
     transition: background-color 0.2s ease-in-out;
 }
 
@@ -143,7 +143,7 @@
 }
 
 .styled-table-head th {
-    background-color: #7272725b; /* Change the head color to blue */
+    background-color: #72727233; 
 }
 
 
@@ -188,14 +188,14 @@
 }
 
 .styled-tasks-table th {
-    background-color: #7272725b; /* Green background */
+    background-color: #72727233;
     color: #ffffff; /* White text */
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .styled-tasks-table tr {
-    background-color: #bbbbbb7c; /* Alternating row color */
+    background-color: #bbbbbb31; /* Alternating row color */
     transition: background-color 0.2s ease-in-out;
 }
 
@@ -239,14 +239,14 @@
 }
 
 .styled-events-table th {
-    background-color: #7272725b; 
+    background-color: #72727233; 
     color: #ffffff; /* White text */
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .styled-events-table tr {
-    background-color: #bbbbbb7c; /* Alternating row color */
+    background-color: #bbbbbb31; /* Alternating row color */
     transition: background-color 0.2s ease-in-out;
 }
 
