@@ -2,6 +2,7 @@
 .dashboard-container {
     font-family: 'Arial', sans-serif;
     background-color: #ffffff00;
+    padding: 10px;
     
 }
 
@@ -9,11 +10,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    background-color: #ffffff;
+    margin-bottom: 15px;
+    background-color: #ffffff9a;
     padding: 0 10px;
-    border: 2px solid rgb(0, 0, 0);
+    border: 0px solid rgb(0, 0, 0);
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.header h1{
+    font-size: 20px;
+    
+    
 }
 
 .reminder-button {
@@ -26,22 +33,25 @@
 .bell-icon {
     width: 20px;   /* Adjust the size of the bell icon */
     height: 20px;
-    margin-right: 8px;  
+    margin-right: 8px; 
+     
 }
 
 .dashboard-content {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 15px;
+    
+    
 }
 
 .grid-item {
     padding:0px;
-    background-color: #ffffff00;
+    background-color: #ffffff9a;
     border-radius: 8px;
-    border: 2px solid rgb(0, 0, 0);
+    border: 0px solid rgb(0, 0, 0);
     overflow-x: auto; /* Ensures table is scrollable */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     
 }
 
@@ -50,7 +60,7 @@
     display: flex;
     padding:10px;
     align-items: center;
-    background-color: #ffffff00;
+    background-color: #ffffff9a;
     grid-column: span 0;
 }
 
@@ -63,28 +73,28 @@
 
 /* Tasks Complete */
 .tasks-complete {
-    background-color: #c5c5c500;
+    background-color: #ffffff9a;
     padding:10px;
 }
 
 .progress-bar {
     height: 20px;
     width: 100%;
-    background-color: #bdbdbd;
+    background-color: #bdbdbd44;
     border-radius: 5px;
     overflow: hidden;
     margin-top: 10px;
-    border: 2px solid rgba(0, 0, 0, 0.37);
+    border: 1px solid rgba(0, 0, 0, 0.37);
 }
 
 .progress {
     height: 100%;
-    background-color: #727272;
+    background-color: #72727260;
 }
 
 /* Today's Time Table _____________________________________________________*/
 .today-timetable{
-    padding: 10px;
+    padding: 15px;
     grid-column: span 0;
     grid-row: span 2;
 }
@@ -109,17 +119,18 @@
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #ddd; /* Row divider */
+    
 }
 
 .styled-table th {
-    background-color: #4CAF50; /* Green background */
+    
     color: #ffffff; /* White text */
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .styled-table tr {
-    background-color: #f9f9f9; /* Alternating row color */
+    background-color: #bbbbbb7c; /* Alternating row color */
     transition: background-color 0.2s ease-in-out;
 }
 
@@ -132,13 +143,13 @@
 }
 
 .styled-table-head th {
-    background-color: #585858; /* Change the head color to blue */
+    background-color: #7272725b; /* Change the head color to blue */
 }
 
 
 /* Calendar */
 .calendar {
-    background-color: #ffffff00;
+    background-color: #ffffff9a;
     padding-left:0px;
     font-size: 15px;
     font-weight: bold;
@@ -147,9 +158,9 @@
 
 /* Container for Upcoming Tasks ________________________________________*/
 .upcoming-tasks {
-    background-color: #f4f4f900; /* Light background */
+    background-color: #ffffff9a; /* Light background */
     grid-row: span 2;
-    padding: 10px;
+    padding: 15px;
 
 }
 
@@ -177,14 +188,14 @@
 }
 
 .styled-tasks-table th {
-    background-color: #585858; /* Green background */
+    background-color: #7272725b; /* Green background */
     color: #ffffff; /* White text */
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .styled-tasks-table tr {
-    background-color: #f9f9f9; /* Alternating row color */
+    background-color: #bbbbbb7c; /* Alternating row color */
     transition: background-color 0.2s ease-in-out;
 }
 
@@ -200,8 +211,8 @@
 
 /* Upcoming Events____________________________________________ */
 .upcoming-events {
-    background-color: #f4f4f900; /* Light background */
-    padding: 10px;
+    background-color: #ffffff9a; /* Light background */
+    padding: 15px;
 }
 
 .upcoming-events h2 {
@@ -228,14 +239,14 @@
 }
 
 .styled-events-table th {
-    background-color: #585858; /* Green background */
+    background-color: #7272725b; 
     color: #ffffff; /* White text */
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .styled-events-table tr {
-    background-color: #f9f9f9; /* Alternating row color */
+    background-color: #bbbbbb7c; /* Alternating row color */
     transition: background-color 0.2s ease-in-out;
 }
 
