@@ -9,7 +9,7 @@ import './dashboard.css';
 const Dashboard = () => {
     let Username = "Yahan";
     const [date, setDate] = useState(new Date());
-    const [progress, setProgress] = useState(86); // Task completion progress
+    const [progress, setProgress] = useState(16); // Task completion progress
     const chatbotMessage = "Hi, I am your Study instructor. You have assignments due in 3 days. Check the Time Table.";
 
     const onDateChange = (newDate: Date) => {
@@ -45,7 +45,7 @@ const Dashboard = () => {
 
                 {/* Today's Time Table Section */}
                 <div className="grid-item today-timetable">
-                    <h2>Today Time Table</h2>
+                    <h2>📌Today Time Table</h2>
                     <table className="styled-table">
                     <thead className="styled-table-head">
                         <tr>
@@ -98,7 +98,7 @@ const Dashboard = () => {
 
                 {/* Upcoming Tasks Section */}
                 <div className="grid-item upcoming-tasks">
-                    <h2>Upcoming Tasks</h2>
+                    <h2>📌Upcoming Tasks</h2>
                     <table className="styled-tasks-table">
                         <thead>
                             <tr>
@@ -127,7 +127,7 @@ const Dashboard = () => {
                 {/* Upcoming Events Section */}
                 {/* Upcoming Events Section */}
                 <div className="grid-item upcoming-events">
-                    <h2>Upcoming Events</h2>
+                    <h2>📌Upcoming Events</h2>
                     <table className="styled-events-table">
                         <thead>
                             <tr>
@@ -158,11 +158,9 @@ const Dashboard = () => {
 
                 
 
-                
+        
 
-                
-
-                
+            
             </div>
         </div>
     );
