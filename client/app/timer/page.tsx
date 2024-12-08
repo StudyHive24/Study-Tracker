@@ -114,8 +114,11 @@ export default function TimerPage() {
           >
             Start
           </button>
-          <button className="reset-button" onClick={handleReset}>
-            Reset
+          <button className="reset-button" 
+            onClick={handleReset}
+            disabled={!isRunning} // Disable when timer is not running
+          >
+          Reset
           </button>
         </div>
       </div>
