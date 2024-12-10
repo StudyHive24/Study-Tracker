@@ -3,7 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
     background-color: none;
     font-family: Arial, sans-serif;
   }
@@ -22,7 +22,7 @@
   }
   
   /* Headings */
-  h1 {
+  .timer-title {
     font-size: 1.8rem;
     margin-bottom: 10px;
     color: #333;
@@ -51,20 +51,17 @@
     width: 100%;
     max-width: 300px;
   }
+
   
-  /* Buttons */
-  button {
+  .start-button {
+    background-color: #2833a7;
+    color: white;
     padding: 10px 15px;
     font-size: 1rem;
     margin: 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  .start-button {
-    background-color: #2833a7;
-    color: white;
   }
   
   .start-button:disabled {
@@ -75,6 +72,12 @@
   .reset-button {
     background-color: #dc3545;
     color: white;
+    padding: 10px 15px;
+    font-size: 1rem;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
   
   /* Reset Confirmation Modal */
@@ -101,10 +104,22 @@
     background-color: #2833a7;
     color: white;
     margin-right: 10px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
   
   .cancel-button {
     background-color: #dc3545;
     color: white;
+    padding: 10px 15px;
+    font-size: 1rem;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
   

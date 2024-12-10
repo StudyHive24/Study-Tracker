@@ -1,6 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Hand } from 'lucide-react'
 import React from 'react'
+import AddTaskModel from './AddTaskModel'
+
 
 export function TaskHeader() {
   return (
@@ -12,7 +14,7 @@ export function TaskHeader() {
             </div>
             <span>You have <span className='text-green-500'>5</span> Active tasks</span>
         </div>
-        <Button className='bg-green-500 hover:bg-green-600 rounded-3xl mt-1'>Add A New Task</Button>
+        <AddTaskModel/>
     </div>
   )
 }

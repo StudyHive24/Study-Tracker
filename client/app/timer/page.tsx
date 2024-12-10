@@ -2,7 +2,7 @@
 "use client"; // Enables client-side rendering
 
 import { useState, useEffect } from "react"; // Importing React hooks
-import "./Timer.css"; // Importing the CSS file for styling
+import "./timer.css"; // Importing the CSS file for styling
 
 export default function TimerPage() {
   const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)
@@ -90,9 +90,9 @@ export default function TimerPage() {
   }, [isRunning, isStudyPhase, studyTime, breakTime]);
 
   return (
-    <div className="timer-page">
+    <div className="timer-page ">
       <div className="timer-container">
-        <h1>{isStudyPhase ? "Study Time" : "Break Time"}</h1>
+        <h1 className="timer-title">{isStudyPhase ? "Study Time" : "Break Time"}</h1>
         <h2 className="timer-display">{formatTime(time)}</h2>
         <p className="timer-message">{message}</p>
         <select
