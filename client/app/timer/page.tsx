@@ -2,7 +2,7 @@
 "use client"; // Enables client-side rendering
 
 import { useState, useEffect } from "react"; // Importing React hooks
-import "./Timer.css"; // Importing the CSS file for styling
+import "./timer.css"; // Importing the CSS file for styling
 
 export default function TimerPage() {
   const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)
@@ -62,7 +62,7 @@ export default function TimerPage() {
     }
   };
 
-  // Timer logic
+  //Timer logic
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
     if (isRunning) {
