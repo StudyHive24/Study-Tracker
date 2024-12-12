@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/Components/Sidebar left"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/Components/Sidebar left", "app/tasks/components/AddTaskModel.tsx", "app/tasks/components/DurationPicker.jsx"],
   "exclude": ["node_modules"]
 }

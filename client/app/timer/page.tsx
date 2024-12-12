@@ -90,9 +90,9 @@ export default function TimerPage() {
   }, [isRunning, isStudyPhase, studyTime, breakTime]);
 
   return (
-    <div className="timer-page">
+    <div className="timer-page ">
       <div className="timer-container">
-        <h1>{isStudyPhase ? "Study Time" : "Break Time"}</h1>
+        <h1 className="timer-title">{isStudyPhase ? "Study Time" : "Break Time"}</h1>
         <h2 className="timer-display">{formatTime(time)}</h2>
         <p className="timer-message">{message}</p>
         <select
@@ -114,8 +114,11 @@ export default function TimerPage() {
           >
             Start
           </button>
-          <button className="reset-button" onClick={handleReset}>
-            Reset
+          <button className="reset-button" 
+            onClick={handleReset}
+            disabled={!isRunning} // Disable when timer is not running
+          >
+          Reset
           </button>
         </div>
       </div>
