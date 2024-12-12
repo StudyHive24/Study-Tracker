@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "mongoose-unique-validator": "^4.0.1",
     "next": "^15.0.3",
     "react-calendar": "^5.1.0",
-    "react-hot-toast": "^2.4.1"
+    "react-hot-toast": "^2.4.1",
+    "react-tag-input-component": "^2.0.2"
   }
 }
