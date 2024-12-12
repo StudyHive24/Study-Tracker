@@ -1,4 +1,3 @@
-// app/timer/page.tsx
 "use client"; // Enables client-side rendering
 
 import { useState, useEffect } from "react"; // Importing React hooks
@@ -12,6 +11,9 @@ export default function TimerPage() {
   const [isStudyPhase, setIsStudyPhase] = useState(true); // Toggle between study and break
   const [message, setMessage] = useState(""); // Display message
   const [showResetConfirm, setShowResetConfirm] = useState(false); // Reset confirmation
+
+  const [showTitleInput, setShowTitleInput] = useState(false); // Toggle title input visibility
+  const [timerTitle, setTimerTitle] = useState("Study"); // Timer title (default)
 
   const timeOptions = [
     { label: "25 Minutes", study: 25 * 60, break: 5 * 60 },
@@ -43,6 +45,8 @@ export default function TimerPage() {
     setTime(studyTime);
     setMessage(""); // Clear any messages
     setShowResetConfirm(false); // Hide confirmation modal
+    setTimerTitle("study"); // Reset title
+    setShowTitleInput(false); // Hide title input
   };
 
   const cancelReset = () => {
@@ -62,6 +66,18 @@ export default function TimerPage() {
     }
   };
 
+  const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTimerTitle(e.target.value); // Update title
+  };
+
+  const handleEnterTitle = () => {
+    setShowTitleInput(false); // Hide title input
+  };
+
+  const handleToggleTitleInput = () => {
+    setShowTitleInput(!showTitleInput); // Toggle input visibility
+  };
+
   // Timer logic
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -73,7 +89,7 @@ export default function TimerPage() {
             setIsRunning(false);
 
             // Switch between study and break
-            const nextPhase = isStudyPhase ? "Break" : "Study";
+            const nextPhase = isStudyPhase ? "Break" : "Focus";
             setMessage(`Time's up! Switching to ${nextPhase} Time.`);
             setTimeout(() => setMessage(""), 1000); // Clear message after 1 second
 
@@ -90,13 +106,15 @@ export default function TimerPage() {
   }, [isRunning, isStudyPhase, studyTime, breakTime]);
 
   return (
-    <div className="timer-page ">
+    <div className="timer-page">
       <div className="timer-container">
-        <h1 className="timer-title">{isStudyPhase ? "Study Time" : "Break Time"}</h1>
+        <h1 className="timer-title">
+          {isStudyPhase ? `Focus Time - ${timerTitle}` : "Break Time"}
+        </h1>
         <h2 className="timer-display">{formatTime(time)}</h2>
         <p className="timer-message">{message}</p>
         <select
-          className="time-selector"
+          className="timer-selector"
           onChange={handleTimeChange}
           defaultValue="25 Minutes"
         >
@@ -106,30 +124,58 @@ export default function TimerPage() {
             </option>
           ))}
         </select>
+
+        {showTitleInput ? (
+          <div className="timer-title-input-container">
+            <input
+              type="text"
+              className="timer-title-input"
+              placeholder="Enter title"
+              value={timerTitle}
+              onChange={handleTitleInputChange}
+            />
+            <button
+              className="timer-enter-button"
+              onClick={handleEnterTitle}
+            >
+              Enter
+            </button>
+          </div>
+        ) : (
+          <button
+            className="timer-toggle-title-button"
+            onClick={handleToggleTitleInput}
+            disabled={isRunning}
+          >
+            {timerTitle === "Study" ? "Add Title" : "Change Title"}
+          </button>
+        )}
+
         <div className="timer-controls">
           <button
-            className="start-button"
+            className="timer-start-button"
             onClick={handleStart}
             disabled={isRunning}
           >
             Start
           </button>
-          <button className="reset-button" 
+          <button
+            className="timer-reset-button"
             onClick={handleReset}
             disabled={!isRunning} // Disable when timer is not running
           >
-          Reset
+            Reset
           </button>
         </div>
       </div>
       {showResetConfirm && (
-        <div className="reset-modal">
-          <div className="reset-modal-content">
+        <div className="timer-reset-modal">
+          <div className="timer-reset-modal-content">
             <p>Are you sure you want to reset?</p>
-            <button className="confirm-button" onClick={confirmReset}>
+            <button className="timer-confirm-button" onClick={confirmReset}>
               Yes
             </button>
-            <button className="cancel-button" onClick={cancelReset}>
+            <button className="timer-cancel-button" onClick={cancelReset}>
               No
             </button>
           </div>

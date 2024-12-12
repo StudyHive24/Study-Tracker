@@ -1,5 +1,4 @@
 const mongoose =  require('mongoose')
-const uniqueValidator = require('mongoose-unique-validator');
 
 const TaskSchema = mongoose.Schema(
     {
@@ -76,7 +75,7 @@ const TaskSchema = mongoose.Schema(
     }
 )
 
-TaskSchema.plugin(uniqueValidator);
+
 
 const Task = mongoose.model("Task", TaskSchema)
 
