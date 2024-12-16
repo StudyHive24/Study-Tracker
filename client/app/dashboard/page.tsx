@@ -32,7 +32,6 @@ const Dashboard = () => {
     
         fetchTasksCount();
     }, []);
-    
 
     return (
         <div className="dashboard-container">
