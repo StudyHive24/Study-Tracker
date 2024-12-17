@@ -22,7 +22,7 @@ function Page() {
 
   return (
     <div>
-``      <RegisterForm />
+      <RegisterForm />
     </div>
   ) 
 }

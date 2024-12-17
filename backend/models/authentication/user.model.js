@@ -15,10 +15,23 @@ const UserSchema = mongoose.Schema(
         password: {
             type: String,
             required: [true, "Enter a password"]
+        },
+        photo: {
+            type: String,
+            default: ''
+        },
+        bio: {
+            type: String,
+            default: 'I am a new user'
+        },
+        isVerified: {
+            type: Boolean,
+            default: false
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        minimize: true
     }
 )
 

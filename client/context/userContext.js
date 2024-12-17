@@ -47,6 +47,7 @@ export const UserContextProvider = ({children}) => {
 
             if (res.data.error == 'email is taken already') {
                 toast.error(res.data.error)
+                return
             } else {
                 toast.success('user registered succcessfully')
                 console.log('user registered succcessfully', res.data)
@@ -76,7 +77,7 @@ export const UserContextProvider = ({children}) => {
         e.preventDefault()
 
         try {
-            const res = await axios.post(`${serverUrl}api/v1/login`, 
+             await axios.post(`${serverUrl}/api/v1/login`, 
             {
                 email: userState.email,
                 password: userState.password
@@ -107,7 +108,7 @@ export const UserContextProvider = ({children}) => {
         setLoading(true)
 
         try {
-            const res = await axios.get(`${serverUrl}api/v1/user`, {
+            const res = await axios.get(`${serverUrl}/api/v1/user`, {
                 withCredentials: true
             })
             
@@ -125,6 +126,7 @@ export const UserContextProvider = ({children}) => {
             toast.error(error.message)
         }
     }
+
 
     // dynamic form handler
     const handleUserInput = (name) => (e) => {
