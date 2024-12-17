@@ -78,7 +78,7 @@ export default function TimerPage() {
     setShowTitleInput(!showTitleInput); // Toggle input visibility
   };
 
-  // Timer logic
+  //Timer logic
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
     if (isRunning) {
