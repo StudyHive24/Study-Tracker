@@ -116,6 +116,7 @@ export default function TimerPage() {
         <select
           className="timer-selector"
           onChange={handleTimeChange}
+          disabled={isRunning}
           defaultValue="25 Minutes"
         >
           {timeOptions.map((option) => (
@@ -182,5 +183,6 @@ export default function TimerPage() {
         </div>
       )}
     </div>
+
   );
 }
