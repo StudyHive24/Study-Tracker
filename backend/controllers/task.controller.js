@@ -1,8 +1,7 @@
-const Task = require('../models/task.model.js')
-const toast = require('react-hot-toast')
+import Task from '../models/tasks/task.model.js'
 
 // to get all tasks
-const getTasks = async (req, res) => {
+export const getTasks = async (req, res) => {
     try {
         const tasks = await Task.find({})
         res.status(200).json(tasks)
@@ -12,7 +11,7 @@ const getTasks = async (req, res) => {
 }
 
 // to create a task
-const createTask = async (req, res) => {
+export const createTask = async (req, res) => {
     try {
         const task = await Task.create(req.body)
         res.status(200).json(task)
@@ -22,7 +21,7 @@ const createTask = async (req, res) => {
 }
 
 // to get a task
-const getTask = async (req, res) => {
+export const getTask = async (req, res) => {
     try {
         const {id} = req.params // to get the task id
         const task = await Task.findById(id)
@@ -33,7 +32,7 @@ const getTask = async (req, res) => {
 }
 
 // to update a task
-const updateTask = async (req, res) => {
+export const updateTask = async (req, res) => {
     try {
         const {id} =  req.params // to get the task id
         const task =  await Task.findByIdAndUpdate(id, req.body)
@@ -50,7 +49,7 @@ const updateTask = async (req, res) => {
 }
 
 // to delete a task
-const deleteTask = async (req, res) => {
+export const deleteTask = async (req, res) => {
     try {
         const {id} = req.params // to get the id
         const task =  await Task.findByIdAndDelete(id, req.body)
@@ -66,7 +65,7 @@ const deleteTask = async (req, res) => {
 }
 
 // to delete all tasks
-const deleteAllTasks = async (req, res) => {
+export const deleteAllTasks = async (req, res) => {
     try {
         const task = await Task.deleteMany({})
         res.status(200).json({
@@ -79,11 +78,3 @@ const deleteAllTasks = async (req, res) => {
 }
 
 
-module.exports = {
-    getTasks, 
-    createTask,
-    getTask,
-    updateTask,
-    deleteTask,
-    deleteAllTasks
-}

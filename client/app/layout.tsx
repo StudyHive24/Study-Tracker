@@ -6,6 +6,9 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { Sidebar } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SideBarR } from "./Components/Sidebar right/SidebarR";
+import UserProvider from "@/providers/UserProvider";
+import { Toaster } from "react-hot-toast";
+import { UserContextProvider } from "@/context/userContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,6 +36,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <UserContextProvider>
+          <Toaster position="top-center" />
         <div className="flex h-screen">
     <SidebarProvider>
       <SideBarL />
@@ -46,7 +51,7 @@ export default function RootLayout({
       </SidebarProvider>
       
     </div>
-
+    </UserContextProvider>
       </body>
     </html>
   );

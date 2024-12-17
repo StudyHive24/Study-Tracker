@@ -1,8 +1,10 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const mongoose = require("mongoose");
-const taskRoute = require('./routes/task.route.js')
-
+import express from 'express'
+import dotenv from 'dotenv'
+import mongoose from 'mongoose';
+import taskRoute from './routes/task.route.js'
+import userRoute from './routes/user.route.js'
+import cors from 'cors'
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -11,12 +13,15 @@ const app = express();
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cookieParser())
 
 const port = process.env.PORT;
 const Mongo_URI = process.env.Mongo_URI;
 
 // routes
 app.use("/api/tasks", taskRoute)
+app.use("/api/v1", userRoute)
 
 // database test
 app.get("/", (req, res) => {
@@ -35,3 +40,4 @@ mongoose
   .catch(() => {
     console.log("Connection failed");
   });
+
