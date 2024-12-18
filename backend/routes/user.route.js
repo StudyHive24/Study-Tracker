@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-import { registerUser, loginUser, getUsers, getUser, logoutUser, updateUser, userLoginStatus, emailVerify } from '../controllers/user.controller.js'
+import { registerUser, loginUser, getUsers, getUser, logoutUser, updateUser, userLoginStatus, emailVerify, verifyUser } from '../controllers/user.controller.js'
 import { protect } from '../middleware/authentcationMiddleware.js'
 
 // to get all users
@@ -29,5 +29,8 @@ router.get('/user', protect, getUser)
 
 // user login status
 router.get('/login-status', userLoginStatus)
+
+// to verify user
+router.post('/verify-user/:verificationToken', verifyUser)
 
 export default router

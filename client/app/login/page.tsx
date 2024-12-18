@@ -5,6 +5,7 @@ import {toast} from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import LoginForm from '../Components/loginForm/LoginForm'
 import { useUserContext } from '@/context/userContext'
+import WelcomeHeader from '../Components/Welcome Header/WelcomeHeader'
 
 function Page() {
 
@@ -27,6 +28,7 @@ function Page() {
     
   return (
     <div>
+        <WelcomeHeader link={'/register'}/>
         <LoginForm />
     </div>
   )

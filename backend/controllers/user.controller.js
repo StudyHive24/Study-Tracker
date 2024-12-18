@@ -317,6 +317,41 @@ export const verifyUser = async (req, res) => {
         })
     }
 
+    // had verification token
+    const hashedToken = hashToken(verificationToken)
+
+    // to find user with the verification token
+    const userToken = await Token.findOne({
+        verificationToken: hashedToken,
+
+        // to check the expiration of the token
+        expiresAt: { $gt: Date.now() }
+    })
+
+    if (!userToken) {
+        res.status(400)
+        res.json({
+            message: 'Invalid or expired verification token'
+        })
+    }
+
+    // to find user with the user id in the token
+    const user = await User.findById(userToken.userID)
+
+    if (user.isVerifed) {
+        res.status(400)
+        return res.json({
+            message: 'User is already verified'
+        })
+    }
+
+    // to update user to verified
+    user.isVerifed = true
+    await user.save()
+    res.status(200)
+    res.json({
+        message: 'User is verified'
+    })
     
 }
 

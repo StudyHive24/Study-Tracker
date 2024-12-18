@@ -57,7 +57,7 @@ export function SideBarL() {
             <SidebarMenu className="gap-5 ">
                 <SidebarMenuItem >
                   <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-                    <Link href="/dashboard" className="flex flex-row gap-5 ml-5">
+                    <Link href="/" className="flex flex-row gap-5 ml-5">
                       <CircleGauge />
                       <span>Dashboard</span>
                     </Link>

@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import React, {useEffect} from 'react'
 import { useUserContext } from '@/context/userContext'
 import RegisterForm from '../Components/registerFrom/RegisterForm'
+import WelcomeHeader from '../Components/Welcome Header/WelcomeHeader'
 
 function Page() {
 
@@ -22,6 +23,7 @@ function Page() {
 
   return (
     <div>
+      <WelcomeHeader link={'/login'}/>
       <RegisterForm />
     </div>
   ) 
