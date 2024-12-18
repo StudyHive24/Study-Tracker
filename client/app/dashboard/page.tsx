@@ -6,13 +6,15 @@ import 'react-calendar/dist/Calendar.css';
 import './dashboard.css';
 import axios from 'axios';
 
+
+
 const Dashboard = () => {
     let Username = "Yahan";
     
     const [date, setDate] = useState(new Date());
     const chatbotMessage = "Hi, I am your Study instructor. You have assignments due in 3 days. Check the Time Table.";
     const onDateChange = (newDate: Date) => {setDate(newDate);};
-    const [progress, setProgress] = useState(10); // Task completion progress
+    const [progress, setProgress] = useState(0); // Task completion progress
 
 
     const [tasksCount, setTasksCount] = useState(0); // State for tasks count
