@@ -12,7 +12,7 @@ interface UserProps {
 
 function Task({title, description, time, priority, color} : UserProps) {
   return (
-    <div className='flex flex-col justify-between bg-[#ecf2fa] p-4 rounded-lg h-48 m-[5px] '>
+    <div className='flex flex-col justify-between bg-white p-4 rounded-lg h-48 m-[5px] '>
         <div className='flex flex-col'>
           <span className='mb-1 mt-1'>{title}</span>
           <span className='text-sm'>{description}</span>

@@ -127,6 +127,28 @@ export const UserContextProvider = ({children}) => {
         }
     }
 
+    // to get user logged in status
+    const userLoginStatus = async (req, res) => {
+        let loggedIn = false
+
+        try {
+            const res = await axios.get(`${serverUrl}/api/v1/login-status`, {
+                withCredentials: true
+            })
+
+            // converting the string to boolean
+            loggedIn = !!res.data
+            setLoading(false)
+
+            if (!loggedIn) {
+                router.push('/login')
+            }
+
+        } catch (error) {
+            console.log('Error in getting the user login status', error)
+        }
+    }
+
 
     // dynamic form handler
     const handleUserInput = (name) => (e) => {
@@ -146,7 +168,8 @@ export const UserContextProvider = ({children}) => {
                 user,
                 handleUserInput,
                 setUser,
-                loginUser
+                loginUser,
+                userLoginStatus
             }}
         > {children} 
         </UserContext.Provider>

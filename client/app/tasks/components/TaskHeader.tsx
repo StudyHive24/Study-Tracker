@@ -6,7 +6,7 @@ import AddTaskModel from './AddTaskModel'
 
 export function TaskHeader() {
   return (
-    <div className='flex flex-row justify-between bg-[#e4f0ff] rounded-2xl p-2'>
+    <div className='flex flex-row justify-between bg-white rounded-2xl p-2'>
         <div className='flex flex-col gap-1'>
             <div className='flex flex-row gap-3'>
                 <Hand color='orange'/>

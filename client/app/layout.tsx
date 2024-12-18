@@ -9,6 +9,7 @@ import { SideBarR } from "./Components/Sidebar right/SidebarR";
 import UserProvider from "@/providers/UserProvider";
 import { Toaster } from "react-hot-toast";
 import { UserContextProvider } from "@/context/userContext";
+import useRiderect from "@/hooks/useUserRiderect";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
