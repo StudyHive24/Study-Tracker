@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-import { registerUser, loginUser, getUsers, getUser, logoutUser, updateUser, userLoginStatus } from '../controllers/user.controller.js'
+import { registerUser, loginUser, getUsers, getUser, logoutUser, updateUser, userLoginStatus, emailVerify } from '../controllers/user.controller.js'
 import { protect } from '../middleware/authentcationMiddleware.js'
 
 // to get all users
@@ -17,6 +17,9 @@ router.patch('/user', protect, updateUser)
 
 // to logout a user
 router.get('/logout', logoutUser)
+
+// email verification
+router.post('/verify-email', protect, emailVerify)
 
 // to get a profile of the user
 // router.get('/profile', getProfile)

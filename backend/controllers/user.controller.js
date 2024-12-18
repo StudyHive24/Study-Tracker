@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken'
 import User from '../models/authentication/user.model.js'
 import generateToken from '../helpers/generateToken.js'
 import Token from '../models/authentication/Token.js'
+import crypto from 'node:crypto'
+import hashToken from '../helpers/hashToken.js'
+import emailSend from '../helpers/emailSend.js'
 
 
 export const test = (req, res) => {
@@ -217,7 +220,66 @@ export const userLoginStatus = async (req, res) => {
 }
 
 // email verification
+export const emailVerify = async (req, res) => {
+    const user = await User.findById(req.user._id)
 
+    // to check user's existence
+    if (!user) {
+        res.status(404)
+        res.json({
+            message: 'User not found'
+        })
+    }
+
+    // check the verified status of the user
+    if (user.isVerifed) {
+        res.status(400)
+        res.json({
+            message: 'User is verified already'
+        })
+    }
+
+    const token = await Token.findOne({ userID: user._id })
+
+    // if token exists then delte the token
+    if (token) {
+        await token.deleteOne()
+    }
+
+    // to create a verification token using the user id
+    const verificationToken = crypto.randomBytes(64).toString('hex') + user._id
+
+    // to hash the verification token
+    const HashedToken = hashToken(verificationToken)
+
+    await new Token({
+        userID: user._id,
+        verificationToken: HashedToken,
+        createdAt: Date.now(),
+        expiresAt: Date.now() + 24 * 60 * 60 * 1000   // expires after 24 hours
+    }).save()
+
+    // verfication link
+    const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`
+
+    // send email
+    const subject = 'Email Verification AuthKit'
+    const send_to = user.email
+    const reply_to = 'noreply@gmail.com'
+    const template = 'emailVerification'
+    const send_from = process.env.USER_EMAIL
+    const name = user.name
+    const url = verificationLink
+
+    try {
+        await emailSend(subject, send_to, send_from, reply_to, template, name, url)
+    } catch (error) {
+        res.status(500)
+        return res.json({
+            message: "Email couldn't be sent"
+        })
+    }
+}
 
 
 export const getUsers = async (req, res) => {
@@ -242,6 +304,20 @@ export const getUser = async (req, res) => {
             message: 'User not found'
         })
     }
+}
+
+// verify user
+export const verifyUser = async (req, res) => {
+    const {verificationToken} = req.params
+
+    if (!verificationToken) {
+        res.status(400)
+        return res.json({
+            message: 'Invalid verification token'
+        })
+    }
+
+    
 }
 
 export const getProfile = (req, res) => {
