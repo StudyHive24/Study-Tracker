@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button"
 import { UserProfile } from "../User-Profile/UserProfile"
 import User from "./Components/User";
 import LogoutButton from "./Components/LogoutButton";
+import { useUserContext } from "@/context/userContext";
 
 
 
@@ -53,6 +54,7 @@ const items = [
 ]
 
 export function SideBarR() {
+
   return (
     <Sidebar variant="inset" side="right">
       <SidebarContent className="bg-[#f3f8ff]">

@@ -214,7 +214,8 @@ export const UserContextProvider = ({children}) => {
                 setUser,
                 loginUser,
                 userLoginStatus,
-                forgotPassowrdEmail
+                forgotPassowrdEmail,
+                logoutUser
             }}
         > {children} 
         </UserContext.Provider>
