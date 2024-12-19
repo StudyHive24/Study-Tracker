@@ -144,10 +144,10 @@ export const TasksProvider = ({children}) => {
     }
 
     // to get completed tasks
-    const completedTasks = tasks.filter((task) => task.completed)
+    const completedTasks = tasks?.filter((task) => task.completed)
 
     // get pending tasks
-    const pendingTasks = tasks.filter((task) => !task.completed)
+    const pendingTasks = tasks?.filter((task) => !task.completed)
 
     useEffect(() => {
         getTasks()
