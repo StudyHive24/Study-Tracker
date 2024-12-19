@@ -51,7 +51,7 @@ export const TasksProvider = ({children}) => {
         setLoading(true)
 
         try {
-            const res = await axios.get(`${serverUrl}/tasks`)
+            const res = await axios.get(`${serverUrl}/api/tasks`)
 
             setTasks(res.data.tasks)
         } catch (error) {
@@ -66,7 +66,7 @@ export const TasksProvider = ({children}) => {
         setLoading(true)
 
         try {
-            const res =  await axios.get(`${serverUrl}/tasks/${taskID}`)
+            const res =  await axios.get(`${serverUrl}/api/tasks/${taskID}`)
 
             setTask(res.data)
         } catch (error) {
@@ -81,7 +81,7 @@ export const TasksProvider = ({children}) => {
         setLoading(true)
 
         try {
-            const res = await axios.post(`${serverUrl}/tasks/`, task)
+            const res = await axios.post(`${serverUrl}/api/tasks/`, task)
 
             console.log('Task created', res.data)
 
@@ -101,7 +101,7 @@ export const TasksProvider = ({children}) => {
         
 
         try {
-            const res =  await axios.patch(`${serverUrl}/tasks/${task._id}`)
+            const res =  await axios.patch(`${serverUrl}/api/tasks/${task._id}`)
 
             // udpdate a task in the tasks array
             const newTasks =  tasks.map((t) => {
@@ -123,7 +123,7 @@ export const TasksProvider = ({children}) => {
         setLoading(true)
 
         try {
-            await axios.delete(`${serverUrl}/tasks/${taskID}`)
+            await axios.delete(`${serverUrl}/api/tasks/${taskID}`)
 
             // remove the task from the task array
             const newTasks = tasks.filter((t) => t._id !== taskID)
