@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
+import useRiderect from "@/hooks/useUserRiderect";
 
 interface Schedule {
   id: number;
@@ -13,6 +14,9 @@ interface Schedule {
 }
 
 export default function TimeTable() {
+
+  useRiderect('/login')
+
   const [activeTable, setActiveTable] = useState<"daily" | "schedule">("daily");
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(

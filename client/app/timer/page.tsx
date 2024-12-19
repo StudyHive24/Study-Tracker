@@ -2,8 +2,12 @@
 
 import { useState, useEffect } from "react"; // Importing React hooks
 import "./timer.css"; // Importing the CSS file for styling
+import useRiderect from "@/hooks/useUserRiderect";
 
 export default function TimerPage() {
+
+  useRiderect('/login')
+
   const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)
   const [breakTime, setBreakTime] = useState(5 * 60); // Default break time (5 mins)
   const [time, setTime] = useState(studyTime); // Current time in seconds
@@ -15,8 +19,18 @@ export default function TimerPage() {
   const [showTitleInput, setShowTitleInput] = useState(false); // Toggle title input visibility
   const [timerTitle, setTimerTitle] = useState("Study"); // Timer title (default)
 
-  const [showHistory, setShowHistory] = useState(false); // Timer history visibility
+  const [timerHistory, setTimerHistory] = useState([
+    { date: "2024-12-01", title: "Study Session", duration: "25:00" },
+    { date: "2024-12-02", title: "Math Practice", duration: "50:00" },
+    { date: "2024-12-03", title: "Reading", duration: "15:00" },
+    { date: "2024-12-03", title: "Reading", duration: "15:00" },
+    { date: "2024-12-03", title: "Reading", duration: "15:00" },
+    { date: "2024-12-03", title: "Reading", duration: "15:00" },
+    { date: "2024-12-03", title: "Reading", duration: "15:00" },
+    { date: "2024-12-03", title: "Reading", duration: "15:00" },
+  ]); // Store timer history
 
+  
   const timeOptions = [
     { label: "25 Minutes", study: 25 * 60, break: 5 * 60 },
     { label: "50 Minutes", study: 50 * 60, break: 10 * 60 },
@@ -25,33 +39,7 @@ export default function TimerPage() {
     { label: "15 Seconds (Test)", study: 15, break: 5 }, // For testing
   ];
 
-  const sampleHistoryData = [
-    {
-      date: "2024-12-17",
-      time: "10:30 AM",
-      title: "Math Study",
-      focusDuration: "25 mins",
-    },
-    {
-      date: "2024-12-16",
-      time: "8:00 PM",
-      title: "Physics Revision",
-      focusDuration: "50 mins",
-    },
-    {
-      date: "2024-12-15",
-      time: "3:00 PM",
-      title: "Programming Practice",
-      focusDuration: "1 hr",
-    },
-    {
-      date: "2024-12-15",
-      time: "3:00 PM",
-      title: "Programming Practice",
-      focusDuration: "1 hr",
-    },
-  ];
-
+ 
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -108,9 +96,7 @@ export default function TimerPage() {
     setShowTitleInput(!showTitleInput); // Toggle input visibility
   };
 
-  const toggleHistory = () => {
-    setShowHistory(!showHistory);
-  };
+  
 
   //Timer logic
   useEffect(() => {
@@ -202,14 +188,32 @@ export default function TimerPage() {
             Reset
           </button>
         </div>
-        <button className="timer-history-button" onClick={toggleHistory}>
-          View Timer History
-        </button>
+        
       </div>
-      {/* uncomment this and start buiding the timer history */}
-      {/* <div className="text-lg p-4 bg-white w-[50vw] text-center hover:bg-red-400">
-        this is the timer history
-      </div> */}
+      {/* Timer History */}
+      <div className="timer-history-container">
+      <h2 className="timer-history-title">Timer History</h2>
+        <table className="timer-history">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Title</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            {timerHistory.map((entry, index) => (
+              <tr key={index}>
+                <td>{entry.date}</td>
+                <td>{entry.title}</td>
+                <td>{entry.duration}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      
       {showResetConfirm && (
         <div className="timer-reset-modal">
           <div className="timer-reset-modal-content">
@@ -223,36 +227,7 @@ export default function TimerPage() {
           </div>
         </div>
       )}
-      {showHistory && (
-        <div className="timer-history-modal">
-          <div className="timer-history-modal-content">
-            <h2>Timer History</h2>
-            <table className="timer-history-table">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Title</th>
-                  <th>Focus Duration</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sampleHistoryData.map((entry, index) => (
-                  <tr key={index}>
-                    <td>{entry.date}</td>
-                    <td>{entry.time}</td>
-                    <td>{entry.title}</td>
-                    <td>{entry.focusDuration}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <button className="timer-close-history-button" onClick={toggleHistory}>
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      
     </div>
     
 

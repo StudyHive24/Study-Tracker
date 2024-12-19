@@ -10,6 +10,7 @@ import UserProvider from "@/providers/UserProvider";
 import { Toaster } from "react-hot-toast";
 import { UserContextProvider } from "@/context/userContext";
 import useRiderect from "@/hooks/useUserRiderect";
+import MainLayoutContent from "@/providers/MainLayoutContent";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -45,7 +46,9 @@ export default function RootLayout({
      
       <SidebarInset>
       <main className="flex-1 p-4 bg-[#c7d9f0] overflow-auto rounded-xl">
-        {children}
+        <MainLayoutContent>
+          {children}
+        </MainLayoutContent>
       </main>
       </SidebarInset>
       <SideBarR />

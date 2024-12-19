@@ -1,3 +1,5 @@
+'use client'
+import useRiderect from "@/hooks/useUserRiderect";
 import React from "react";
 
 // Reusable Sub-box Component
@@ -31,6 +33,9 @@ const ProgressPage: React.FC<ProgressPageProps> = ({
   completionPercentage = 85,
   completionPercentage2 = 85,
 }) => {
+
+  useRiderect('/login')
+
   return (
     <div className="p-6 font-sans space-y-6">
       {/* Top Section */}

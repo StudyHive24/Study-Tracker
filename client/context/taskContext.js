@@ -17,7 +17,7 @@ export const TasksProvider = ({children}) => {
     const [task, setTask] = useState({})
 
     const [isEditing, setIsEditing] = useState(false)
-    const [priority, SetPriority] = useState("all")
+    const [priority, setPriority] = useState("all")
     const [activeTask, setActiveTask] = useState(null)
     const [modalMode, setModalMode] = useState("")
     const [profileModal, setProfileModal] = useState(false)
@@ -34,7 +34,7 @@ export const TasksProvider = ({children}) => {
         setActiveTask(task)
     }
 
-    const openPorfileModal = () => {
+    const openProfileModal = () => {
         setProfileModal(true)
     }
 
@@ -172,7 +172,7 @@ export const TasksProvider = ({children}) => {
             closeModal,
             modalMode,
             openProfileModal,
-            activeTasks,
+            pendingTasks,
             completedTasks,
             profileModal,
             
