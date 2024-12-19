@@ -164,63 +164,82 @@ background-color: #dc3545;
 color: white;
 }
 
-/* Timer History Button */
-.timer-history-button {
-  background-color: #030c14;
-  color: white;
-  padding: 10px 15px;
-  font-size: 1rem;
-  margin: 20px 0;
-  border: none;
-  border-radius: 90px;
-  cursor: pointer;
+
+
+/* Styling for Timer History Container */
+.timer-history-container {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9; /* Light gray background */
+  border: 1px solid #ddd; /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
+  max-height: 300px; /* Set a maximum height for the container */
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
+  width: 80%;
 }
 
-/* Timer History Modal */
-.timer-history-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
+/* Styling for Timer History Table */
+.timer-history {
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-collapse: collapse; /* Remove space between cells */
 }
 
-.timer-history-modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 80%;
-  overflow-y: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-.timer-history-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.timer-history-table th,
-.timer-history-table td {
-  border: 1px solid #ccc;
+.timer-history th, 
+.timer-history td {
   padding: 10px;
-  text-align: center;
+  text-align: left;
+  border-bottom: 1px solid #ddd; /* Light gray bottom border for rows */
 }
 
-.timer-close-history-button {
-  background-color: #dc3545;
-  color: white;
-  padding: 10px 15px;
-  font-size: 1rem;
-  margin-top: 15px;
-  border: none;
-  border-radius: 90px;
-  cursor: pointer;
+/* Styling for Table Header */
+.timer-history th {
+  background-color: #939898; 
+  color: rgb(0, 0, 1); 
+  font-weight: bold;
+  text-transform: uppercase; /* Uppercase text for header */
+  border-top: 1px solid #ddd; /* Top border */
+  /* border-radius: 25px; */
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+/* font-family: 'Montserrat', sans-serif; */
+/* font-family: 'Roboto', sans-serif; */
+}
+
+/* Styling for Table Rows */
+.timer-history tr:nth-child(even) {
+  background-color: #f2f2f2; /* Alternate row color */
+}
+
+.timer-history tr:hover {
+  background-color: #e9ecef; /* Highlight row on hover */
+}
+
+/* Styling for Table Cells */
+.timer-history td {
+  font-size: 14px; /* Smaller font size */
+  color: #333; /* Dark gray text */
+ 
+}
+
+/* Responsive Table Styling */
+@media (max-width: 768px) {
+  .timer-history-container {
+    padding: 10px;
+  }
+
+  .timer-history th,
+  .timer-history td {
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+}
+
+.timer-history-title {
+  font-size: 1.5rem; /* Larger font size */
+  font-weight: bold; /* Make it bold */
+  margin-bottom: 10px; /* Add some space below the title */
+  color: #333; /* Dark gray text */
+  text-align: center; /* Center the title */
 }
 
