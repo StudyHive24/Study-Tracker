@@ -5,12 +5,10 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; 
 import './dashboard.css';
 import axios from 'axios';
-
-
+import { useUserContext } from '../../../context/userContext';
 
 const Dashboard = () => {
-    let Username = "Yahan";
-    
+    const { user, getUser } = useUserContext();
     const [date, setDate] = useState(new Date());
     const chatbotMessage = "Hi, I am your Study instructor. You have assignments due in 3 days. Check the Time Table.";
     const onDateChange = (newDate: Date) => {setDate(newDate);};
@@ -38,7 +36,7 @@ const Dashboard = () => {
     return (
         <div className="dashboard-container">
             <header className="header">
-                <h1>Hello {Username}</h1>
+                <h1>Hello {user.name}</h1>
                 <button className="reminder-button">
                     <img src="/Dashboeard-imgs/bell.png" alt="Bell Icon" className="bell-icon" />
                 </button>

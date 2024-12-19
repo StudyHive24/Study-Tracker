@@ -12,15 +12,15 @@
     align-items: center;
     margin-bottom: 15px;
     background-color: #ffffff9a;
-    padding: 0 10px;
+    padding: 4px 10px;
     border: 0px solid rgb(0, 0, 0);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 .header h1{
-    font-size: 20px;
-    
-    
+    font-size: 22px;
+    color: #282430;
+    font-weight: bold;
 }
 
 .reminder-button {
@@ -63,12 +63,21 @@
     background-color: #ffffff9a;
     grid-column: span 0;
 }
-
+.chatbot p{
+    font-family:Arial, Helvetica, sans-serif;
+    background-color: #ffffff;
+    padding:10px;
+    border-radius: 8px;
+    color: #000000;
+    
+    font-size: 17px;
+}
 .chatbot-icon {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     margin-right: 10px;
+    
 }
 
 /* Tasks Complete */
