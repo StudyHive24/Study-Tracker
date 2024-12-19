@@ -15,6 +15,8 @@ export default function TimerPage() {
   const [showTitleInput, setShowTitleInput] = useState(false); // Toggle title input visibility
   const [timerTitle, setTimerTitle] = useState("Study"); // Timer title (default)
 
+  const [showHistory, setShowHistory] = useState(false); // Timer history visibility
+
   const timeOptions = [
     { label: "25 Minutes", study: 25 * 60, break: 5 * 60 },
     { label: "50 Minutes", study: 50 * 60, break: 10 * 60 },
@@ -22,6 +24,34 @@ export default function TimerPage() {
     { label: "2 Hours", study: 2 * 60 * 60, break: 20 * 60 },
     { label: "15 Seconds (Test)", study: 15, break: 5 }, // For testing
   ];
+
+  const sampleHistoryData = [
+    {
+      date: "2024-12-17",
+      time: "10:30 AM",
+      title: "Math Study",
+      focusDuration: "25 mins",
+    },
+    {
+      date: "2024-12-16",
+      time: "8:00 PM",
+      title: "Physics Revision",
+      focusDuration: "50 mins",
+    },
+    {
+      date: "2024-12-15",
+      time: "3:00 PM",
+      title: "Programming Practice",
+      focusDuration: "1 hr",
+    },
+    {
+      date: "2024-12-15",
+      time: "3:00 PM",
+      title: "Programming Practice",
+      focusDuration: "1 hr",
+    },
+  ];
+
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -76,6 +106,10 @@ export default function TimerPage() {
 
   const handleToggleTitleInput = () => {
     setShowTitleInput(!showTitleInput); // Toggle input visibility
+  };
+
+  const toggleHistory = () => {
+    setShowHistory(!showHistory);
   };
 
   //Timer logic
@@ -168,6 +202,9 @@ export default function TimerPage() {
             Reset
           </button>
         </div>
+        <button className="timer-history-button" onClick={toggleHistory}>
+          View Timer History
+        </button>
       </div>
       {showResetConfirm && (
         <div className="timer-reset-modal">
@@ -178,6 +215,36 @@ export default function TimerPage() {
             </button>
             <button className="timer-cancel-button" onClick={cancelReset}>
               No
+            </button>
+          </div>
+        </div>
+      )}
+      {showHistory && (
+        <div className="timer-history-modal">
+          <div className="timer-history-modal-content">
+            <h2>Timer History</h2>
+            <table className="timer-history-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Title</th>
+                  <th>Focus Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sampleHistoryData.map((entry, index) => (
+                  <tr key={index}>
+                    <td>{entry.date}</td>
+                    <td>{entry.time}</td>
+                    <td>{entry.title}</td>
+                    <td>{entry.focusDuration}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button className="timer-close-history-button" onClick={toggleHistory}>
+              Close
             </button>
           </div>
         </div>
