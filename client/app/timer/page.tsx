@@ -140,7 +140,7 @@ export default function TimerPage() {
   }, [isRunning, isStudyPhase, studyTime, breakTime]);
 
   return (
-    <div className="timer-page">
+    <div className="timer-page gap-3 ">
       <div className="timer-container">
         <h1 className="timer-title">
           {isStudyPhase ? `Focus Time - ${timerTitle}` : "Break Time"}
@@ -206,6 +206,10 @@ export default function TimerPage() {
           View Timer History
         </button>
       </div>
+      {/* uncomment this and start buiding the timer history */}
+      {/* <div className="text-lg p-4 bg-white w-[50vw] text-center hover:bg-red-400">
+        this is the timer history
+      </div> */}
       {showResetConfirm && (
         <div className="timer-reset-modal">
           <div className="timer-reset-modal-content">
@@ -250,6 +254,7 @@ export default function TimerPage() {
         </div>
       )}
     </div>
+    
 
   );
 }

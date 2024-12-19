@@ -103,6 +103,26 @@ export const UserContextProvider = ({children}) => {
         }
     }
 
+    // logout user
+    const logoutUser = async (req, res) => {
+        try {
+            const res = axios.get(`${serverUrl}/api/v1/logout`, {
+                withCredentials: true
+            })
+
+            toast.success('User logged out successfully')
+
+            setUser({})
+
+            // to riderect to the login page
+            router.push('/login')
+
+        } catch (error) {
+            console.log('Error on loggin out the user')
+            toast.error(error.message)
+        }
+    }
+
     // get user details 
     const getUser = async () => {
         setLoading(true)
@@ -149,6 +169,30 @@ export const UserContextProvider = ({children}) => {
         }
     }
 
+    // forgot password email
+    const forgotPassowrdEmail = async (email) => {
+        setLoading(true)
+
+        try {
+            const res = await axios.post(
+                `${serverUrl}/api/v1/forgot-password`,
+                {
+                    email
+                },
+                {
+                    withCredentials: true   // this is for sending cookies to the server
+                }
+            )
+
+            toast.success('Password reset email sent successfully')
+            setLoading(false)
+        } catch (error) {
+            console.log('Error while sending the password reset email', error)
+            toast.error(error.message)
+            setLoading(false)
+        }
+    }
+
 
     // dynamic form handler
     const handleUserInput = (name) => (e) => {
@@ -169,7 +213,8 @@ export const UserContextProvider = ({children}) => {
                 handleUserInput,
                 setUser,
                 loginUser,
-                userLoginStatus
+                userLoginStatus,
+                forgotPassowrdEmail
             }}
         > {children} 
         </UserContext.Provider>

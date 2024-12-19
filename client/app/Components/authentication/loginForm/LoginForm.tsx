@@ -47,7 +47,7 @@ function LoginForm() {
               <hr />
             </div>
             <div className='flex justify-end'>
-              <span className='text-blue-500 text-[15px] hover:text-blue-600 cursor-pointer'>Forgot Password?</span>
+              <Link href={'/forgot-password'}><span className='text-blue-500 text-[15px] hover:text-blue-600 cursor-pointer'>Forgot Password?</span></Link> 
             </div>
             <button
               disabled={ !email || !password}

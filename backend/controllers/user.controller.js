@@ -317,7 +317,7 @@ export const verifyUser = async (req, res) => {
         })
     }
 
-    // had verification token
+    // hash the verification token
     const hashedToken = hashToken(verificationToken)
 
     // to find user with the verification token
@@ -355,6 +355,76 @@ export const verifyUser = async (req, res) => {
     
 }
 
+// forgot password
+export const forgotPassowrd = async (req, res) => {
+    const {email} = req.body
+
+    if (!email) {
+        res.status(400)
+        return res.json({
+            message: 'Email is required'
+        })
+    }
+
+    // check the existence of the user
+    const user = await User.findOne({email})
+
+    if (!user) {
+        res.status(404) 
+        res.json({
+            message: 'User not found'
+        })
+    }
+
+    // check the existence of the reset toke
+    let token = await Token.findOne({userID: user._id})
+
+    // delete the token if it already exists
+    if (token) {
+        await token.deleteOne()
+    }
+
+    // create a reset token using user id, this will expires in 1 hour
+    const passResetToken = crypto.randomBytes(64).toString('hex') + user._id
+
+    // hash the reset token
+    const hashedToken = hashToken(passResetToken)
+    
+    await new Token({
+        userID: user._id,
+        passwordResetToken: hashedToken,
+        createdAt: Date.now(),
+        expiresAt: Date.now() + 60 * 60 * 1000   // 1 hour
+    }).save()
+
+    // reset link
+    const resetLink = `${process.env.CLIENT_URL}/reset-password/${passResetToken}`
+
+    // send email to the user
+    const subject = 'Password Reset - StudyHive'
+    const send_to = user.email
+    const send_from = process.env.USER_EMAIL
+    const reply_to = 'noreply@noreply.com'
+    const template = 'forgotPassword'
+    const name = user.name
+    const url = resetLink
+
+    try {
+        await emailSend(subject, send_to, send_from, reply_to, template, name, url)
+        return res.json({
+            message: 'Email sent successfully'
+        })
+    } catch (error) {
+        console.log('Error in sending the email', error)
+        res.status(500)
+        return res.json({
+            message: 'Email couldn\'t be sent'
+        })
+    }
+
+
+}
+ 
 export const getProfile = (req, res) => {
     const {token} = req.cookies
     if(token) {

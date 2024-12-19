@@ -3,13 +3,13 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {toast} from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
-import LoginForm from '../Components/loginForm/LoginForm'
+import LoginForm from '../Components/authentication/loginForm/LoginForm'
 import { useUserContext } from '@/context/userContext'
 import WelcomeHeader from '../Components/Welcome Header/WelcomeHeader'
 
 function Page() {
 
-    const {user} = useUserContext()
+    const { user } = useUserContext()
 
     const router = useRouter()
 
@@ -23,6 +23,8 @@ function Page() {
     // return null or a laod a spiner
     if (user && user._id) {
         return null
+    } else {
+        console.log('There is no user')
     }
   
     

@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation'
 import React, {useEffect} from 'react'
 import { useUserContext } from '@/context/userContext'
-import RegisterForm from '../Components/registerFrom/RegisterForm'
+import RegisterForm from '../Components/authentication/registerForm/RegisterForm'
 import WelcomeHeader from '../Components/Welcome Header/WelcomeHeader'
 
 function Page() {
