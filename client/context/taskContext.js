@@ -1,8 +1,8 @@
+'use client'
 import axios from 'axios'
-import React, { createContext, useEffect, useState } from 'react'
-import { useUserContext } from '../context/userContext'
+import React, { createContext, useEffect, useState, useContext } from 'react'
+import { useUserContext } from '../context/userContext.js'
 import toast from 'react-hot-toast'
-import { tr } from 'date-fns/locale'
 
 const TaskContext = createContext()
 
@@ -10,11 +10,13 @@ const serverUrl = 'http://localhost:8000'
 
 export const TasksProvider = ({children}) => {
 
-    const userID =  useUserContext.user._id
+    const {user} = useUserContext()
+
+    const userID =  user?._id
 
     const [tasks, setTasks] = useState([])
     const [loading, setLoading] = useState(false)
-    const [task, setTask] = useState({})
+    const [task, setTask] = React.useState({})
 
     const [isEditing, setIsEditing] = useState(false)
     const [priority, setPriority] = useState("all")
@@ -46,7 +48,7 @@ export const TasksProvider = ({children}) => {
         setTask({})
     }
 
-    // get task
+    // get tasks
     const getTasks = async () => {
         setLoading(true)
 
@@ -57,14 +59,16 @@ export const TasksProvider = ({children}) => {
         } catch (error) {
             console.log('Error getting tasks', error)
         }
+
+        setLoading(false)
     }
 
     // get task
-    const getTask = async (tasKID) => {
+    const getTask = async (taskID) => {
         setLoading(true)
 
         try {
-            const res =  await axios.get(`${serverUrl}/tasks/${tasKID}`)
+            const res =  await axios.get(`${serverUrl}/tasks/${taskID}`)
 
             setTask(res.data)
         } catch (error) {
@@ -85,6 +89,7 @@ export const TasksProvider = ({children}) => {
 
             setTasks([...tasks, res.data])
             toast.success('Task created succcessfully')
+
         } catch (error) {
             console.log('Error getting a task', error)
         }
@@ -150,6 +155,8 @@ export const TasksProvider = ({children}) => {
         getTasks()
     }, [userID])
 
+    console.log('Active tasks', activeTask)
+
 
     return (
         <TaskContext.Provider value={{
@@ -182,6 +189,6 @@ export const TasksProvider = ({children}) => {
     )
 } 
 
-export const useTasks = () => {
-    return React.useContext(TaskContext)
+export const useTasksContext = () => {
+    return useContext(TaskContext)
 }
