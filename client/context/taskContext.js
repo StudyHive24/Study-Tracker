@@ -10,9 +10,7 @@ const serverUrl = 'http://localhost:8000'
 
 export const TasksProvider = ({children}) => {
 
-    const {user} = useUserContext()
-
-    const userID =  user?._id
+    const userID =  useUserContext().user._id
 
     const [tasks, setTasks] = useState([])
     const [loading, setLoading] = useState(false)

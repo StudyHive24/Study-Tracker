@@ -1,5 +1,6 @@
-import { UserContextProvider } from '@/context/userContext'
 import React from 'react'
+import { UserContextProvider } from '@/context/userContext.js'
+import { TasksProvider } from '@/context/taskContext.js'
 
 interface Props {
     children: React.ReactNode
@@ -8,7 +9,7 @@ interface Props {
 function UserProvider({children}: Props) {
   return (
     <UserContextProvider>
-        {children}
+      <TasksProvider>{children}</TasksProvider>
     </UserContextProvider>
   )
 }

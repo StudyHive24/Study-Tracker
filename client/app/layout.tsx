@@ -43,7 +43,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <UserContextProvider>
+        <UserProvider>
           <Toaster position="top-center" />
           <div className="">
             <TwoSidebarProvider>
@@ -52,7 +52,7 @@ export default function RootLayout({
               </main>
             </TwoSidebarProvider>
           </div>
-        </UserContextProvider>
+        </UserProvider>
       </body>
     </html>
   );
