@@ -46,7 +46,7 @@ const ProgressPage: React.FC<ProgressPageProps> = (props) => {
 
   // Convert duration to total minutes
 // Convert duration to total minutes
-const calculateTotalTime = (period: 'daily' | 'weekly' | 'monthly') => {
+const calculateTotalTime = (period: 'daily' | 'weekly' | 'monthly' | 'lifetime') => {
   const now = new Date();
   let totalSeconds = 0; // Change to track total seconds instead of minutes
 
@@ -70,6 +70,8 @@ const calculateTotalTime = (period: 'daily' | 'weekly' | 'monthly') => {
       if (timerDate.getMonth() === now.getMonth() && timerDate.getFullYear() === now.getFullYear()) {
         totalSeconds += totalDurationInSeconds;
       }
+    } else if (period === 'lifetime') {
+      totalSeconds += totalDurationInSeconds;
     }
   });
 
@@ -123,34 +125,64 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       {/* Top Section */}
       <div className="flex space-x-6">
         {/* Daily/Weekly/Monthly Study Time */}
-        <div className="flex-1 bg-gray-200 bg-opacity-80 p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-semibold mb-4">
+        <div className="flex-1 bg-gray-500 p-6 rounded-xl shadow-lg flex flex-col items-center">
+          <h3 className="text-2xl  font-semibold mb-6 text-white">
             Daily/Weekly/Monthly Study Time
           </h3>
-          <div className="flex space-x-4">
-            <TimeBox label="Daily" time={calculateTotalTime('daily')} className="w-[200px]" />
-            <TimeBox label="Weekly" time={calculateTotalTime('weekly')} />
-            <TimeBox label="Monthly" time={calculateTotalTime('monthly')} />
+          <div className="flex space-x-6 text-white  ">
+            <TimeBox label="Daily" time={calculateTotalTime('daily')} className="w-[100px] bg-gray-300 rounded-lg p-4 shadow-md text-center bg-white bg-opacity-20" />
+            <TimeBox label="Weekly" time={calculateTotalTime('weekly')} className=" bg-gray-300  shadow-md text-center bg-white bg-opacity-20"  />
+            <TimeBox label="Monthly" time={calculateTotalTime('monthly')} className=" bg-gray-300  shadow-md text-center bg-white bg-opacity-20" />
           </div>
         </div>
-        {/* Weekly Time Goal */}
-        <div className="flex-1 bg-gray-200 bg-opacity-80 p-6 rounded-lg flex flex-col items-center justify-center shadow-lg">
-          <h3 className="text-lg font-semibold mb-2">
-            Weekly Time Goal: 2h
+
+      
+        <div className="flex-1 bg-gray-500 p-6 rounded-xl shadow-xl flex flex-col items-center justify-center text-white">
+          {/* Header */}
+          <h3 className="text-lg font-semibold mb-4 text-center tracking-wide uppercase">
+            Total Progress
           </h3>
-          <h1 className="text-2xl font-bold">Completion</h1>
-          <h2 className="text-3xl font-bold mt-2">2%</h2>
+
+          {/* Tasks Progress */}
+          <div className="bg-white bg-opacity-20 p-2 rounded-lg shadow-md mb-4 w-full">
+            <h1 className="text-xl font-extrabold text-center text-white mt-2">
+              Tasks: <span className="text-green-300">{weeklyTaskGoal}</span>
+            </h1>
+          </div>
+
+          {/* Study Time Progress */}
+          <div className="bg-white bg-opacity-20 p-2 rounded-lg shadow-md w-full">
+            <h1 className="text-xl font-extrabold text-center text-white mt-2">
+              Study Time:<br /> <span className="text-green-300">{calculateTotalTime('lifetime')}</span>
+            </h1>
+          </div>
         </div>
-        {/* Weekly Tasks Goal */}
-        <div className="flex-1 bg-gray-200 bg-opacity-80 p-6 rounded-lg flex flex-col items-center justify-center shadow-lg">
-          <h3 className="text-lg font-semibold mb-2">
-            Weekly Tasks Goal: {weeklyTaskGoal}
-          </h3>
-          <h1 className="text-2xl font-bold">Completion</h1>
-          <h2 className="text-3xl font-bold mt-2">
-            {weeklyCompletionPercentage}%
-          </h2>
+
+
+        
+        
+      {/* Weekly Tasks Goal */}
+      <div className="flex-1 bg-gray-500 p-6 rounded-lg shadow-lg flex flex-col items-center ">
+        {/* Header Section with Separate Background */}
+        <div className="bg-white bg-opacity-20 text-base font-bold text-white p-7 py-2 rounded-md mb-4 shadow-md">
+          Weekly Tasks Goal: <span className="font-bold">{weeklyTaskGoal}</span>
         </div>
+        {/* Completion Title */}
+        <h1 className="text-2xl font-bold text-white">Completion</h1>
+        {/* Progress Bar */}
+        <div className="w-full bg-gray-200 rounded-full h-4 mt-4">
+          <div
+            className="bg-green-500 h-4 rounded-full"
+            style={{ width: `${weeklyCompletionPercentage}%` }}
+          ></div>
+        </div>
+        {/* Completion Percentage */}
+        <h2 className="text-xl font-bold text-white mt-2">
+          {weeklyCompletionPercentage}%
+        </h2>
+      </div>
+
+
       </div>
 
       {/* Bottom Section */}
