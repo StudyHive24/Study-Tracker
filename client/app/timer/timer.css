@@ -10,6 +10,17 @@
 
 }
 
+.timer-page-title{
+  font-size: 2rem; /* Large font size */
+  font-weight: bold; /* Bold font */
+  color: #333; /* Dark color for the text */
+  text-align: center; /* Center the title */
+  margin-top: 1px; /* Add some space above the title */
+  margin-bottom: 3px; /* Add some space below the title */
+  letter-spacing: 1px; /* Slight letter spacing for better readability */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle text shadow for effect */
+}
+
 .timer-container {
   background: none;
   background-color:rgba(255, 255, 255, 0.453);
@@ -25,7 +36,7 @@
 
 /* Timer Title */
 .timer-title {
-font-size: 2rem;
+font-size: 1.5rem;
 margin-bottom: 10px;
 /* font-family: 'Playfair Display', serif; */
 /* font-family: 'Montserrat', sans-serif; */
@@ -168,7 +179,7 @@ color: white;
 
 /* Styling for Timer History Container */
 .timer-history-container {
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 15px;
   background-color: #f9f9f9; /* Light gray background */
   border: 1px solid #ddd; /* Subtle border */
@@ -202,7 +213,7 @@ color: white;
   /* border-radius: 25px; */
   text-align: center;
   font-family: 'Playfair Display', serif;
-  font-size: 20px;
+  font-size: 15px;
 /* font-family: 'Montserrat', sans-serif; */
 /* font-family: 'Roboto', sans-serif; */
 }
@@ -241,4 +252,45 @@ color: white;
   margin-bottom: 10px; /* Add some space below the title */
   color: #333; /* Dark gray text */
   text-align: center; /* Center the title */
+}
+
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-confirm-button, .modal-cancel-button {
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-confirm-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+}
+
+.modal-cancel-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
 }
