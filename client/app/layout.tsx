@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { SideBarL} from "./Components/Sidebar left/SidebarL";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SideBarL } from "./Components/Sidebar left/SidebarL";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { Sidebar } from "lucide-react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SideBarR } from "./Components/Sidebar right/SidebarR";
@@ -10,6 +14,8 @@ import UserProvider from "@/providers/UserProvider";
 import { Toaster } from "react-hot-toast";
 import { UserContextProvider } from "@/context/userContext";
 import useRiderect from "@/hooks/useUserRiderect";
+import MainLayoutContent from "@/providers/MainLayoutContent";
+import TwoSidebarProvider from "@/providers/TwoBarProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -37,22 +43,16 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <UserContextProvider>
+        <UserProvider>
           <Toaster position="top-center" />
-        <div className="flex h-screen">
-    <SidebarProvider>
-      <SideBarL />
-     
-      <SidebarInset>
-      <main className="flex-1 p-4 bg-[#c7d9f0] overflow-auto rounded-xl">
-        {children}
-      </main>
-      </SidebarInset>
-      <SideBarR />
-      </SidebarProvider>
-      
-    </div>
-    </UserContextProvider>
+          <div className="">
+            <TwoSidebarProvider>
+              <main className="flex-1 p-4 bg-[#c7d9f0] overflow-auto rounded-xl">
+                <MainLayoutContent>{children}</MainLayoutContent>
+              </main>
+            </TwoSidebarProvider>
+          </div>
+        </UserProvider>
       </body>
     </html>
   );

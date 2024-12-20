@@ -8,7 +8,7 @@ const TaskContext = createContext()
 
 const serverUrl = 'http://localhost:8000'
 
-export const TasksProvider = ({children}) => {
+export const TimersProvider = ({children}) => {
 
     const userID =  useUserContext().user._id
 
@@ -22,30 +22,7 @@ export const TasksProvider = ({children}) => {
     const [modalMode, setModalMode] = useState("")
     const [profileModal, setProfileModal] = useState(false)
 
-    const openModalForAdd = () => {
-        setModalMode('add')
-        setIsEditing(true),
-        setTask({})
-    }
-
-    const openModalForEdit = () => {
-        setModalMode('edit')
-        setIsEditing(true)
-        setActiveTask(task)
-    }
-
-    const openProfileModal = () => {
-        setProfileModal(true)
-    }
-
-    const closeModal = () => {
-        setIsEditing(false)
-        setProfileModal(false)
-        setModalMode('')
-        setActiveTask(null)
-        setTask({})
-    }
-
+    
     // get tasks
     const getTasks = async () => {
         setLoading(true)
@@ -54,8 +31,6 @@ export const TasksProvider = ({children}) => {
             const res = await axios.get(`${serverUrl}/api/tasks`)
 
             setTasks(res.data.tasks)
-
-            return res.json(tasks)
         } catch (error) {
             console.log('Error getting tasks', error)
         }
@@ -80,9 +55,10 @@ export const TasksProvider = ({children}) => {
     
     // create a task
     const createTask = async (task) => {
+        setLoading(true)
 
         try {
-            const res = await axios.post(`${serverUrl}/api/tasks/create`, task)
+            const res = await axios.post(`${serverUrl}/api/tasks/`, task)
 
             console.log('Task created', res.data)
 
@@ -90,9 +66,10 @@ export const TasksProvider = ({children}) => {
             toast.success('Task created succcessfully')
 
         } catch (error) {
-            console.log('Error in creating a task', error)
-            toast.error("Error in Creating the task")
+            console.log('Error getting a task', error)
         }
+
+        setLoading(false)
     }
 
     // update a task

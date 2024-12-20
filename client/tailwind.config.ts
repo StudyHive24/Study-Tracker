@@ -59,7 +59,16 @@ const config: Config = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			}
+  			},
+			low: {
+				500: "#4caf50",
+			},
+			medium: {
+				500: '#ffc107'
+			},
+			high: {
+				500: '#f44336'
+			}
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

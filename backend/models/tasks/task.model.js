@@ -6,69 +6,54 @@ const TaskSchema = mongoose.Schema(
             type: String,
             required: [true, 'title'],
             unique: true,
-            index: true
         },
         description: {
             type: String,
-            required: false
-        },
-        priority: {
-            type: String,
-            enum: ['Low', 'Medium', 'High'],
-            required: [true, 'priority']
-        },
-        status: {
-            type: String,
-            enum: ['Pending', 'In Progress', 'Completed'],
-            default: 'Pending'
+            default: " "
         },
         duedate: {
             type: Date,
             required: [true, "duedate"]
         },
-        createdAt: {
+        startTime: {
             type: Date,
-            default: Date.now
+            default: Date.now()
         },
-        category: {
-            type: String,
-            required: false
-        },
-        tags: [{ type: String, required: false}], 
-        updatedAt: {
+        endTime: {
             type: Date,
-            required: false
+            required: true
         },
-        star: {
+        status: {
             type: String,
-            required: false
+            enum: ['active', 'inactive'],
+            default: 'active'
         },
-        progress: {
-            type: Number,
-            min: 0, max: 100,
-            required: false
+        completed: {
+            type: Boolean,
+            default: false
         },
+        priority: {
+            type: String,
+            enum: ['Low', 'Medium', 'High'],
+            default: 'Low'
+        },
+        tags: {
+            type: [String],
+            default: []
+        }, 
         attachments: [{
             type: String,
-            required: false
+            default: ''
         }],
-        // subtasks: [{
-        //     title: String,
-        //     isCompleted: Boolean,
-
-        // }],
-        estimatedTime: {
-            type: Number,
-            required: false
-        },
-        timeSpent: {
-            type: Number,
-            required: false
-        }, 
-        createdBy: {
+        attachments: {
             type: String,
-            required: [true, 'user']
+            default: ''
         },
+        user: {
+            type: mongoose.Schema.ObjectId,
+            ref: "User",
+            required: true
+        }
     },
     {
         timestamps: true

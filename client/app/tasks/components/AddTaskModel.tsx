@@ -11,21 +11,55 @@ import {
 import { Input } from "@/components/ui/input";
 import {} from "@radix-ui/react-dialog";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
-import DurationPicker from "../components/DurationPicker";
+import { FormEvent, useRef, useState } from "react";
 import { MoveRight, Tag, Tags } from "lucide-react";
 import {TagsInput} from 'react-tag-input-component'
+import { useTasksContext } from "@/context/taskContext";
+import { time } from "console";
 
 
 function AddTaskModel() {
-  const [selectedValue, setSelectedValue] = useState("low");
+  const [selectedValue, setSelectedValue] = useState("low")
+  
+  const currentTime = new Date().toLocaleString([], {hour: '2-digit', minute: '2-digit'})
+
+  const {
+    task,
+    handleInput,
+    createTask,
+    isEditing,
+    closeModal,
+    modalMode,
+    activeTask,
+    updateTask
+  } = useTasksContext()
+
+  const ref = useRef(null)
 
   const handleRadioChange = (value: any) => {
-    setSelectedValue(value);
+    setSelectedValue(value)
     
   };
 
-  const [selected, setSelected] = useState(['Coding'])
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    // if (modalMode === 'edit') {
+    //   updateTask(task)
+    // } else if (modalMode === 'add') {
+    //   createTask(task)
+    // }
+    const endDate = new Date(`${task.duedate}T${task.endTime}:00`);
+
+    const updatedTask = {...task, endTime: endDate}
+
+
+    createTask(updateTask)
+
+     closeModal()
+  }
+
+  const [tags, setTags] = useState(['Coding'])
 
   return (
     <>
@@ -35,10 +69,13 @@ function AddTaskModel() {
             Add A New Task
           </Button>
         </DialogTrigger>
-        <DialogContent className="w-[525px] h-[100vh] p-7 ">
+        <DialogContent className="w-[525px] h-[75vh] p-7 ">
           <DialogHeader className="mt-5 gap-2">
             <DialogTitle>Create Task</DialogTitle>
           </DialogHeader>
+          <form action=""
+            ref={ref} onSubmit={handleSubmit}
+          >
           <div className=" p-3 gap-2 flex flex-col">
             <div className="flex mb-4 gap-5">
               <div className="">
@@ -47,6 +84,9 @@ function AddTaskModel() {
                   id="title"
                   placeholder="Enter a task title"
                   className="w-50 border-none bg-gray-200"
+                  onChange={(e) => handleInput('title')(e)}
+                  name="title"
+                  value={task.title}
                 ></Input>
               </div>
               <div>
@@ -55,6 +95,9 @@ function AddTaskModel() {
                   id="description"
                   placeholder="Enter a task description"
                   className="border-none bg-gray-200 w-50"
+                  onChange={(e) => handleInput('description')(e)}
+                  name="description"
+                  value={task.description}
                 ></Input>
               </div>
             </div>
@@ -65,84 +108,60 @@ function AddTaskModel() {
                   id="duedate"
                   type="date"
                   className="border-none bg-gray-200"
+                  onChange={(e) => handleInput('duedate')(e)}
+                  name="duedate"
+                  value={task.duedate}
                 ></Input>
               </div>
               <div>
-                <Label htmlFor="time">Start time</Label>
-                <Input id="time" type="time" className="border-none bg-gray-200" />
-              </div>
-              <div>
-                <MoveRight />
-              </div>
-              <div>
                 <Label htmlFor="duration">End time</Label>
-                <Input id="time" type="time" className="border-none bg-gray-200" />
+                <Input id="time" type="time" value={task.endTime} className="border-none bg-gray-200" 
+                  onChange={(e) => handleInput('endTime')(e)}
+                />
               </div>
             </div>
             <div className="text-xs text-gray-500 mt-1">
-              This task will due on the December 15, 2023 at 5.45 PM
+              This task will due on the {task.duedate || 'a specified date'} at {task.endTime || 'a specific time'}
             </div>
             <div className="mt-2 flex flex-col gap-2">
               <Label htmlFor="priority" >Priority</Label>
-              <div className="flex gap-6">
-                <div className={`flex gap-6 hover:bg-green-400 p-2 rounded-xl ${selectedValue === 'low' ? 'bg-green-400 text-white' : ""}`}>
-                  <Label htmlFor="low">Low</Label>
-                  <Input
-                    id="low"
-                    type="radio"
-                    value="low"
-                    checked={selectedValue === "low"}
-                    onChange={() => handleRadioChange("low")}
-                    className={`w-5 h-5 outline-none accent-white  ${selectedValue === 'low' ? 'accent-green-300' : ""}`}
-                  ></Input>
-                </div>
-                <div className={`flex gap-6 hover:bg-orange-500 p-2 rounded-xl ${selectedValue === 'medium' ? 'bg-orange-500 text-white' : ""}`}>
-                  <Label htmlFor="medium">Medium</Label>
-                  <Input
-                    id="medium"
-                    type="radio"
-                    value="medium"
-                    checked={selectedValue === "medium"}
-                    onChange={() => handleRadioChange("medium")}
-                    className={`w-5 h-5 outline-none accent-white  ${selectedValue === 'medium' ? 'accent-orange-300' : ""}`}
-                  ></Input>
-                </div>
-                <div className={`flex gap-6 hover:bg-red-500 p-2 rounded-xl ${selectedValue === 'high' ? 'bg-red-500 text-white' : ""}`}>
-                  <Label htmlFor="high">high</Label>
-                  <Input
-                    id="high"
-                    type="radio"
-                    value="high"
-                    checked={selectedValue === "high"}
-                    onChange={() => handleRadioChange("high")}
-                    className={`w-5 h-5 outline-none accent-white  ${selectedValue === 'high' ? 'accent-red-400' : ""}`}
-                  ></Input>
-                </div>
-              </div>
-              <div className="mt-1 gap-1 flex flex-col">
-                <Label htmlFor="tags" className="">Tags</Label>
-                <TagsInput 
-                  value={selected}
-                  onChange={setSelected}
-                  name="tags"
-                  placeHolder="Enter tags"
-                  classNames={{
-                    tag: 'tag',
-                    input: 'input'
-                  }}
-                />
-                
-              </div>
-              <div className="mt-1 gap-1 flex flex-col mb-2">
-                <Label htmlFor="tags" className="">Attachments</Label>
-                <Input type="file" className="bg-gray-200"></Input>
+              <div className="">
+              <select
+                className=" p-2 rounded-md border cursor-pointer border-none w-[30vw] bg-gray-200 focus:bg-green-200"
+                name="priority"
+                value={task.priority}
+                onChange={(e) => handleInput("priority")(e)}
+              >
+                <option className="bg-green-300" value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
               </div>
 
-              <div className="flex mt-1">
-                <Input type="submit" className="bg-green-500 hover:bg-green-600 text-white rounded-xl" value={'Create Task'}></Input>
+              <div className="flex flex-col gap-1">
+          <label htmlFor="completed">Task Completed</label>
+          <div className="flex items-center justify-between  bg-gray-200 p-2 rounded-md border">
+            <label htmlFor="completed">Completed</label>
+            <div>
+              <select
+                className=" bg-gray-200 p-1 rounded-md border cursor-pointer"
+                name="completed"
+                value={task.completed ? "true" : "false"}
+                onChange={(e) => handleInput("completed")(e)}
+              >
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+              </select>
+            </div>
+          </div>
+          </div>
+
+              <div className="flex justify-center">
+                <Button type="submit" className="mt-6 bg-green-500 w-[20vw] hover:bg-green-600 text-white rounded-xl " >Create Task</Button>
               </div>
             </div>
           </div>
+          </form>
         </DialogContent>
       </Dialog>
     </>

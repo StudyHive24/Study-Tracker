@@ -1,80 +1,240 @@
 import Task from '../models/tasks/task.model.js'
+import asyncHandler from 'express-async-handler'
 
-// to get all tasks
-export const getTasks = async (req, res) => {
+export const createTask = asyncHandler(async (req, res) => {
     try {
-        const tasks = await Task.find({})
-        res.status(200).json(tasks)
-    } catch (error) {
-        res.status(500).json({message: error.message})
-    }
-}
+        const { title, description, duedate, startTime, endTime, status, completed, priority, tags, attachments } =  req.body
+        
+            if (!title || title.trim() === '') {
+                res.status(400)
+                return res.json({
+                    message: 'Title is required'
+                })
+            }
 
-// to create a task
-export const createTask = async (req, res) => {
+            if (!description || description.trim() === '') {
+                res.status(400)
+                return res.json({
+                    message: 'Description is required'
+                })
+            }
+
+            const task = new Task({
+                title,
+                description,
+                duedate,
+                startTime,
+                endTime,
+                status,
+                completed,
+                priority,
+                tags,
+                attachments,
+                user: req.user._id
+            })
+
+            await task.save()
+
+            return res.status(201).json(task)
+
+    } catch (error) {
+        console.log('Error in creating task: ', error.message)
+    }
+})
+
+export const getTasks = asyncHandler(async (req, res) => {
     try {
-        const task = await Task.create(req.body)
-        res.status(200).json(task)
-    } catch (error) {
-        res.status(500).json({message: error.message})
-    }
-}
+        const userID = req.user._id
 
-// to get a task
+        if (!userID) {
+            res.status(400).json({
+                message: 'User not found'
+            })
+        }
+
+        const tasks = await Task.find({user: userID})
+
+        res.status(200).json({
+            length: tasks.length,
+            tasks
+        })
+
+    } catch (error) {
+        console.log('Error in getting tasks: ', error.message)
+        res.status(400).json({
+            message: error.message
+        })
+    }
+})
+
 export const getTask = async (req, res) => {
     try {
-        const {id} = req.params // to get the task id
-        const task = await Task.findById(id)
-        res.status(200).json(task)
-    } catch (error) {
-        res.status(500).json({message: error.message})
-    }
-}
+        const userID = req.user._id
 
-// to update a task
-export const updateTask = async (req, res) => {
-    try {
-        const {id} =  req.params // to get the task id
-        const task =  await Task.findByIdAndUpdate(id, req.body)
+        const {id} = req.params
+
+        if (!id) {
+            res.status(400)
+            res.json({
+                message: 'Please add a task id'
+            })
+        }
+
+        const task = await Task.findById(id)
 
         if (!task) {
-            return res.status(404).json({message: 'Task not found'})
+            res.status(404)
+            res.json({
+                message: 'Task not found'
+            })
         }
 
-        const updatedTask = await Task.findById(id)   // to find the updated task
-        res.status(200).json(updatedTask)
+        if (!task.user.equals(userID)) {
+            res.status(401)
+            res.json({
+                message: 'please log in'
+            })
+        }
+
+        res.status(200).json(task)
+
+
     } catch (error) {
-        res.status(500).json({message: error.message})
+        console.log('Error in getting the task: ', error.message)
+        res.staus(500)
+        return res.json({
+            message: error.message
+        })
     }
 }
 
-// to delete a task
+export const updateTask = async (req, res) => {
+    try {
+        const userID = req.user._id
+
+        const {id} =  req.params
+        const { title, description, duedate, startTime, endTime, status, completed, priority, tags, attachments } = req.body
+
+        if(!id) {
+            res.status(400)
+            res.json({
+                message: 'Task id cannot be found'
+            })
+        }
+
+        const task = await Task.findById(id)
+
+        if (!task) {
+            res.status(400)
+            res.json({
+                message: 'Task cannot be found'
+            })
+        }
+
+        // to check the user is the owner of the task
+        if (!task.user.equals(userID)) {
+            res.status(401)
+            res.json({
+                message: 'Please login'
+            })
+        }
+
+        // update the task
+        task.title = title || task.title
+        task.description = description || task.description
+        task.duedate = duedate || task.duedate
+        task.startTime = startTime || task.startTime
+        task.endTime = endTime || task.endTime
+        task.status = status || task.status
+        task.completed = completed || task.completed
+        task.priority = priority || task.priority
+        task.tags = tags || task.tags
+        task.attachments = attachments || task.attachments
+
+        await task.save()
+
+    } catch (error) {
+        console.log('Error in updating the task: ', error.message)
+        res.status(500)
+        res.json({
+            message: error.message
+        })
+    }
+}
+
 export const deleteTask = async (req, res) => {
     try {
-        const {id} = req.params // to get the id
-        const task =  await Task.findByIdAndDelete(id, req.body)
-
-        if(!task) {
-            return res.status(404).json({message: 'Task not found'})
-        }
         
-        res.status(200).json(task)
+        const userID = req.user._id
+
+        const {id} = req.params
+
+        const task = await Task.findById(id)
+
+        if (!task) {
+            res.status(401)
+            res.json({
+                message: 'Task cannot be found'
+            })
+        }
+
+        // check the user is the owner of the task
+        if (!task.user.equals(userID)) {
+            res.status(401)
+            res.json({
+                message: 'Please login'
+            })
+        }
+
+        await Task.findByIdAndDelete(id)
+
+        res.status(200)
+        return res.json({
+            message: 'Task deleted successfully!'
+        })
+
     } catch (error) {
-        res.status(500).json({message: error.message})
+        console.log('Error in deleteing the task: ', error.message)
+        res.status(500)
+        res.json({
+            message: error.message
+        })
     }
 }
 
-// to delete all tasks
 export const deleteAllTasks = async (req, res) => {
     try {
-        const task = await Task.deleteMany({})
-        res.status(200).json({
-            message: "All tasks have been deleted successfully.",
-            deletedCount: task.deletedCount, // Number of documents deleted
+        const userID = req.user._id
+
+        const tasks = await Task.find({user: userID})
+
+        if (!tasks) {
+            res.status(404)
+            res.json({
+                message:'No tasks found'
+            })
+        }
+
+        // check the owner of the task
+        if (!tasks.user.equals(userID)) {
+            res.status(401)
+            res.json({
+                message: 'Please login'
+            })
+        }
+
+        await Task.deleteMany({user: userID})
+
+        res.status(200)
+        res.json({
+            message: 'All tasks deleted successfully!'
         })
+
     } catch (error) {
-        res.status(500).json({message: error.message}) 
+        console.log('Error in deleting tasks: ', error.message)
+        res.status(500)
+        res.json({
+            message: error.message
+        })
     }
 }
-
-

@@ -1,15 +1,17 @@
 import express from 'express'
-const router = express.Router()
 import {getTasks, createTask, getTask, updateTask, deleteTask, deleteAllTasks} from '../controllers/task.controller.js'
+import { protect } from '../middleware/authentcationMiddleware.js'
+
+const router = express.Router()
 
 // to get all tasks
-router.get('/', getTasks)
+router.get('/', protect ,getTasks)
 
 // to delete all tasks
 router.delete('/all', deleteAllTasks)
 
 // to create a task
-router.post('/', createTask)
+router.post('/create', protect, createTask)
 
 // to get a task
 router.get('/:id', getTask)

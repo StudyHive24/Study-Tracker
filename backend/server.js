@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose';
 import taskRoute from './routes/task.route.js'
 import userRoute from './routes/user.route.js'
+import timerRoute from './routes/timer.route.js' //uncommented
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 
@@ -12,7 +13,7 @@ const app = express();
 
 // middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(cookieParser())
 
@@ -22,6 +23,7 @@ const Mongo_URI = process.env.Mongo_URI;
 // routes
 app.use("/api/tasks", taskRoute)
 app.use("/api/v1", userRoute)
+app.use("/api/timer", timerRoute) //uncommented
 
 // database test
 app.get("/", (req, res) => {
