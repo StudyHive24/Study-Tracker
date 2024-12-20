@@ -6,7 +6,7 @@ import 'react-calendar/dist/Calendar.css';
 import './dashboard.css';
 import { useUserContext } from '../../../context/userContext';
 import { useTasksContext } from '@/context/taskContext.js';
-import Task from '@/app/tasks/components/TaskItem';
+
 
 const Dashboard = () => {
 
@@ -19,11 +19,21 @@ const Dashboard = () => {
     
 
     const totalTasks = tasks.length
-
-    
-    const completedTasks = tasks.filter((task: { status: string; }) => task.status === 'Completed').length;
+    const completedTasks = tasks.filter((task: { completed: boolean; }) => task.completed === true).length;
     const taskCompletionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     
+
+    // Find the first upcoming task
+    // Find the first upcoming task
+    const upcomingTasks = tasks
+    .filter((task: { completed: any; duedate: string | number | Date; }) => !task.completed && new Date(task.duedate) > new Date()) // Filter for incomplete and future tasks
+    .sort((a: { duedate: string | number | Date; }, b: { duedate: string | number | Date; }) => 
+        new Date(a.duedate).getTime() - new Date(b.duedate).getTime()
+    );
+    
+    const firstUpcomingTask1= upcomingTasks[0];
+    const firstUpcomingTask2= upcomingTasks[1];
+    const firstUpcomingTask3= upcomingTasks[2];
 
     return (
         <div className="dashboard-container">
@@ -47,7 +57,7 @@ const Dashboard = () => {
 
                 {/* Tasks Complete Section */}
                 <div className="grid-item tasks-complete">
-                    <p>Tasks Complete: {totalTasks}%</p> {/* Use state */}
+                    <p>Tasks Complete: {taskCompletionPercentage}%</p> {/* Use state */}
                     <div className="progress-bar">
                         <div className="progress" style={{ width: `${taskCompletionPercentage}%` }}></div>
                     </div>
@@ -89,10 +99,30 @@ const Dashboard = () => {
                             </tr>
                         </thead>
                         <tbody>
+                            {firstUpcomingTask1 ? (
                             <tr>
-                                <td>Assignment 1</td>
-                                <td>Due in 3 days</td>
+                                <td>{firstUpcomingTask1.title}</td>
+                                <td>{new Date(firstUpcomingTask1.duedate).toLocaleDateString()}</td>
                             </tr>
+                            ) : (
+                                <tr></tr>
+                            )}
+                            {firstUpcomingTask2 ? (
+                            <tr>
+                                <td>{firstUpcomingTask2.title}</td>
+                                <td>{new Date(firstUpcomingTask2.duedate).toLocaleDateString()}</td>
+                            </tr>
+                            ) : (
+                                <tr></tr>
+                            )}
+                            {firstUpcomingTask3 ? (
+                            <tr>
+                                <td>{firstUpcomingTask3.title}</td>
+                                <td>{new Date(firstUpcomingTask3.duedate).toLocaleDateString()}</td>
+                            </tr>
+                            ) : (
+                                <tr></tr>
+                            )}
                             {/* Add additional rows as needed */}
                         </tbody>
                     </table>
