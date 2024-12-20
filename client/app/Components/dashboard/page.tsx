@@ -57,7 +57,7 @@ const Dashboard = () => {
 
                 {/* Tasks Complete Section */}
                 <div className="grid-item tasks-complete">
-                    <p>Tasks Complete: {taskCompletionPercentage}%</p> {/* Use state */}
+                    <p>Tasks Complete: {Math.round(taskCompletionPercentage)}%</p> 
                     <div className="progress-bar">
                         <div className="progress" style={{ width: `${taskCompletionPercentage}%` }}></div>
                     </div>
