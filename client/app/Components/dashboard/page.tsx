@@ -5,21 +5,24 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; 
 import './dashboard.css';
 import { useUserContext } from '../../../context/userContext';
-import { useTasksContext } from '../../../context/taskContext';
+import { useTasksContext } from '@/context/taskContext.js';
 import Task from '@/app/tasks/components/Task';
 
 const Dashboard = () => {
+
     const { user, getUser } = useUserContext();
-    const { tasks} = useTasksContext();
+    const { tasks, getTasks } = useTasksContext();
     const [date, setDate] = useState(new Date());
     const chatbotMessage = "Hi, I am your Study instructor. You have assignments due in 3 days. Check the Time Table.";
     const onDateChange = (newDate: Date) => {setDate(newDate);};
     const [progress, setProgress] = useState(0); // Task completion progress
+    
 
-    const totalTasks = tasks.length;
+    const totalTasks = tasks.length
+
+    
     const completedTasks = tasks.filter((task: { status: string; }) => task.status === 'Completed').length;
     const taskCompletionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
     
 
     return (

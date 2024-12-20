@@ -163,6 +163,7 @@ export const TasksProvider = ({children}) => {
             task,
             tasks,
             getTask,
+            getTasks,
             createTask,
             updateTask,
             deleteTask,

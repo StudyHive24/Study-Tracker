@@ -11,14 +11,27 @@ import {
 import { Input } from "@/components/ui/input";
 import {} from "@radix-ui/react-dialog";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
-import DurationPicker from "../components/DurationPicker";
+import { useRef, useState } from "react";
 import { MoveRight, Tag, Tags } from "lucide-react";
 import {TagsInput} from 'react-tag-input-component'
+import { useTasksContext } from "@/context/taskContext";
 
 
 function AddTaskModel() {
   const [selectedValue, setSelectedValue] = useState("low");
+
+  const {
+    task,
+    handleInput,
+    createTask,
+    isEditing,
+    closeModal,
+    modalMode,
+    activeTask,
+    updateTask
+  } = useTasksContext()
+
+  const ref = useRef(null)
 
   const handleRadioChange = (value: any) => {
     setSelectedValue(value);
@@ -39,6 +52,9 @@ function AddTaskModel() {
           <DialogHeader className="mt-5 gap-2">
             <DialogTitle>Create Task</DialogTitle>
           </DialogHeader>
+          <form action=""
+            
+          >
           <div className=" p-3 gap-2 flex flex-col">
             <div className="flex mb-4 gap-5">
               <div className="">
@@ -47,6 +63,9 @@ function AddTaskModel() {
                   id="title"
                   placeholder="Enter a task title"
                   className="w-50 border-none bg-gray-200"
+                  onChange={(e) => handleInput('title')(e)}
+                  name="title"
+                  value={task.title}
                 ></Input>
               </div>
               <div>
@@ -55,6 +74,9 @@ function AddTaskModel() {
                   id="description"
                   placeholder="Enter a task description"
                   className="border-none bg-gray-200 w-50"
+                  onChange={(e) => handleInput('description')(e)}
+                  name="description"
+                  value={task.description}
                 ></Input>
               </div>
             </div>
@@ -65,11 +87,18 @@ function AddTaskModel() {
                   id="duedate"
                   type="date"
                   className="border-none bg-gray-200"
+                  onChange={(e) => handleInput('duedate')(e)}
+                  name="duedate"
+                  value={task.duedate}
                 ></Input>
               </div>
               <div>
                 <Label htmlFor="time">Start time</Label>
-                <Input id="time" type="time" className="border-none bg-gray-200" />
+                <Input id="Starttime" type="time" className="border-none bg-gray-200" 
+                  onChange={(e) => handleInput('time')(e)}
+                  name="time"
+                  // value={task.}
+                />
               </div>
               <div>
                 <MoveRight />
@@ -143,6 +172,7 @@ function AddTaskModel() {
               </div>
             </div>
           </div>
+          </form>
         </DialogContent>
       </Dialog>
     </>
