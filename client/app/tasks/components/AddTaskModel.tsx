@@ -54,7 +54,7 @@ function AddTaskModel() {
     const updatedTask = {...task, endTime: endDate}
 
 
-    createTask(updateTask)
+    createTask(updatedTask)
 
      closeModal()
   }
@@ -132,9 +132,9 @@ function AddTaskModel() {
                 value={task.priority}
                 onChange={(e) => handleInput("priority")(e)}
               >
-                <option className="bg-green-300" value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                <option className="bg-green-300" value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
               </select>
               </div>
 

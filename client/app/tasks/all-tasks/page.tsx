@@ -28,14 +28,16 @@ function page() {
     <div>
       <TaskHeader/>
       <TasksSubHeader title={"All Tasks"}/>
-      <motion.div className='grid grid-cols-3'>
+      <motion.div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-2'>
             {filtered.map((task: Task, i: number) => (
               <TaskItem key={i} task={task} />
             ))}
-        </motion.div>
-        <motion.button>
+        <motion.button className='border-dashed border-2 rounded-lg border-gray-400 mt-1 h-[12rem] w-[20vw]
+          hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out
+        '>
           Add New Task
         </motion.button>
+        </motion.div>
       </div>
   )
 }
