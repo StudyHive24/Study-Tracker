@@ -54,6 +54,8 @@ export const TasksProvider = ({children}) => {
             const res = await axios.get(`${serverUrl}/api/tasks`)
 
             setTasks(res.data.tasks)
+
+            return res.json(tasks)
         } catch (error) {
             console.log('Error getting tasks', error)
         }
@@ -78,10 +80,9 @@ export const TasksProvider = ({children}) => {
     
     // create a task
     const createTask = async (task) => {
-        setLoading(true)
 
         try {
-            const res = await axios.post(`${serverUrl}/api/tasks/`, task)
+            const res = await axios.post(`${serverUrl}/api/tasks/create`, task)
 
             console.log('Task created', res.data)
 
@@ -89,10 +90,9 @@ export const TasksProvider = ({children}) => {
             toast.success('Task created succcessfully')
 
         } catch (error) {
-            console.log('Error getting a task', error)
+            console.log('Error in creating a task', error)
+            toast.error("Error in Creating the task")
         }
-
-        setLoading(false)
     }
 
     // update a task

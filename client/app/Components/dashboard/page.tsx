@@ -6,7 +6,7 @@ import 'react-calendar/dist/Calendar.css';
 import './dashboard.css';
 import { useUserContext } from '../../../context/userContext';
 import { useTasksContext } from '@/context/taskContext.js';
-import Task from '@/app/tasks/components/Task';
+import Task from '@/app/tasks/components/TaskItem';
 
 const Dashboard = () => {
 

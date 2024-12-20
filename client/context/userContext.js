@@ -22,6 +22,29 @@ export const UserContextProvider = ({children}) => {
     })
 
     const [loading, setLoading] = useState(false)
+
+    // Function to persist user session
+    const persistUserSession = async () => {
+        setLoading(true);
+        try {
+            const res = await axios.get(`${serverUrl}/api/v1/user`, {
+                withCredentials: true
+            });
+            setUser(res.data);
+            setLoading(false);
+        } catch (error) {
+            console.log('Error fetching user session:', error);
+            setUser({});
+            setLoading(false);
+            router.push('/login'); // Redirect to login if the session is invalid
+        }
+    };
+
+    // Call persistUserSession on initial load
+    useEffect(() => {
+        persistUserSession();
+    }, []); // Empty dependency array ensures this runs only on mount
+
     
     // register user
     const registerUser = async (e) => {
@@ -203,6 +226,18 @@ export const UserContextProvider = ({children}) => {
             [name]: value
         }))
     }
+
+    useEffect(() => {
+        const loginStatusGetUser = async () => {
+            const isLoggedIn =  await userLoginStatus()
+
+            if (isLoggedIn) {
+                await getUser()
+            }
+        }
+
+        loginStatusGetUser
+    }, [])
 
     return (
         <UserContext.Provider

@@ -9,11 +9,19 @@ const TaskSchema = mongoose.Schema(
         },
         description: {
             type: String,
-            required: false
+            default: " "
         },
         duedate: {
             type: Date,
             required: [true, "duedate"]
+        },
+        startTime: {
+            type: Date,
+            default: Date.now()
+        },
+        endTime: {
+            type: Date,
+            required: true
         },
         status: {
             type: String,
@@ -27,12 +35,15 @@ const TaskSchema = mongoose.Schema(
         priority: {
             type: String,
             enum: ['Low', 'Medium', 'High'],
-            required: [true, 'priority']
+            default: 'Low'
         },
-        tags: [{ type: String, required: false}], 
+        tags: {
+            type: [String],
+            default: []
+        }, 
         attachments: [{
             type: String,
-            required: false
+            default: ''
         }],
         attachments: {
             type: String,
