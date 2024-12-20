@@ -1,291 +1,294 @@
 "use client";
 
-import { useState } from "react";
-import { format, parseISO } from "date-fns";
+import React, { useState } from "react";
+import { format, parseISO, getDay } from "date-fns";
+import { isBefore, isAfter, isEqual } from "date-fns";
 
-interface Schedule {
+interface Entry {
   id: number;
-  date: string; // Format: YYYY-MM-DD
-  startTime: string; // Format: HH:mm
-  endTime: string; // Format: HH:mm
+  date: string; // YYYY-MM-DD
+  startTime: string; // HH:mm
+  endTime: string; // HH:mm
   title: string;
-  priority: string;
+  subject: string;
+  dayOfWeek: string;
+  subjectColor: string; // Added for color-coding the subjects
 }
 
-export default function TimeTable() {
-  const [activeTable, setActiveTable] = useState<"daily" | "schedule">("daily");
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(
-    null
-  );
+export default function TimeTableApp() {
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const [subjects, setSubjects] = useState<string[]>(["Math", "Science", "History"]);
+  const [subjectColors, setSubjectColors] = useState<string[]>([
+    "#F0A1C2", "#A1D8F0", "#F0F0A1", "#A1F0A1", "#F0A1F0",
+    "#FF69B4", "#33CC33", "#6666CC", "#CC6666", "#66CCCC",
+  ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null);
+  const [form, setForm] = useState<Entry | null>(null);
+  const [newSubject, setNewSubject] = useState("");
+  const [selectedColor, setSelectedColor] = useState(subjectColors[0]); // Default color for new subject
+  const [isEditMode, setIsEditMode] = useState(false); // Flag to check if in edit mode
+  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
 
-  const handleAddOrEditSchedule = (schedule: Schedule) => {
-    if (editingSchedule) {
-      // Edit existing schedule
-      setSchedules((prev) =>
-        prev.map((s) => (s.id === editingSchedule.id ? schedule : s))
-      );
-    } else {
-      // Add new schedule
-      setSchedules((prev) => [...prev, { ...schedule, id: Date.now() }]);
+  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const timeSlots = Array.from({ length: 8 }, (_, index) => `${index + 8}:00`); // 8 time slots from 8:00 to 15:00
+
+  const handleAddEntry = () => {
+    if (form) {
+      const dayOfWeek = daysOfWeek[getDay(new Date(form.date)) - 1];
+
+      // Check for overlapping times only if not in edit mode
+      const newStartTime = parseISO(`${form.date}T${form.startTime}:00`);
+      const newEndTime = parseISO(`${form.date}T${form.endTime}:00`);
+
+      if (!isEditMode) {
+        const isOverlapping = entries.some((entry) => {
+          const entryStart = parseISO(`${entry.date}T${entry.startTime}:00`);
+          const entryEnd = parseISO(`${entry.date}T${entry.endTime}:00`);
+          return (
+            (isBefore(entryStart, newEndTime) && isAfter(entryEnd, newStartTime)) ||
+            isEqual(entryStart, newStartTime) || isEqual(entryEnd, newEndTime)
+          );
+        });
+
+        if (isOverlapping) {
+          alert("The new entry overlaps with an existing entry. Please choose a different time.");
+          return;
+        }
+      }
+
+      if (isEditMode && selectedEntry) {
+        // Update entry if in edit mode
+        setEntries((prev) =>
+          prev.map((entry) =>
+            entry.id === selectedEntry.id
+              ? { ...form, id: selectedEntry.id, dayOfWeek, subjectColor: selectedColor }
+              : entry
+          )
+        );
+      } else {
+        setEntries((prev) => [
+          ...prev,
+          { ...form, id: Date.now(), dayOfWeek, subjectColor: selectedColor } as Entry,
+        ]);
+      }
+
+      setForm(null);
+      setIsModalOpen(false);
+      setIsEditMode(false);
     }
-    setEditingSchedule(null);
-    setIsModalOpen(false);
   };
 
-  const handleDeleteSchedule = (id: number) => {
-    setSchedules((prev) => prev.filter((s) => s.id !== id));
-    setSelectedSchedule(null);
+  const handleEntryClick = (entry: Entry) => {
+    setSelectedEntry(entry);
+    setForm(entry);
+    setSelectedColor(entry.subjectColor); // Set selected color to the entry's color
+    setIsEditMode(true);
+    setIsModalOpen(true);
   };
+
+  const handleDeleteEntry = () => {
+    if (selectedEntry) {
+      setEntries((prev) => prev.filter((entry) => entry.id !== selectedEntry.id));
+      setIsModalOpen(false);
+      setSelectedEntry(null);
+      setIsEditMode(false);
+    }
+  };
+
+  const addNewSubject = () => {
+    if (newSubject.trim() && !subjects.includes(newSubject.trim())) {
+      setSubjects((prev) => [...prev, newSubject.trim()]);
+      setNewSubject("");
+    }
+  };
+
+  const getEntriesForDay = (day: string) => entries.filter((entry) => entry.dayOfWeek === day);
 
   return (
-    <div className="flex flex-col items-center p-4">
-      <div className="flex space-x-4 mb-4">
-        <button
-          className={`px-4 py-2 font-semibold ${
-            activeTable === "daily"
-              ? "bg-gray-500 text-white"
-              : "bg-gray-200 text-gray-700"
-          } rounded-lg`}
-          onClick={() => setActiveTable("daily")}
-        >
-          Daily Time Table
-        </button>
-        <button
-          className={`px-4 py-2 font-semibold ${
-            activeTable === "schedule"
-              ? "bg-gray-500 text-white"
-              : "bg-gray-200 text-gray-700"
-          } rounded-lg`}
-          onClick={() => setActiveTable("schedule")}
-        >
-          Schedule Time Table
-        </button>
-      </div>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6 text-center">📅 Weekly Time Table</h1>
 
-      <div className="w-full max-w-4xl">
-        {activeTable === "daily" && (
-          <div className="bg-gray-100 p-6 rounded-lg shadow-lg bg-opacity-80">
-            <h2 className="text-lg font-semibold mb-4">📌 Daily Time Table</h2>
-            {/* Daily Time Table (Static for now) */}
-          </div>
-        )}
+      <button
+        className="bg-blue-500 text-white px-4 py-2 mb-4 rounded-lg"
+        onClick={() => setIsModalOpen(true)}
+      >
+        + Add Time Table
+      </button>
 
-        {activeTable === "schedule" && (
-          <div className="bg-gray-100 p-6 rounded-lg shadow-lg bg-opacity-80">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">📌 Schedule Time Table</h2>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                onClick={() => setIsModalOpen(true)}
-              >
-                + Add Schedule
-              </button>
-            </div>
-            <table className="table-auto w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-200 shadow-md">
-                  <th className="border border-gray-400 px-4 py-2">Date</th>
-                  <th className="border border-gray-400 px-4 py-2">Day</th>
-                  <th className="border border-gray-400 px-4 py-2">Start Time</th>
-                  <th className="border border-gray-400 px-4 py-2">End Time</th>
-                  <th className="border border-gray-400 px-20 py-2">Title</th>
-                  <th className="border border-gray-400 px-2 py-2">Priority</th>
-                </tr>
-              </thead>
-              <tbody>
-                {schedules.map((schedule) => (
-                  <tr
-                    key={schedule.id}
-                    onClick={() => setSelectedSchedule(schedule)}
-                    className="cursor-pointer hover:bg-gray-300"
-                  >
-                    <td className="border border-gray-300 px-4 py-2">
-                      {schedule.date}
+      <div className="overflow-auto border border-gray-300 rounded-lg shadow-lg bg-white">
+        <table className="w-full table-auto border-collapse">
+          <thead className="bg-gray-200">
+            <tr>
+              {daysOfWeek.map((day) => (
+                <th key={day} className="border border-gray-300 px-4 py-2 text-center">
+                  {day}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {timeSlots.map((slot, index) => (
+              <tr key={index}>
+                {daysOfWeek.map((day) => {
+                  const entriesForDay = getEntriesForDay(day);
+                  const entry = entriesForDay.find((entry) => {
+                    const startTime = parseISO(`${entry.date}T${entry.startTime}:00`);
+                    return startTime.getHours() === index + 8; // Match entry based on the time slot index
+                  });
+
+                  return (
+                    <td
+                      key={day}
+                      className="border border-gray-300 px-4 py-2 text-center cursor-pointer"
+                      onClick={() => entry && handleEntryClick(entry)}
+                    >
+                      {entry ? (
+                        <div
+                          key={entry.id}
+                          className="mb-2 p-2 rounded-lg"
+                          style={{ backgroundColor: entry.subjectColor }}
+                        >
+                          <div className="font-semibold">{entry.title}</div>
+                          <div className="text-sm">{entry.subject}</div>
+                          <div className="text-xs text-gray-600">
+                            {entry.startTime} - {entry.endTime}
+                          </div>
+                        </div>
+                      ) : null}
                     </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {format(parseISO(schedule.date), "EEEE")}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {schedule.startTime}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {schedule.endTime}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {schedule.title}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2">
-                      {schedule.priority}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {isModalOpen && (
-        <ScheduleModal
-          onClose={() => {
-            setIsModalOpen(false);
-            setEditingSchedule(null);
-          }}
-          onSave={handleAddOrEditSchedule}
-          schedule={editingSchedule}
-        />
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-lg font-semibold mb-4">
+              {isEditMode ? "Edit Time Table Entry" : "Add Time Table Entry"}
+            </h2>
+            <div className="space-y-4">
+              <div className="flex flex-col">
+                <label className="text-sm mb-2">Date:</label>
+                <input
+                  type="date"
+                  className="w-full border border-gray-300 px-4 py-2 rounded"
+                  value={form?.date || ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, date: e.target.value } as Entry))
+                  }
+                />
+              </div>
+              <div className="flex space-x-4">
+                <div className="flex flex-col w-1/2">
+                  <label className="text-sm mb-2">Start Time:</label>
+                  <input
+                    type="time"
+                    className="w-full border border-gray-300 px-4 py-2 rounded"
+                    value={form?.startTime || ""}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, startTime: e.target.value } as Entry))
+                    }
+                  />
+                </div>
+                <div className="flex flex-col w-1/2">
+                  <label className="text-sm mb-2">End Time:</label>
+                  <input
+                    type="time"
+                    className="w-full border border-gray-300 px-4 py-2 rounded"
+                    value={form?.endTime || ""}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, endTime: e.target.value } as Entry))
+                    }
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm mb-2">Title:</label>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  className="w-full border border-gray-300 px-4 py-2 rounded"
+                  value={form?.title || ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, title: e.target.value } as Entry))
+                  }
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm mb-2">Subject:</label>
+                <select
+                  className="w-full border border-gray-300 px-4 py-2 rounded"
+                  value={form?.subject || ""}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, subject: e.target.value } as Entry))
+                  }
+                >
+                  {subjects.map((subject) => (
+                    <option key={subject} value={subject}>
+                      {subject}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm mb-2">Add New Subject:</label>
+                <input
+                  type="text"
+                  placeholder="Add new subject"
+                  value={newSubject}
+                  onChange={(e) => setNewSubject(e.target.value)}
+                  className="w-full border border-gray-300 px-4 py-2 rounded"
+                />
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
+                  onClick={addNewSubject}
+                >
+                  Add Subject
+                </button>
+              </div>
+              <div className="flex flex-col">
+                <label className="text-sm mb-2">Select Color:</label>
+                <div className="flex space-x-2">
+                  {subjectColors.map((color) => (
+                    <button
+                      key={color}
+                      className={`w-6 h-6 rounded-full ${selectedColor === color ? 'border-2 border-black' : ''}`} // Smaller color balls
+                      style={{ backgroundColor: color }}
+                      onClick={() => setSelectedColor(color)}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end mt-4 space-x-2">
+              <button
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleAddEntry}
+              >
+                {isEditMode ? "Update" : "Add"}
+              </button>
+              {isEditMode && (
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  onClick={handleDeleteEntry}
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       )}
-
-      {selectedSchedule && (
-        <DetailsModal
-          schedule={selectedSchedule}
-          onClose={() => setSelectedSchedule(null)}
-          onEdit={() => {
-            setEditingSchedule(selectedSchedule);
-            setIsModalOpen(true);
-          }}
-          onDelete={() => handleDeleteSchedule(selectedSchedule.id)}
-        />
-      )}
-    </div>
-  );
-}
-
-function ScheduleModal({
-  onClose,
-  onSave,
-  schedule,
-}: {
-  onClose: () => void;
-  onSave: (schedule: Schedule) => void;
-  schedule: Schedule | null;
-}) {
-  const [form, setForm] = useState<Schedule>(
-    schedule || { id: 0, date: "", startTime: "", endTime: "", title: "", priority: "" }
-  );
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = () => {
-    if (form.date && form.startTime && form.endTime && form.title && form.priority) {
-      onSave(form);
-    } else {
-      alert("Please fill in all fields.");
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-lg font-semibold mb-4">
-          {schedule ? "Edit Schedule" : "Add Schedule"}
-        </h2>
-        <div className="space-y-4">
-          <input
-            type="date"
-            name="date"
-            value={form.date}
-            onChange={handleChange}
-            className="w-full border border-gray-300 px-4 py-2 rounded"
-          />
-          <input
-            type="time"
-            name="startTime"
-            value={form.startTime}
-            onChange={handleChange}
-            className="w-full border border-gray-300 px-4 py-2 rounded"
-          />
-          <input
-            type="time"
-            name="endTime"
-            value={form.endTime}
-            onChange={handleChange}
-            className="w-full border border-gray-300 px-4 py-2 rounded"
-          />
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            placeholder="Title"
-            className="w-full border border-gray-300 px-4 py-2 rounded"
-          />
-          <input
-            type="text"
-            name="priority"
-            value={form.priority}
-            onChange={handleChange}
-            placeholder="Priority"
-            className="w-full border border-gray-300 px-4 py-2 rounded"
-          />
-        </div>
-        <div className="flex justify-end mt-4 space-x-2">
-          <button
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            onClick={handleSubmit}
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function DetailsModal({
-  schedule,
-  onClose,
-  onEdit,
-  onDelete,
-}: {
-  schedule: Schedule;
-  onClose: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-}) {
-  return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-lg font-semibold mb-4">Schedule Details</h2>
-        <p><strong>Date:</strong> {schedule.date}</p>
-        <p><strong>Day:</strong> {format(parseISO(schedule.date), "EEEE")}</p>
-        <p><strong>Start Time:</strong> {schedule.startTime}</p>
-        <p><strong>End Time:</strong> {schedule.endTime}</p>
-        <p><strong>Title:</strong> {schedule.title}</p>
-        <p><strong>Priority:</strong> {schedule.priority}</p>
-        <div className="flex justify-end mt-4 space-x-2">
-          <button
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
-            onClick={onClose}
-          >
-            Close
-          </button>
-          <button
-            className="bg-yellow-500 text-white px-4 py-2 rounded"
-            onClick={onEdit}
-          >
-            Edit
-          </button>
-          <button
-            className="bg-red-500 text-white px-4 py-2 rounded"
-            onClick={onDelete}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
