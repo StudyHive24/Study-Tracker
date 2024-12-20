@@ -9,33 +9,36 @@ import { useTasksContext } from '@/context/taskContext'
 import { filteredTasks } from '@/utils/utilities'
 import { Task } from '@/utils/types'
 import TaskItem from '../components/TaskItem'
+import AddTaskModel from '../components/AddTaskModel'
 
 
 function page() {
 
   useRiderect('/login')
 
-  const { tasks, priority, setPriority } = useTasksContext()
+  const { tasks, priority, setPriority, pendingTasks } = useTasksContext()
 
   const filtered = filteredTasks(tasks, priority)
 
   useEffect(() => {
-    setPriority('all')
-  })
+    setPriority('All')
+  }, [])
+
+  const totalTasks = pendingTasks.length
 
   return (
 
     <div>
-      <TaskHeader/>
+      <TaskHeader totalTasks={totalTasks} Status={' Active Tasks'} firstPhrase={'You have '}/>
       <TasksSubHeader title={"All Tasks"}/>
-      <motion.div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-2'>
+      <motion.div className='mt-3 grid grid-cols-3 gap-2'>
             {filtered.map((task: Task, i: number) => (
               <TaskItem key={i} task={task} />
             ))}
-        <motion.button className='border-dashed border-2 rounded-lg border-gray-400 mt-1 h-[12rem] w-[20vw]
+        <motion.button className='
           hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out
         '>
-          Add New Task
+          <AddTask />
         </motion.button>
         </motion.div>
       </div>

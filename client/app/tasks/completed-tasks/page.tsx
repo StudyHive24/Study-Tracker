@@ -1,26 +1,44 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TaskHeader } from '../components/TaskHeader'
 import TasksSubHeader from '../components/TasksSubHeader'
-import Task from '../components/TaskItem'
 import useRiderect from '@/hooks/useUserRiderect'
+import { useTasksContext } from '@/context/taskContext'
+import { filteredTasks } from '@/utils/utilities'
+import { motion } from 'framer-motion'
+import { Task } from '@/utils/types'
+import TaskItem from '../components/TaskItem'
+import AddTask from '../components/AddTask'
 
 function page() {
 
   useRiderect('/login')
 
+  const { tasks, priority, setPriority,  completedTasks} = useTasksContext()
+
+  const filtered = filteredTasks(completedTasks, priority)
+
+  useEffect(() => {
+    setPriority('All')
+  }, [])
+
+  let totalTasks = completedTasks.length 
+
   return (
     <div>
-        <TaskHeader/>
-        <TasksSubHeader title={"Completed Tasks"}/>
-        <div className='grid grid-cols-3 gap-2 mt-3'>
-            <Task title={"Task1"} description={"lorem ipsm "} priority={"Low"} time={"Yesterday"} color={"text-green-500"}/>
-            <Task title={"Task1"} description={"Description 1"} priority={"Low"} time={"Yesterday"} color={"text-green-500"}/>
-            <Task title={"Task1"} description={"Description 1"} priority={"Low"} time={"Yesterday"} color={"text-green-500"}/>
-            <Task title={"Task1"} description={"Description 1"} priority={"Low"} time={"Yesterday"} color={"text-green-500"}/>
-            <Task title={"Task1"} description={"Description 1"} priority={"Low"} time={"Yesterday"} color={"text-green-500"}/>
-        </div>
-    </div>
+      <TaskHeader totalTasks={totalTasks} Status={'Completed task/s'} firstPhrase={'There are '}/>
+      <TasksSubHeader title={"All Tasks"}/>
+      <motion.div className='mt-3 grid grid-cols-3 gap-2'>
+            {filtered.map((task: Task, i: number) => (
+              <TaskItem key={i} task={task} />
+            ))}
+        <motion.button className='
+          hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out
+        '>
+          <AddTask />
+        </motion.button>
+        </motion.div>
+      </div>
   )
 }
 

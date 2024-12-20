@@ -8,19 +8,19 @@ const router = express.Router()
 router.get('/', protect ,getTasks)
 
 // to delete all tasks
-router.delete('/all', deleteAllTasks)
+router.delete('/all', protect,deleteAllTasks)
 
 // to create a task
 router.post('/create', protect, createTask)
 
 // to get a task
-router.get('/:id', getTask)
+router.get('/:id', protect,getTask)
 
 // to update a task
-router.put('/:id', updateTask)
+router.patch('/update/:id', protect,updateTask)
 
 // to delete a task
-router.delete('/:id', deleteTask)
+router.delete('/delete/:id', protect, deleteTask)
 
 
 export default router

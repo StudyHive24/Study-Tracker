@@ -11,23 +11,38 @@ function TasksSubHeader({title} : UserProps) {
 
   const [activeIndex, setActiveIndex] = React.useState(0)
 
+  const priorities = ['All', 'Low', 'Medium', 'High']
+
+
   return (
-    <div className='flex flex-row justify-between mt-2 border-b-2 p-2 border-blue-50 rounded-xl'>
-        <span className='flex flex-col p-2 rounded-xl text-center justify-center text-base'>{title}</span>
-        <div className=' flex gap-2 bg-[#e1e9f3] p-2 rounded-xl'>
-            <span className='bg-[#c4d2e3] active:bg-[#acc7e8] hover:bg-[#acc7e8] cursor-pointer p-1 pr-4 pl-4 rounded-lg text-[13px]'>
-              <button>All</button>
-            </span>
-            <span className='bg-[#c4d2e3] active:bg-[#acc7e8] hover:bg-[#acc7e8] cursor-pointer p-1 pr-3 pl-3 rounded-lg text-[13px]'>
-              <button>Low</button>
-            </span>
-            <span className='bg-[#c4d2e3] active:bg-[#acc7e8] hover:bg-[#acc7e8] cursor-pointer p-1 pr-2 pl-2 rounded-lg text-[13px]'>
-                <button>Medium</button>
-            </span>
-            <span className='bg-[#c4d2e3] active:bg-[#acc7e8] hover:bg-[#acc7e8] cursor-pointer p-1 pr-3 pl-3 rounded-lg text-[13px]'>
-                <button>High</button>
-            </span>
-        </div>
+    <div className="relative py-2 px-2 grid grid-cols-4 items-center gap-3 bg-[#F9F9F9] border-2 border-white rounded-md mt-4">
+      <span
+        className="absolute left-[5px] bg-[#EDEDED] rounded-md transition-all duration-300"
+        style={{
+          width: "calc(100% / 4 - 10px)",
+          height: "calc(100% - 10px)",
+          top: "50%",
+          transform: `translate(calc(${activeIndex * 100}% + ${
+            activeIndex * 10
+          }px), -50%)`,
+          transition: "transform 300ms cubic-bezier(.95,.03,1,1)",
+        }}
+      ></span>
+      {priorities.map((priority, index) => (
+        <button
+          key={index}
+          className={`relative px-1 z-10 font-medium text-sm ${
+            activeIndex === index ? "text-[#3aafae] " : "text-gray-500"
+          }`}
+          onClick={() => {
+            setActiveIndex(index);
+            setPriority(priority);
+            console.log(priority)
+          }}
+        >
+          {priority}
+        </button>
+      ))}
     </div>
   )
 }

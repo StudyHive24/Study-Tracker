@@ -17,7 +17,7 @@ export const TasksProvider = ({children}) => {
     const [task, setTask] = React.useState({})
 
     const [isEditing, setIsEditing] = useState(false)
-    const [priority, setPriority] = useState("all")
+    const [priority, setPriority] = useState("All")
     const [activeTask, setActiveTask] = useState(null)
     const [modalMode, setModalMode] = useState("")
     const [profileModal, setProfileModal] = useState(false)
@@ -120,10 +120,8 @@ export const TasksProvider = ({children}) => {
 
     // delete a task
     const deleteTask = async (taskID) => {
-        setLoading(true)
-
         try {
-            await axios.delete(`${serverUrl}/api/tasks/${taskID}`)
+            await axios.delete(`${serverUrl}/api/tasks/delete/${taskID}`)
 
             // remove the task from the task array
             const newTasks = tasks.filter((t) => t._id !== taskID)
@@ -144,10 +142,10 @@ export const TasksProvider = ({children}) => {
     }
 
     // to get completed tasks
-    const completedTasks = tasks?.filter((task) => task.completed)
+    const completedTasks = tasks.filter((task) => task.completed)
 
     // get pending tasks
-    const pendingTasks = tasks?.filter((task) => !task.completed)
+    const pendingTasks = tasks.filter((task) => !task.completed)
 
     useEffect(() => {
         getTasks()

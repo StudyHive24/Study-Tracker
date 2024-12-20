@@ -2,6 +2,7 @@ import React from 'react'
 import { FilePenLine, Star, Trash2 } from 'lucide-react'
 import { Task } from '@/utils/types'
 import { formatTime } from '@/utils/utilities'
+import { useTasksContext } from '@/context/taskContext'
 
 interface TaskProps {
   task: Task
@@ -10,12 +11,14 @@ interface TaskProps {
 
 function TaskItem({task} : TaskProps) {
 
+  const {deleteTask} = useTasksContext()
+
   const priorityColor = (priority: string) => {
-    if (priority == 'low') {
+    if (priority == 'Low') {
       return 'text-green-500'
-    } else if (priority == 'medium') {
+    } else if (priority == 'Medium') {
       return 'text-yellow-500'
-    } else if (priority == 'high') {
+    } else if (priority == 'High') {
       return 'text-red-500'
     } else {
       return 'text-green-500'
@@ -34,7 +37,7 @@ function TaskItem({task} : TaskProps) {
           <div className='flex flex-row gap-1'>
             <Star width={20} height={20} color='white' className='bg-slate-400 p-[3px] hover:bg-yellow-500 active:bg-yellow-500 rounded-xl cursor-pointer'/>
             <FilePenLine width={20} height={20} color='white' className='bg-green-500 hover:bg-green-600 p-[3px] rounded-xl cursor-pointer'/>
-            <Trash2 width={20} height={20} color='white' className='bg-red-500 p-[3px] hover:bg-red-600 rounded-xl cursor-pointer'/>
+            <Trash2 onClick={() => {deleteTask(task._id)}} width={20} height={20} color='white' className='bg-red-500 p-[3px] hover:bg-red-600 rounded-xl cursor-pointer'/>
           </div>
         </div> 
     </div>
