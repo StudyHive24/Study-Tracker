@@ -1,8 +1,9 @@
 import Task from '../models/tasks/task.model.js'
+import asyncHandler from 'express-async-handler'
 
-export const createTask = async (req, res) => {
+export const createTask = asyncHandler(async (req, res) => {
     try {
-        const { title, description, duedate, status, priority, tags, attachments } =  req.body
+        const { title, description, duedate, startTime, endTime, status, completed, priority, tags, attachments } =  req.body
         
             if (!title || title.trim() === '') {
                 res.status(400)
@@ -22,7 +23,10 @@ export const createTask = async (req, res) => {
                 title,
                 description,
                 duedate,
+                startTime,
+                endTime,
                 status,
+                completed,
                 priority,
                 tags,
                 attachments,
@@ -31,21 +35,19 @@ export const createTask = async (req, res) => {
 
             await task.save()
 
-            res.status(200)
-            res.json(task)
+            return res.status(201).json(task)
 
     } catch (error) {
         console.log('Error in creating task: ', error.message)
     }
-}
+})
 
-export const getTasks = async (req, res) => {
+export const getTasks = asyncHandler(async (req, res) => {
     try {
         const userID = req.user._id
 
         if (!userID) {
-            res.status(400)
-            res.json({
+            res.status(400).json({
                 message: 'User not found'
             })
         }
@@ -59,8 +61,11 @@ export const getTasks = async (req, res) => {
 
     } catch (error) {
         console.log('Error in getting tasks: ', error.message)
+        res.status(400).json({
+            message: error.message
+        })
     }
-}
+})
 
 export const getTask = async (req, res) => {
     try {
@@ -69,7 +74,7 @@ export const getTask = async (req, res) => {
         const {id} = req.params
 
         if (!id) {
-            res.staus(400)
+            res.status(400)
             res.json({
                 message: 'Please add a task id'
             })
@@ -108,7 +113,7 @@ export const updateTask = async (req, res) => {
         const userID = req.user._id
 
         const {id} =  req.params
-        const { title, description, duedate, status, completed, priority, tags, attachments } = req.body
+        const { title, description, duedate, startTime, endTime, status, completed, priority, tags, attachments } = req.body
 
         if(!id) {
             res.status(400)
@@ -138,6 +143,8 @@ export const updateTask = async (req, res) => {
         task.title = title || task.title
         task.description = description || task.description
         task.duedate = duedate || task.duedate
+        task.startTime = startTime || task.startTime
+        task.endTime = endTime || task.endTime
         task.status = status || task.status
         task.completed = completed || task.completed
         task.priority = priority || task.priority
