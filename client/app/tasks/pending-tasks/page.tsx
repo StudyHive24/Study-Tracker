@@ -35,7 +35,6 @@ function page() {
         <motion.button className='
           hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out
         '>
-          <AddTask />
         </motion.button>
         </motion.div>
       </div>

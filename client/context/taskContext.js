@@ -10,41 +10,41 @@ const serverUrl = 'http://localhost:8000'
 
 export const TasksProvider = ({children}) => {
 
-    const userID =  useUserContext().user._id
+    const userID = useUserContext().user._id;
 
-    const [tasks, setTasks] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [task, setTask] = React.useState({})
-
-    const [isEditing, setIsEditing] = useState(false)
-    const [priority, setPriority] = useState("All")
-    const [activeTask, setActiveTask] = useState(null)
-    const [modalMode, setModalMode] = useState("")
-    const [profileModal, setProfileModal] = useState(false)
-
+    const [tasks, setTasks] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
+    const [task, setTask] = React.useState({});
+  
+    const [isEditing, setIsEditing] = React.useState(false);
+    const [priority, setPriority] = React.useState("all");
+    const [activeTask, setActiveTask] = React.useState(null);
+    const [modalMode, setModalMode] = React.useState("");
+    const [profileModal, setProfileModal] = React.useState(false);
+  
     const openModalForAdd = () => {
-        setModalMode('add')
-        setIsEditing(true),
-        setTask({})
-    }
-
-    const openModalForEdit = () => {
-        setModalMode('edit')
-        setIsEditing(true)
-        setActiveTask(task)
-    }
-
+      setModalMode("add");
+      setIsEditing(true);
+      setTask({});
+    };
+  
+    const openModalForEdit = (task) => {
+      setModalMode("edit");
+      setIsEditing(true);
+      setActiveTask(task);
+    };
+  
     const openProfileModal = () => {
-        setProfileModal(true)
-    }
-
+      setProfileModal(true);
+    };
+  
     const closeModal = () => {
-        setIsEditing(false)
-        setProfileModal(false)
-        setModalMode('')
-        setActiveTask(null)
-        setTask({})
-    }
+      setIsEditing(false);
+      setProfileModal(false);
+      setModalMode("");
+      setActiveTask(null);
+      setTask({});
+    };
 
     // get tasks
     const getTasks = async () => {
@@ -57,26 +57,31 @@ export const TasksProvider = ({children}) => {
 
             return res.json(tasks)
         } catch (error) {
-            console.log('Error getting tasks', error)
+            return console.log('Error getting tasks', error)
+            
         }
 
         setLoading(false)
     }
 
     // get task
-    const getTask = async (taskID) => {
-        setLoading(true)
+    // get a task by ID
+const getTask = async (taskID) => {
+    try {
+        // Make a GET request to fetch the task by ID
+        const response = await axios.get(`${serverUrl}/api/tasks/task/${taskID}`);
+        
+        // Extract the task data from the response
+        const task = response.data;
 
-        try {
-            const res =  await axios.get(`${serverUrl}/api/tasks/${taskID}`)
+        console.log('Task fetched successfully:', task);
 
-            setTask(res.data)
-        } catch (error) {
-            console.log('Error getting task', error)
-        }
-
-        setLoading(false)
+        return task; // Return the fetched task
+    } catch (error) {
+        console.error('Error fetching task', error);
+        return null; // Handle error gracefully
     }
+};
     
     // create a task
     const createTask = async (task) => {
@@ -101,7 +106,7 @@ export const TasksProvider = ({children}) => {
         
 
         try {
-            const res =  await axios.patch(`${serverUrl}/api/tasks/${task._id}`)
+            const res =  await axios.patch(`${serverUrl}/api/tasks/update/${task._id}`)
 
             // udpdate a task in the tasks array
             const newTasks =  tasks.map((t) => {
@@ -141,6 +146,14 @@ export const TasksProvider = ({children}) => {
         }
     }
 
+    const handleInput2 = (name) => (e) => {
+        if (name === 'setTask') {
+            setTask(e)
+        } else {
+            setTask({...task, [name]: e.target.value})
+        }
+      };
+
     // to get completed tasks
     const completedTasks = tasks.filter((task) => task.completed)
 
@@ -151,7 +164,6 @@ export const TasksProvider = ({children}) => {
         getTasks()
     }, [userID])
 
-    console.log('Active tasks', activeTask)
 
 
     return (
@@ -179,7 +191,8 @@ export const TasksProvider = ({children}) => {
             pendingTasks,
             completedTasks,
             profileModal,
-            
+            handleInput2
+
         }}>
             {children}
         </TaskContext.Provider>

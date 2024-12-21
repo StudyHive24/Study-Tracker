@@ -96,12 +96,12 @@ export const getTask = async (req, res) => {
             })
         }
 
-        res.status(200).json(task)
+        return res.status(200).json(task)
 
 
     } catch (error) {
         console.log('Error in getting the task: ', error.message)
-        res.staus(500)
+        res.status(500)
         return res.json({
             message: error.message
         })
@@ -152,6 +152,8 @@ export const updateTask = async (req, res) => {
         task.attachments = attachments || task.attachments
 
         await task.save()
+
+        return res.status(201).json(task)
 
     } catch (error) {
         console.log('Error in updating the task: ', error.message)

@@ -1,10 +1,11 @@
 import express from 'express'
 const router = express.Router()
-import { registerUser, loginUser, getUsers, getUser, logoutUser, updateUser, userLoginStatus, emailVerify, verifyUser, forgotPassowrd } from '../controllers/user.controller.js'
+import { registerUser, loginUser, getUsers, getUser, logoutUser, updateUser, userLoginStatus, emailVerify, verifyUser, forgotPassowrd, changePassword, resetPassword } from '../controllers/user.controller.js'
 import { protect } from '../middleware/authentcationMiddleware.js'
 
 // to get all users
 router.get('/', getUsers)
+
 
 // to register a user
 router.post('/register', registerUser)
@@ -24,16 +25,26 @@ router.post('/verify-email', protect, emailVerify)
 // to get a profile of the user
 // router.get('/profile', getProfile)
 
+
 // to get a user
 router.get('/user', protect, getUser)
 
 // user login status
 router.get('/login-status', userLoginStatus)
 
-// to verify user
+// forgot password
+router.post("/verify-user/:verificationToken", verifyUser)
+
+// to verify user , after the email verification
 router.post('/verify-user/:verificationToken', verifyUser)
 
-// to reset the password
+// forgot password
 router.post('/forgot-password', forgotPassowrd)
+
+//reset passwrord
+router.post('/reset-password/:resetPasswordToken', resetPassword)
+
+// change password
+router.patch('/change-password', protect, changePassword)
 
 export default router

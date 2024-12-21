@@ -4,6 +4,7 @@ import React from 'react'
 import AddTaskModel from './AddTaskModel'
 import { useTasksContext } from '@/context/taskContext'
 import { useUserContext } from '@/context/userContext'
+import AddTask from './AddTask'
 
 interface TaskHeaderProps {
   totalTasks: string,
@@ -13,7 +14,7 @@ interface TaskHeaderProps {
 
 export function TaskHeader({totalTasks, Status, firstPhrase} : TaskHeaderProps) {
 
-  const {tasks , pendingTasks} = useTasksContext()
+  const {tasks , pendingTasks, task} = useTasksContext()
 
   const {user} = useUserContext()
 

@@ -193,7 +193,7 @@ export const UserContextProvider = ({children}) => {
     }
 
     // forgot password email
-    const forgotPassowrdEmail = async (email) => {
+    const forgotPasswordEmail = async (email) => {
         setLoading(true)
 
         try {
@@ -215,6 +215,52 @@ export const UserContextProvider = ({children}) => {
             setLoading(false)
         }
     }
+
+      // reset password
+  const resetPassword = async (token, password) => {
+
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/reset-password/${token}`,
+        {
+          password,
+        },
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("Password reset successfully");
+      // redirect to login page
+      router.push("/login");
+    } catch (error) {
+      console.log("Error resetting password", error);
+      toast.error(error.response.message);
+    }
+  };
+
+    // change password
+    const changePassword = async (currentPassword, newPassword) => {
+        setLoading(true);
+    
+        try {
+          const res = await axios.patch(
+            `${serverUrl}/api/v1/change-password`,
+            { currentPassword, newPassword },
+            {
+              withCredentials: true, // send cookies to the server
+            }
+          );
+    
+          toast.success("Password changed successfully");
+          setLoading(false);
+        } catch (error) {
+          console.log("Error changing password", error);
+          toast.error(error.response.data.message);
+          setLoading(false);
+        }
+      };
+    
 
 
     // dynamic form handler
@@ -249,8 +295,10 @@ export const UserContextProvider = ({children}) => {
                 setUser,
                 loginUser,
                 userLoginStatus,
-                forgotPassowrdEmail,
-                logoutUser
+                forgotPasswordEmail,
+                logoutUser,
+                resetPassword,
+                changePassword
             }}
         > {children} 
         </UserContext.Provider>

@@ -1,8 +1,10 @@
 import React from 'react'
 import { FilePenLine, Star, Trash2 } from 'lucide-react'
+import { edit, star, trash } from "@/utils/Icons";
 import { Task } from '@/utils/types'
 import { formatTime } from '@/utils/utilities'
-import { useTasksContext } from '@/context/taskContext'
+import { useTasksContext } from '@/context/taskContext.js'
+import Modal from './Modal';
 
 interface TaskProps {
   task: Task
@@ -11,7 +13,9 @@ interface TaskProps {
 
 function TaskItem({task} : TaskProps) {
 
-  const {deleteTask} = useTasksContext()
+  const {deleteTask, getTask, openModalForEdit} = useTasksContext()
+
+
 
   const priorityColor = (priority: string) => {
     if (priority == 'Low') {
@@ -35,11 +39,15 @@ function TaskItem({task} : TaskProps) {
           <span className='text-slate-500 '>{formatTime(task.createdAt)}</span>
           <span className={`${priorityColor(task.priority)}`}>{task.priority}</span>
           <div className='flex flex-row gap-1'>
-            <Star width={20} height={20} color='white' className='bg-slate-400 p-[3px] hover:bg-yellow-500 active:bg-yellow-500 rounded-xl cursor-pointer'/>
-            <FilePenLine width={20} height={20} color='white' className='bg-green-500 hover:bg-green-600 p-[3px] rounded-xl cursor-pointer'/>
+          <Star width={20} height={20} color='white' className={`${task.completed ? 'bg-yellow-500' : 'bg-slate-400'}   p-[3px] hover:bg-yellow-500 active:bg-yellow-500 rounded-xl cursor-pointer`}
+            />
+            {/* <UpdateTaskModel /> */}
+
+            <Modal task={task}/>
             <Trash2 onClick={() => {deleteTask(task._id)}} width={20} height={20} color='white' className='bg-red-500 p-[3px] hover:bg-red-600 rounded-xl cursor-pointer'/>
           </div>
         </div> 
+        
     </div>
   )
 }

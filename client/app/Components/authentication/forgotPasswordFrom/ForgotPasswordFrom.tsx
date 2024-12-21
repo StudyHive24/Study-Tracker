@@ -27,7 +27,7 @@ function ForgotPasswordForm() {
       <form className="">
         <div className="flex flex-col gap-4 bg-white p-12 rounded-lg h-[65vh] mt-3">
           <div className="flex justify-center">
-            <span className="text-xl">Login to your StudyHive Account</span>
+            <span className="text-xl">Enter email to reset your password</span>
           </div>
           <span className="text-sm text-gray-400 text-center mb-5">
             Login now, Don't have an account? 
@@ -56,7 +56,7 @@ function ForgotPasswordForm() {
               onClick={submitHandle}
               className="bg-blue-300 p-2 rounded-lg mt-3 hover:bg-blue-400 cursor-pointer"
             >
-              Login Now
+              Reset Password
             </button>
           </div>
         </div>

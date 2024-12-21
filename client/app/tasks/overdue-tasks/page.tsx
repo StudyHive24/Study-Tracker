@@ -26,6 +26,8 @@ function page() {
 
   let totalTasks = completedTasks.length 
 
+  
+
   return (
     <div>
       <TaskHeader totalTasks={totalTasks} Status={' Overdue Tasks'} firstPhrase={'There are '}/>
@@ -38,7 +40,6 @@ function page() {
         <motion.button className='
           hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out
         '>
-          <AddTask />
         </motion.button>
         </motion.div>
       </div>

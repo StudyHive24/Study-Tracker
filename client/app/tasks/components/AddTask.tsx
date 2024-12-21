@@ -11,63 +11,69 @@ import {
 import { Input } from "@/components/ui/input";
 import {} from "@radix-ui/react-dialog";
 import { Label } from "@radix-ui/react-label";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { MoveRight, Tag, Tags } from "lucide-react";
 import {TagsInput} from 'react-tag-input-component'
-import { useTasksContext } from "@/context/taskContext";
+import { useTasksContext } from "@/context/taskContext.js";
 import { time } from "console";
+
+
 function AddTask() {
+  const [selectedValue, setSelectedValue] = useState("low")
+  
+  const currentTime = new Date().toLocaleString([], {hour: '2-digit', minute: '2-digit'})
 
-    const [selectedValue, setSelectedValue] = useState("low")
+  const {
+    task,
+    handleInput,
+    createTask,
+    isEditing,
+    closeModal,
+    modalMode,
+    activeTask,
+    updateTask,
+    getTask
+  } = useTasksContext()
+
+  const ref = useRef(null)
+
+  const handleRadioChange = (value: any) => {
+    setSelectedValue(value)
     
-    const currentTime = new Date().toLocaleString([], {hour: '2-digit', minute: '2-digit'})
-  
-    const {
-      task,
-      handleInput,
-      createTask,
-      isEditing,
-      closeModal,
-      modalMode,
-      activeTask,
-      updateTask
-    } = useTasksContext()
-  
-    const ref = useRef(null)
-  
-    const handleRadioChange = (value: any) => {
-      setSelectedValue(value)
-      
-    };
-  
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-  
-      // if (modalMode === 'edit') {
-      //   updateTask(task)
-      // } else if (modalMode === 'add') {
-      //   createTask(task)
-      // }
-      const endDate = new Date(`${task.duedate}T${task.endTime}:00`);
-  
-      const updatedTask = {...task, endTime: endDate}
-  
-  
-      createTask(updatedTask)
-  
-       closeModal()
-    }
+  };
 
+
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    // if (modalMode === 'edit') {
+    //   updateTask(task)
+    // } else if (modalMode === 'add') {
+    //   createTask(task)
+    // }
+    const endDate = new Date(`${task.duedate}T${task.endTime}:00`);
+
+    const updatedTask = {...task, endTime: endDate}
+
+
+    createTask(updatedTask)
+
+     closeModal()
+  }
   return (
+    <>
+    <Dialog>
+      <DialogTrigger asChild>
     <div className='flex flex-col justify-center text-center border-2 border-dashed border-white p-2 rounded-lg h-48 m-[5px] mt-2 cursor-pointer'>
-              <Dialog>
-        <DialogTrigger asChild>
+
           <span className="bg-none">
             Add A New Task
           </span>
+    </div>
         </DialogTrigger>
-        <DialogContent className="w-[525px] h-[75vh] p-7 ">
-          <DialogHeader className="mt-5 gap-2">
+        <DialogContent>
+        <DialogHeader className="mt-5 gap-2">
             <DialogTitle>Create Task</DialogTitle>
           </DialogHeader>
           <form action=""
@@ -83,7 +89,7 @@ function AddTask() {
                   className="w-50 border-none bg-gray-200"
                   onChange={(e) => handleInput('title')(e)}
                   name="title"
-                  value={task.title}
+                  value={task?.title}
                 ></Input>
               </div>
               <div>
@@ -94,7 +100,7 @@ function AddTask() {
                   className="border-none bg-gray-200 w-50"
                   onChange={(e) => handleInput('description')(e)}
                   name="description"
-                  value={task.description}
+                  value={task?.description}
                 ></Input>
               </div>
             </div>
@@ -107,18 +113,18 @@ function AddTask() {
                   className="border-none bg-gray-200"
                   onChange={(e) => handleInput('duedate')(e)}
                   name="duedate"
-                  value={task.duedate}
+                  value={task?.duedate}
                 ></Input>
               </div>
               <div>
                 <Label htmlFor="duration">End time</Label>
-                <Input id="time" type="time" value={task.endTime} className="border-none bg-gray-200" 
+                <Input id="time" type="time" value={task?.endTime} className="border-none bg-gray-200" 
                   onChange={(e) => handleInput('endTime')(e)}
                 />
               </div>
             </div>
             <div className="text-xs text-gray-500 mt-1">
-              This task will due on the {task.duedate || 'a specified date'} at {task.endTime || 'a specific time'}
+              This task will due on the {task?.duedate || 'a specified date'} at {task?.endTime || 'a specific time'}
             </div>
             <div className="mt-2 flex flex-col gap-2">
               <Label htmlFor="priority" >Priority</Label>
@@ -126,7 +132,7 @@ function AddTask() {
               <select
                 className=" p-2 rounded-md border cursor-pointer border-none w-[30vw] bg-gray-200 focus:bg-green-200"
                 name="priority"
-                value={task.priority}
+                value={task?.priority}
                 onChange={(e) => handleInput("priority")(e)}
               >
                 <option className="bg-green-300" value="Low">Low</option>
@@ -143,7 +149,7 @@ function AddTask() {
               <select
                 className=" bg-gray-200 p-1 rounded-md border cursor-pointer"
                 name="completed"
-                value={task.completed ? "true" : "false"}
+                value={task?.completed ? "true" : "false"}
                 onChange={(e) => handleInput("completed")(e)}
               >
                 <option value="false">No</option>
@@ -159,9 +165,9 @@ function AddTask() {
             </div>
           </div>
           </form>
-        </DialogContent>
+         </DialogContent> 
       </Dialog>
-    </div>
+    </>
   )
 }
 

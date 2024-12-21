@@ -21,6 +21,9 @@ import { UserProfile } from "../User-Profile/UserProfile"
 import User from "./Components/User";
 import LogoutButton from "./Components/LogoutButton";
 import { useUserContext } from "@/context/userContext";
+import Profile from "../Profile/Profile";
+import Chart from "../Chart/RadialChart";
+import RadialChart from "../Chart/RadialChart";
 
 
 
@@ -58,7 +61,8 @@ export function SideBarR() {
   return (
     <Sidebar variant="inset" side="right">
       <SidebarContent className="bg-[#f3f8ff]">
-        <UserProfile />
+        <Profile />
+        <RadialChart />
       </SidebarContent>
       <SidebarFooter>
           <SidebarMenu>

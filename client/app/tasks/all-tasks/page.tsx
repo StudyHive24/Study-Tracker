@@ -10,6 +10,7 @@ import { filteredTasks } from '@/utils/utilities'
 import { Task } from '@/utils/types'
 import TaskItem from '../components/TaskItem'
 import AddTaskModel from '../components/AddTaskModel'
+import { container, item } from "@/utils/animations";
 
 
 function page() {
@@ -37,8 +38,9 @@ function page() {
             ))}
         <motion.button className='
           hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out
-        '>
+        '  variants={item}>
           <AddTask />
+          
         </motion.button>
         </motion.div>
       </div>
