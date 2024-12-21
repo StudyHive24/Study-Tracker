@@ -189,7 +189,7 @@ const Dashboard = () => {
                     <Calendar />
                 </div> */}
 
-                <div className="grid-item calendar">
+                {/* <div className="grid-item calendar">
                     <Calendar
                         onChange={(value) => {
                             if (value instanceof Date) {
@@ -225,7 +225,9 @@ const Dashboard = () => {
                                 <li key={task.title}>{task.title}</li>
                             ))}
                     </ul>
-                </div>
+                </div> */}
+
+                
                 
 
                 {/* Today's Time Table Section */}
@@ -274,6 +276,61 @@ const Dashboard = () => {
                     </table>
                 </div> */}
             </div>
+
+            <div className='calendar-container'>
+                    <div className="grid-item calendar">
+                        <Calendar
+                            onChange={(value) => {
+                                if (value instanceof Date) {
+                                    setDate(value); // Ensure the value is a Date
+                                }
+                            }}
+                            value={date}
+                            tileContent={({ date, view }) => {
+                                // Highlight tasks due on the calendar
+                                if (view === 'month') {
+                                    const taskOnDate = tasks.find(
+                                        (task: { duedate: string | number | Date; }) =>
+                                            new Date(task.duedate).toDateString() === date.toDateString()
+                                    );
+                                    return taskOnDate ? (
+                                        <div className="task-highlight">
+                                            📌
+                                        </div>
+                                    ) : null;
+                                }
+                            }}
+                        />
+
+                        
+                        
+                    </div>
+                    <div className="tasks-for-date">
+                        <h3>📌Tasks for {date.toDateString()}</h3>
+                        <table className="tasks-table">
+                            <thead>
+                                <tr>
+                                    <th>Task Title</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tasks
+                                    .filter((task: { duedate: string | number | Date; }) =>
+                                        new Date(task.duedate).toDateString() === date.toDateString()
+                                    )
+                                    .map((task: { title: string; }) => (
+                                        <tr key={task.title}>
+                                            <td>{task.title}</td>
+                                        </tr>
+                                    ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                </div>
+            
         </div>
     );
 };
