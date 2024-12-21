@@ -226,7 +226,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       <div className="flex space-x-6">
         {/* Study Guide (Table) */}
         <div className="flex-1 bg-gray-500 bg-opacity-80 p-6 rounded-lg shadow-lg">
-          <h3 className="text-2xl font-semibold text-gray-100 mb-4">📌Time-table Study Guide</h3>
+          <h3 className="text-2xl font-semibold text-gray-100 mb-4">📌Tasks Study Guide</h3>
           <table className="w-full bg-white bg-opacity-20 table-auto border-separate border-spacing-2 shadow-lg rounded-lg ">
             <thead>
               <tr className="bg-gray-700 bg-opacity-80">
