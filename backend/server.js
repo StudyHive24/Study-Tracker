@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import taskRoute from './routes/task.route.js'
 import userRoute from './routes/user.route.js'
 import timerRoute from './routes/timer.route.js' //uncommented
+import timetableRoute from './routes/timetable.route.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser';
 
@@ -23,7 +24,8 @@ const Mongo_URI = process.env.Mongo_URI;
 // routes
 app.use("/api/tasks", taskRoute)
 app.use("/api/v1", userRoute)
-app.use("/api/timer", timerRoute) //uncommented
+app.use("/api/timer", timerRoute)//uncommented
+app.use("/api/timetable", timetableRoute) 
 
 // database test
 app.get("/", (req, res) => {
