@@ -102,26 +102,28 @@ const getTask = async (taskID) => {
 
     // update a task
     const updateTask = async (task) => {
-        setLoading(true)
-        
-
+        setLoading(true);
+      
         try {
-            const res =  await axios.patch(`${serverUrl}/api/tasks/update/${task._id}`)
-
-            // udpdate a task in the tasks array
-            const newTasks =  tasks.map((t) => {
-                return t._id === res.data._id ? res.data : t
-            })
-
-            toast.success('Task updated successfully')
-
-            setTasks(newTasks)
-
-
+          const res = await axios.patch(
+            `${serverUrl}/api/tasks/update/${task._id}`,
+            task // Send updated task data in the request body
+          );
+      
+          // Update the task in the tasks array
+          const newTasks = tasks.map((task) =>
+            task._id === res.data._id ? res.data : task
+          );
+      
+          toast.success("Task updated successfully");
+          setTasks(newTasks);
         } catch (error) {
-            console.log('Error updating a task', error)
+          console.error("Error updating task:", error);
+          toast.error("Failed to update task");
+        } finally {
+          setLoading(false);
         }
-    }
+      };
 
     // delete a task
     const deleteTask = async (taskID) => {
@@ -157,7 +159,7 @@ const getTask = async (taskID) => {
     // to get completed tasks
     const completedTasks = tasks.filter((task) => task.completed)
 
-    // get pending tasks
+    // to get pending tasks
     const pendingTasks = tasks.filter((task) => !task.completed)
 
     useEffect(() => {

@@ -10,7 +10,7 @@ export default function Settings() {
     return (
         <div className="flex">
             <div className="flex-1 p-4">
-                {/* <ProfileSettings/> */}
+                <ProfileSettings/>
             </div>
         </div>
     );

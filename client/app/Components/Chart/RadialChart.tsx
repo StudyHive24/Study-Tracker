@@ -16,7 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useTasksContext } from "@/context/taskContext";
+import { useTasksContext } from "@/context/taskContext.js";
 
 export const description = "A radial chart with stacked sections";
 

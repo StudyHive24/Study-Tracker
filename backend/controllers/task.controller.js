@@ -126,7 +126,7 @@ export const updateTask = async (req, res) => {
 
         if (!task) {
             res.status(400)
-            res.json({
+            return res.json({
                 message: 'Task cannot be found'
             })
         }
@@ -134,7 +134,7 @@ export const updateTask = async (req, res) => {
         // to check the user is the owner of the task
         if (!task.user.equals(userID)) {
             res.status(401)
-            res.json({
+            return res.json({
                 message: 'Please login'
             })
         }
@@ -158,7 +158,7 @@ export const updateTask = async (req, res) => {
     } catch (error) {
         console.log('Error in updating the task: ', error.message)
         res.status(500)
-        res.json({
+        return res.json({
             message: error.message
         })
     }

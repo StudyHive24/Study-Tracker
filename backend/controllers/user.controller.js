@@ -106,6 +106,10 @@ export const loginUser = async (req, res) => {
         // check if passwords match
         const match = await comparePasswords(password, user.password)
 
+        console.log(match)
+
+        console.log(user.password)
+
         if (!match) {
             return res.status(404).json({
                 error: 'Invalid Credentials'
@@ -460,30 +464,52 @@ export const resetPassword = async (req, res) => {
 };
 
   // change password
-export const changePassword = async (req, res) => {
-    const { currentPassword, newPassword } = req.body;
-  
-    if (!currentPassword || !newPassword) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-  
-    //find user by id
-    const user = await User.findById(req.user._id);
-  
-    // compare current password with the hashed password in the database
-    const isMatch = await bcrypt.compare(currentPassword, user.password);
-  
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid password!" });
-    }
-  
-    // reset password
-    if (isMatch) {
-      user.password = newPassword;
-      await user.save();
-      return res.status(200).json({ message: "Password changed successfully" });
-    } else {
-      return res.status(400).json({ message: "Password could not be changed!" });
+  export const changePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+        // Check for required fields
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ message: "All fields are required." });
+        }
+
+        // Find user by ID
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        // Check if current password matches
+        const isMatch = await comparePasswords(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Current password is incorrect." });
+        }
+
+        // Hash the new password
+        const hashedPassword = await hashPassword(newPassword);
+        user.password = hashedPassword;
+
+        // Save the updated password
+        await user.save();
+
+        // Regenerate and send a new token
+        const token = generateToken(user._id);
+        res.cookie("token", token, {
+            path: "/",
+            httpOnly: true,
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            sameSite: "none",
+            secure: true,
+        });
+
+        // Respond with success
+        return res.status(200).json({
+            message: "Password changed successfully.",
+            token,
+        });
+    } catch (error) {
+        console.error("Error during password change:", error);
+        return res.status(500).json({ message: "An error occurred while changing the password." });
     }
 };
 

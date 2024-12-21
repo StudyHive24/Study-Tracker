@@ -170,6 +170,34 @@ export const UserContextProvider = ({children}) => {
         }
     }
 
+      // update user details
+  const updateUser = async (e, data) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await axios.patch(`${serverUrl}/api/v1/user`, data, {
+        withCredentials: true, // send cookies to the server
+      });
+
+      // update the user state
+      setUser((prevState) => {
+        return {
+          ...prevState,
+          ...res.data,
+        };
+      });
+
+      toast.success("User updated successfully");
+
+      setLoading(false);
+    } catch (error) {
+      console.log("Error updating user details", error);
+      setLoading(false);
+      toast.error(error.response.data.message);
+    }
+  };
+
     // to get user logged in status
     const userLoginStatus = async (req, res) => {
         let loggedIn = false
@@ -260,11 +288,34 @@ export const UserContextProvider = ({children}) => {
           setLoading(false);
         }
       };
+
+      // delete user
+  const deleteUser = async (id) => {
+    setLoading(true);
+    try {
+      const res = await axios.delete(
+        `${serverUrl}/api/v1/admin/users/${id}`,
+        {},
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("User deleted successfully");
+      setLoading(false);
+      // refresh the users list
+      getAllUsers();
+    } catch (error) {
+      console.log("Error deleting user", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
     
 
 
     // dynamic form handler
-    const handleUserInput = (name) => (e) => {
+    const handlerUserInput = (name) => (e) => {
         const value = e.target.value
 
         setUserState((prevState) => ({
@@ -291,14 +342,16 @@ export const UserContextProvider = ({children}) => {
                 registerUser,
                 userState,
                 user,
-                handleUserInput,
+                handlerUserInput,
                 setUser,
                 loginUser,
                 userLoginStatus,
                 forgotPasswordEmail,
                 logoutUser,
                 resetPassword,
-                changePassword
+                changePassword,
+                updateUser,
+                deleteUser
             }}
         > {children} 
         </UserContext.Provider>
