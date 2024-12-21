@@ -6,12 +6,13 @@
     
 }
 
+/* header start*/
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-    background-color: #ffffff9a;
+    background-color: #525252b7; /* new bg color*/
     padding: 4px 10px;
     border: 0px solid rgb(0, 0, 0);
     border-radius: 8px;
@@ -19,23 +20,21 @@
 }
 .header h1{
     font-size: 22px;
-    color: #282430;
+    color: #ffffff;
     font-weight: bold;
 }
-
 .reminder-button {
     background-color: #ffffff00;
     padding: 10px 10px;
     border: none;
     cursor: pointer;
-    
 }
 .bell-icon {
-    width: 20px;   /* Adjust the size of the bell icon */
-    height: 20px;
+    width: 25px;   /* Adjust the size of the bell icon */
+    height: 25px;
     margin-right: 8px; 
-     
 }
+/* header end*/
 
 .dashboard-content {
     display: grid;
@@ -44,7 +43,6 @@
     
     
 }
-
 .grid-item {
     padding:0px;
     background-color: #ffffff9a;
@@ -60,15 +58,15 @@
     display: flex;
     padding:10px;
     align-items: center;
-    background-color: #ffffff9a;
+    background-color: #525252b7;
     grid-column: span 0;
 }
 .chatbot p{
     font-family:Arial, Helvetica, sans-serif;
-    background-color: #ffffff;
+    background-color: #525252b7;
     padding:10px;
     border-radius: 8px;
-    color: #000000;
+    color: #ffffff;
     
     font-size: 17px;
 }
@@ -80,16 +78,17 @@
     
 }
 
-/* Tasks Complete */
+/* Tasks Complete ______________________________________________________*/
 .tasks-complete {
-    background-color: #ffffff9a;
+    background-color: #525252b7;
     padding:10px;
+    color: #ffffff;
 }
 
 .progress-bar {
     height: 20px;
     width: 100%;
-    background-color: #bdbdbd44;
+    background-color: #bdbdbdcb;
     border-radius: 5px;
     overflow: hidden;
     margin-top: 10px;
@@ -98,65 +97,13 @@
 
 .progress {
     height: 100%;
-    background-color: #72727233;
-}
-
-/* Today's Time Table _____________________________________________________*/
-.today-timetable{
-    padding: 15px;
-    grid-column: span 0;
-    grid-row: span 2;
-}
-
-.grid-item h2 {
-    font-family: 'Arial', sans-serif;
-    color: #333333;
-    margin-bottom: 10px;
-}
-
-.styled-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden; /* Ensures borders stay rounded */
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-}
-
-.styled-table th,
-.styled-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd; /* Row divider */
-    
-}
-
-.styled-table th {
-    
-    color: #ffffff; /* White text */
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.styled-table tr {
-    background-color: #bbbbbb31; /* Alternating row color */
-    transition: background-color 0.2s ease-in-out;
-}
-
-.styled-table tr:hover {
-    background-color: #f1f1f1; /* Hover effect */
-}
-
-.styled-table td {
-    color: #333;
-}
-
-.styled-table-head th {
-    background-color: #72727233; 
+    background-color: #15ff0070;
 }
 
 
-/* Calendar */
+
+/* Calendar______________________________________________________*/
+
 .calendar {
     background-color: #ffffff9a;
     padding-left:0px;
@@ -164,18 +111,27 @@
     font-weight: bold;
 }
 
+.task-highlight {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    color: rgb(231, 231, 231);
+}
+
+
 
 /* Container for Upcoming Tasks ________________________________________*/
 .upcoming-tasks {
-    background-color: #ffffff9a; /* Light background */
-    grid-row: span 2;
+    background-color: #525252b7; /* Light background */
+    /* grid-row: span 2; */
     padding: 15px;
-
+    
 }
 
-.upcoming-tasks h2 {
-    font-family: 'Arial', sans-serif;
-    color: #333;
+.upcoming-tasks h2{
+    font-family: 'Arial';
+    color: #ffffff;
     margin-bottom: 10px;
 }
 
@@ -193,11 +149,65 @@
 .styled-tasks-table td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd; /* Row divider */
+    border-bottom: 1px solid #dddddd; /* Row divider */
+    color: #ffffff;
+    font-size: medium;
 }
 
 .styled-tasks-table th {
-    background-color: #72727233;
+    background-color: #a8a8a8;
+    color: #ffffff; /* White text */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.styled-tasks-table tr {
+    background-color: #bbbbbb31; /* Alternating row color */
+    transition: background-color 0.2s ease-in-out;
+    
+}
+
+.styled-tasks-table tr:hover {
+    background-color: #a1a1a1; /* Hover effect */
+}
+
+
+
+/* Timer History ________________________________________*/
+
+/* Timer History Section ________________________________________*/
+.timer-history {
+    background-color: #525252b7; /* Light background */
+    padding: 15px;
+}
+
+.timer-history h2 {
+    font-family: 'Arial';
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+/* Styling for the timer history table */
+.styled-tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    border-radius: 10px;
+    overflow: hidden; /* Ensures borders stay rounded */
+}
+
+.styled-tasks-table th,
+.styled-tasks-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #dddddd; /* Row divider */
+    color: #ffffff;
+    font-size: medium;
+}
+
+.styled-tasks-table th {
+    background-color: #a8a8a8;
     color: #ffffff; /* White text */
     font-weight: bold;
     text-transform: uppercase;
@@ -209,67 +219,7 @@
 }
 
 .styled-tasks-table tr:hover {
-    background-color: #f1f1f1; /* Hover effect */
+    background-color: #a1a1a1; /* Hover effect */
 }
-
-.styled-tasks-table td {
-    color: #333;
-}
-
-
-
-/* Upcoming Events____________________________________________ */
-.upcoming-events {
-    background-color: #ffffff9a; /* Light background */
-    padding: 15px;
-}
-
-.upcoming-events h2 {
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-/* Styling for the events table */
-.styled-events-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-    border-radius: 10px;
-    overflow: hidden; /* Ensures borders stay rounded */
-}
-
-.styled-events-table th,
-.styled-events-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd; /* Row divider */
-}
-
-.styled-events-table th {
-    background-color: #72727233; 
-    color: #ffffff; /* White text */
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.styled-events-table tr {
-    background-color: #bbbbbb31; /* Alternating row color */
-    transition: background-color 0.2s ease-in-out;
-}
-
-.styled-events-table tr:hover {
-    background-color: #f1f1f1; /* Hover effect */
-}
-
-.styled-events-table td {
-    color: #333;
-}
-
-
-
-
-
 
 
