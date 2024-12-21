@@ -4,7 +4,7 @@ import { useUserContext } from "@/context/userContext";
 import Link from "next/link";
 
 function RegisterForm() {
-  const { registerUser, handleUserInput, userState } = useUserContext();
+  const { registerUser, handlerUserInput, userState } = useUserContext();
   const { name, email, password } = userState;
 
   return (
@@ -30,7 +30,7 @@ function RegisterForm() {
                 className="p-1 w-[30vw]  outline-none focus:border-2 border-blue-300 rounded-md"
                 placeholder="Enter name"
                 value={name}
-                onChange={(e) => handleUserInput("name")(e)}
+                onChange={(e) => handlerUserInput("name")(e)}
               ></input>
               <hr />
             </div>
@@ -43,7 +43,7 @@ function RegisterForm() {
                 className="p-1 w-[30vw] outline-none focus:border-2 border-blue-300 rounded-md"
                 placeholder="Enter email"
                 value={email}
-                onChange={(e) => handleUserInput("email")(e)}
+                onChange={(e) => handlerUserInput("email")(e)}
               ></input>
               <hr />
             </div>
@@ -55,7 +55,7 @@ function RegisterForm() {
                 className="p-1 w-[30vw] outline-none focus:border-2 border-blue-300 rounded-md"
                 placeholder="Enter a password"
                 value={password}
-                onChange={(e) => handleUserInput("password")(e)}
+                onChange={(e) => handlerUserInput("password")(e)}
               ></input>
               <hr />
             </div>
