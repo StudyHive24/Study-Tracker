@@ -24,6 +24,7 @@ interface ProgressPageProps {
   monthlyTime?: string;
 }
 
+
 const ProgressPage: React.FC<ProgressPageProps> = (props) => {
   const { dailyTime = "0h", weeklyTime = "0h", monthlyTime = "0h" } = props;
   useRiderect('/login');
@@ -120,6 +121,42 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
     );
   }, [tasks]);
 
+  
+  type Task = {
+    priority: 'High' | 'Medium' | 'Low';  // Only allow these 3 values
+    duedate: string;  // Assuming this is an ISO string or a valid Date string
+    endTime: string;  // Same as above
+    // Include other fields as necessary...
+  };
+  
+  const sortedTasks = tasks
+    .slice()  // Clone the array to avoid mutating the original
+    .sort((a: Task, b: Task) => {
+      // Priority mapping for sorting
+      const priorityMap = { High: 1, Medium: 2, Low: 3 };
+  
+      // Sort by priority first
+      if (priorityMap[a.priority] !== priorityMap[b.priority]) {
+        return priorityMap[a.priority] - priorityMap[b.priority];
+      }
+  
+      // Parse the dates and times for comparison
+      const dateA = new Date(a.duedate);
+      const dateB = new Date(b.duedate);
+  
+      if (dateA.getTime() !== dateB.getTime()) {
+        return dateA.getTime() - dateB.getTime();
+      }
+  
+      // If `duedate` is the same, sort by `endTime`
+      const endTimeA = new Date(a.endTime);
+      const endTimeB = new Date(b.endTime);
+      return endTimeA.getTime() - endTimeB.getTime();
+    });
+  
+
+
+
   return (
     <div className="p-6 font-sans space-y-6">
       {/* Top Section */}
@@ -145,14 +182,14 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
 
           {/* Tasks Progress */}
           <div className="bg-white bg-opacity-20 p-2 rounded-lg shadow-md mb-4 w-full">
-            <h1 className="text-xl font-extrabold text-center text-white mt-2">
-              Tasks: <span className="text-green-300">{weeklyTaskGoal}</span>
+            <h1 className="text-xl font-extrabold text-center text-white ">
+              Tasks:<br /> <span className="text-green-300">{weeklyTaskGoal}</span>
             </h1>
           </div>
 
           {/* Study Time Progress */}
           <div className="bg-white bg-opacity-20 p-2 rounded-lg shadow-md w-full">
-            <h1 className="text-xl font-extrabold text-center text-white mt-2">
+            <h1 className="text-xl font-extrabold text-center text-white ">
               Study Time:<br /> <span className="text-green-300">{calculateTotalTime('lifetime')}</span>
             </h1>
           </div>
@@ -164,7 +201,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       {/* Weekly Tasks Goal */}
       <div className="flex-1 bg-gray-500 p-6 rounded-lg shadow-lg flex flex-col items-center ">
         {/* Header Section with Separate Background */}
-        <div className="bg-white bg-opacity-20 text-base font-bold text-white p-7 py-2 rounded-md mb-4 shadow-md">
+        <div className="bg-white bg-opacity-20 text-base font-bold text-white p-7 py-2 rounded-md mb-7 shadow-md">
           Weekly Tasks Goal: <span className="font-bold">{weeklyTaskGoal}</span>
         </div>
         {/* Completion Title */}
@@ -188,8 +225,56 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       {/* Bottom Section */}
       <div className="flex space-x-6">
         {/* Study Guide (Table) */}
+        <div className="flex-1 bg-gray-500 bg-opacity-80 p-6 rounded-lg shadow-lg">
+          <h3 className="text-2xl font-semibold text-gray-100 mb-4">📌Time-table Study Guide</h3>
+          <table className="w-full bg-white bg-opacity-20 table-auto border-separate border-spacing-2 shadow-lg rounded-lg ">
+            <thead>
+              <tr className="bg-gray-700 bg-opacity-80">
+                <th className="p-3 text-center font-medium-bold text-gray-100 rounded-lg">Priority Level</th>
+                <th className="p-3 text-center font-medium-bold text-gray-100 rounded-lg">Event</th>
+                <th className="p-3 text-center font-medium-bold text-gray-100 rounded-lg">Date</th>
+                <th className="p-3 text-center font-medium-bold text-gray-100 rounded-lg">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedTasks.slice(0, 5).map((task: any, index: any) => (
+                <tr
+                  key={index}
+                  className="hover:bg-gray-600 transition duration-300 "
+                >
+                  {/* <td className="p-1 text-center text-gray-100">{task.priority}</td> */}
+                  <td
+                    className={`p-1 text-center text-sm font-medium ${
+                      task.priority === 'High'
+                        ? 'text-red-200'
+                        : task.priority === 'Medium'
+                        ? 'text-yellow-200'
+                        : 'text-green-200'
+                    }`}>
+                    {task.priority}
+                  </td>
+                  <td className="p-1 text-center text-gray-100">{task.title}</td>
+                  <td className="p-1 text-center text-gray-100">{new Date(task.duedate).toLocaleDateString()}</td>
+                  <td className="p-1 text-center text-gray-100">
+                    {new Date(task.endTime).toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })}
+                  </td>
+
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <div>
+        {/* Study Guide (Table) */}
         <div className="flex-1 bg-gray-200 bg-opacity-80 p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-semibold mb-4">Study Guide</h3>
+          <h3 className="text-lg font-semibold mb-4">Time-table Study Guide</h3>
           <table className="w-full table-auto border-separate border-spacing-2">
             <thead>
               <tr className="bg-gray-300 bg-opacity-80">
