@@ -1,20 +1,21 @@
 import express from 'express';
-const router = express.Router();
-import {
-    getTimetable,
-    createTimetable,
-    updateTimetable,
-    deleteTimetable
-} from '../controllers/timetable.controller.js';
 import { protect } from '../middleware/authentcationMiddleware.js';
+import { 
+  createTimetable,
+  getTimetables,
+  updateTimetable,
+  deleteTimetable
+} from '../controllers/timetable.controller.js';
+
+const router = express.Router();
 
 // Route to get all timetable entries
-router.get('/', protect, getTimetable);
+router.get('/', protect, getTimetables);
 
 // Route to create a new timetable entry
 router.post('/create', protect, createTimetable);
 
-// Route to update an existing timetable entry
+// Route to update a timetable entry
 router.put('/:id', protect, updateTimetable);
 
 // Route to delete a timetable entry

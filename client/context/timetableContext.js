@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import axios from 'axios';
 import React, { createContext, useEffect, useState, useContext } from 'react';
 import { useUserContext } from '../context/userContext.js';
@@ -42,6 +42,25 @@ export const TimetableProvider = ({ children }) => {
         }
     };
 
+    // Update an existing timetable entry
+    const updateTimetable = async (id, updatedTimetable) => {
+        setLoading(true);
+        try {
+            const res = await axios.put(`${serverUrl}/api/timetable/${id}`, updatedTimetable);
+            setTimetable((prevTimetables) =>
+                prevTimetables.map((timetable) =>
+                    timetable._id === id ? res.data : timetable
+                )
+            );
+            toast.success('Timetable entry updated successfully');
+        } catch (error) {
+            console.error('Error updating timetable:', error);
+            toast.error('Failed to update timetable entry.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // Delete a timetable entry
     const deleteTimetable = async (id) => {
         setLoading(true);
@@ -59,15 +78,6 @@ export const TimetableProvider = ({ children }) => {
         }
     };
 
-    // Handle input changes for forms
-    const handleInput = (name) => (e) => {
-        if (name === 'setTimetables') {
-            setTimetable(e);
-        } else {
-            setTimetable((prevTimetable) => ({ ...prevTimetable, [name]: e.target.value }));
-        }
-    };
-
     useEffect(() => {
         if (userID) {
             getTimetable();
@@ -80,8 +90,8 @@ export const TimetableProvider = ({ children }) => {
                 timetables,
                 setTimetable,
                 createTimetable,
+                updateTimetable,
                 deleteTimetable,
-                handleInput,
                 setLoading,
                 loading,
             }}

@@ -1,94 +1,83 @@
 "use client";
+import React, { useState, useEffect } from "react";
+import { useTimetableContext } from "@/context/timetableContext"; // Import context
+import useRiderect from "@/hooks/useUserRiderect";
 
-import React, { useState } from "react";
-import { format, parseISO, getDay } from "date-fns";
-import { isBefore, isAfter, isEqual } from "date-fns";
-
-interface Entry {
-  id: number;
-  date: string; // YYYY-MM-DD
-  startTime: string; // HH:mm
-  endTime: string; // HH:mm
+// Define TimetableEntry type
+type TimetableEntry = {
+  _id: string;
+  date: string;
+  startTime: string;
+  endTime: string;
   title: string;
   subject: string;
-  dayOfWeek: string;
-  subjectColor: string; // Added for color-coding the subjects
-}
+  subjectColor: string;
+};
+
+type TimetableForm = {
+  date: string;
+  startTime: string;
+  endTime: string;
+  title: string;
+  subject: string;
+  subjectColor: string;
+};
 
 export default function TimeTableApp() {
-  const [entries, setEntries] = useState<Entry[]>([]);
-  const [subjects, setSubjects] = useState<string[]>(["Math", "Science", "History"]);
-  const [subjectColors, setSubjectColors] = useState<string[]>([
-    "#F0A1C2", "#A1D8F0", "#F0F0A1", "#A1F0A1", "#F0A1F0",
-    "#FF69B4", "#33CC33", "#6666CC", "#CC6666", "#66CCCC",
-  ]);
+  useRiderect("/login");
+  const { timetables, createTimetable, updateTimetable, deleteTimetable, setLoading, loading } = useTimetableContext();
+
+  const [form, setForm] = useState<TimetableForm>({
+    date: "",
+    startTime: "",
+    endTime: "",
+    title: "",
+    subject: "",
+    subjectColor: "#F0A1C2", // Default color
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form, setForm] = useState<Entry | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedEntry, setSelectedEntry] = useState<TimetableEntry | null>(null); // Updated type
   const [newSubject, setNewSubject] = useState("");
-  const [selectedColor, setSelectedColor] = useState(subjectColors[0]); // Default color for new subject
-  const [isEditMode, setIsEditMode] = useState(false); // Flag to check if in edit mode
-  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
+  const [subjects, setSubjects] = useState(["Math", "Science", "History"]);
 
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  const timeSlots = Array.from({ length: 8 }, (_, index) => `${index + 8}:00`); // 8 time slots from 8:00 to 15:00
+  const timeSlots = Array.from({ length: 8 }, (_, index) => `${index + 8}:00`);
 
   const handleAddEntry = () => {
     if (form) {
-      const dayOfWeek = daysOfWeek[getDay(new Date(form.date)) - 1];
-
-      // Check for overlapping times only if not in edit mode
-      const newStartTime = parseISO(`${form.date}T${form.startTime}:00`);
-      const newEndTime = parseISO(`${form.date}T${form.endTime}:00`);
-
-      if (!isEditMode) {
-        const isOverlapping = entries.some((entry) => {
-          const entryStart = parseISO(`${entry.date}T${entry.startTime}:00`);
-          const entryEnd = parseISO(`${entry.date}T${entry.endTime}:00`);
-          return (
-            (isBefore(entryStart, newEndTime) && isAfter(entryEnd, newStartTime)) ||
-            isEqual(entryStart, newStartTime) || isEqual(entryEnd, newEndTime)
-          );
-        });
-
-        if (isOverlapping) {
-          alert("The new entry overlaps with an existing entry. Please choose a different time.");
-          return;
-        }
-      }
+      const newEntry = { ...form };
 
       if (isEditMode && selectedEntry) {
-        // Update entry if in edit mode
-        setEntries((prev) =>
-          prev.map((entry) =>
-            entry.id === selectedEntry.id
-              ? { ...form, id: selectedEntry.id, dayOfWeek, subjectColor: selectedColor }
-              : entry
-          )
-        );
+        updateTimetable(selectedEntry._id, newEntry); // Update existing entry
       } else {
-        setEntries((prev) => [
-          ...prev,
-          { ...form, id: Date.now(), dayOfWeek, subjectColor: selectedColor } as Entry,
-        ]);
+        createTimetable(newEntry); // Create new entry
       }
 
-      setForm(null);
+      // Reset form after submission
+      setForm({
+        date: "",
+        startTime: "",
+        endTime: "",
+        title: "",
+        subject: "",
+        subjectColor: "#F0A1C2", // Reset to default color
+      });
       setIsModalOpen(false);
       setIsEditMode(false);
     }
   };
 
-  const handleEntryClick = (entry: Entry) => {
+  const handleEntryClick = (entry: TimetableEntry) => {
     setSelectedEntry(entry);
     setForm(entry);
-    setSelectedColor(entry.subjectColor); // Set selected color to the entry's color
     setIsEditMode(true);
     setIsModalOpen(true);
   };
 
   const handleDeleteEntry = () => {
     if (selectedEntry) {
-      setEntries((prev) => prev.filter((entry) => entry.id !== selectedEntry.id));
+      deleteTimetable(selectedEntry._id); // Delete selected entry
       setIsModalOpen(false);
       setSelectedEntry(null);
       setIsEditMode(false);
@@ -97,12 +86,18 @@ export default function TimeTableApp() {
 
   const addNewSubject = () => {
     if (newSubject.trim() && !subjects.includes(newSubject.trim())) {
-      setSubjects((prev) => [...prev, newSubject.trim()]);
+      setSubjects((prev: string[]) => [...prev, newSubject.trim()]);
       setNewSubject("");
     }
   };
 
-  const getEntriesForDay = (day: string) => entries.filter((entry) => entry.dayOfWeek === day);
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value, // Dynamically update form fields based on input name
+    }));
+  };
 
   return (
     <div className="p-6">
@@ -130,10 +125,9 @@ export default function TimeTableApp() {
             {timeSlots.map((slot, index) => (
               <tr key={index}>
                 {daysOfWeek.map((day) => {
-                  const entriesForDay = getEntriesForDay(day);
-                  const entry = entriesForDay.find((entry) => {
-                    const startTime = parseISO(`${entry.date}T${entry.startTime}:00`);
-                    return startTime.getHours() === index + 8; // Match entry based on the time slot index
+                  const entry = timetables.find((entry: TimetableEntry) => {
+                    const startTime = new Date(`${entry.date}T${entry.startTime}:00`);
+                    return startTime.getHours() === index + 8; // Match hour based on the slot
                   });
 
                   return (
@@ -144,7 +138,7 @@ export default function TimeTableApp() {
                     >
                       {entry ? (
                         <div
-                          key={entry.id}
+                          key={entry._id}
                           className="mb-2 p-2 rounded-lg"
                           style={{ backgroundColor: entry.subjectColor }}
                         >
@@ -167,19 +161,16 @@ export default function TimeTableApp() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-semibold mb-4">
-              {isEditMode ? "Edit Time Table Entry" : "Add Time Table Entry"}
-            </h2>
+            <h2 className="text-lg font-semibold mb-4">{isEditMode ? "Edit Time Table Entry" : "Add Time Table Entry"}</h2>
             <div className="space-y-4">
               <div className="flex flex-col">
                 <label className="text-sm mb-2">Date:</label>
                 <input
                   type="date"
+                  name="date"
                   className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form?.date || ""}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, date: e.target.value } as Entry))
-                  }
+                  value={form.date || ""}
+                  onChange={handleFormChange}
                 />
               </div>
               <div className="flex space-x-4">
@@ -187,22 +178,20 @@ export default function TimeTableApp() {
                   <label className="text-sm mb-2">Start Time:</label>
                   <input
                     type="time"
+                    name="startTime"
                     className="w-full border border-gray-300 px-4 py-2 rounded"
-                    value={form?.startTime || ""}
-                    onChange={(e) =>
-                      setForm((prev) => ({ ...prev, startTime: e.target.value } as Entry))
-                    }
+                    value={form.startTime || ""}
+                    onChange={handleFormChange}
                   />
                 </div>
                 <div className="flex flex-col w-1/2">
                   <label className="text-sm mb-2">End Time:</label>
                   <input
                     type="time"
+                    name="endTime"
                     className="w-full border border-gray-300 px-4 py-2 rounded"
-                    value={form?.endTime || ""}
-                    onChange={(e) =>
-                      setForm((prev) => ({ ...prev, endTime: e.target.value } as Entry))
-                    }
+                    value={form.endTime || ""}
+                    onChange={handleFormChange}
                   />
                 </div>
               </div>
@@ -210,73 +199,40 @@ export default function TimeTableApp() {
                 <label className="text-sm mb-2">Title:</label>
                 <input
                   type="text"
-                  placeholder="Title"
+                  name="title"
                   className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form?.title || ""}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, title: e.target.value } as Entry))
-                  }
+                  value={form.title || ""}
+                  onChange={handleFormChange}
                 />
               </div>
               <div className="flex flex-col">
                 <label className="text-sm mb-2">Subject:</label>
                 <select
+                  name="subject"
                   className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form?.subject || ""}
-                  onChange={(e) =>
-                    setForm((prev) => ({ ...prev, subject: e.target.value } as Entry))
-                  }
+                  value={form.subject || ""}
+                  onChange={handleFormChange}
                 >
-                  {subjects.map((subject) => (
-                    <option key={subject} value={subject}>
+                  <option value="">Select a subject</option>
+                  {subjects.map((subject, index) => (
+                    <option key={index} value={subject}>
                       {subject}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="flex flex-col">
-                <label className="text-sm mb-2">Add New Subject:</label>
+                <label className="text-sm mb-2">Color:</label>
                 <input
-                  type="text"
-                  placeholder="Add new subject"
-                  value={newSubject}
-                  onChange={(e) => setNewSubject(e.target.value)}
+                  type="color"
+                  name="subjectColor"
                   className="w-full border border-gray-300 px-4 py-2 rounded"
+                  value={form.subjectColor || "#F0A1C2"}
+                  onChange={handleFormChange}
                 />
-                <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-                  onClick={addNewSubject}
-                >
-                  Add Subject
-                </button>
-              </div>
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Select Color:</label>
-                <div className="flex space-x-2">
-                  {subjectColors.map((color) => (
-                    <button
-                      key={color}
-                      className={`w-6 h-6 rounded-full ${selectedColor === color ? 'border-2 border-black' : ''}`} // Smaller color balls
-                      style={{ backgroundColor: color }}
-                      onClick={() => setSelectedColor(color)}
-                    />
-                  ))}
-                </div>
               </div>
             </div>
-            <div className="flex justify-end mt-4 space-x-2">
-              <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={handleAddEntry}
-              >
-                {isEditMode ? "Update" : "Add"}
-              </button>
+            <div className="flex justify-between mt-4">
               {isEditMode && (
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded"
@@ -285,6 +241,12 @@ export default function TimeTableApp() {
                   Delete
                 </button>
               )}
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleAddEntry}
+              >
+                {isEditMode ? "Update" : "Add"}
+              </button>
             </div>
           </div>
         </div>
