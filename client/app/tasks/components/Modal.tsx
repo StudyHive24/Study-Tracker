@@ -32,7 +32,9 @@ function Modal({ task }: TaskPropsModal) {
     setLocalTask(task);
   }, [task]);
 
-
+  const handleInput2 = (fieldName : any) => (e: any) => {
+    setLocalTask((prevTask) => ({ ...prevTask, [fieldName]: e.target.value }));
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -145,3 +147,5 @@ function Modal({ task }: TaskPropsModal) {
     </Dialog>
   );
 }
+
+export default Modal

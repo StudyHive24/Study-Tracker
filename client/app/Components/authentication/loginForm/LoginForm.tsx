@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 
 function LoginForm() {
 
-    const {loginUser, userState, handleUserInput} = useUserContext()
+    const {loginUser, userState, handlerUserInput} = useUserContext()
     const { email, password } = userState
 
   return (
@@ -30,7 +30,7 @@ function LoginForm() {
                 className="p-1 w-[30vw] outline-none focus:border-2 border-blue-300 rounded-md"
                 placeholder="Enter email"
                 value={email}
-                onChange={(e) => handleUserInput("email")(e)}
+                onChange={(e) => handlerUserInput("email")(e)}
               ></input>
               <hr />
             </div>
@@ -42,7 +42,7 @@ function LoginForm() {
                 className="p-1 w-[30vw] outline-none focus:border-2 border-blue-300 rounded-md"
                 placeholder="Enter a password"
                 value={password}
-                onChange={(e) => handleUserInput("password")(e)}
+                onChange={(e) => handlerUserInput("password")(e)}
               ></input>
               <hr />
             </div>
