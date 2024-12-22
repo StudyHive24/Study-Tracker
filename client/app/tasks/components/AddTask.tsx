@@ -80,21 +80,19 @@ function AddTask() {
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
-          <div className="p-3 gap-2 flex flex-col">
-            <div className="flex mb-4 gap-5">
-              <div className="gap-2 flex flex-col w-50">
+          <div className="p-3 gap-2 flex flex-col w-full">
+              <div className="gap-2 flex flex-col ">
                 <Label htmlFor="title" className="text-gray-200">
                   Task title
                 </Label>
                 <Input
                   id="title"
                   placeholder="Enter a task title"
-                  className="w-[30vw] border-none bg-gray-200"
+                  className="gap-2 flex flex-col mb-1 bg-gray-200"
                   onChange={(e) => handleInput("title")(e)}
                   value={task?.title || ""}
                 />
               </div>
-            </div>
             <div className="flex justify-between">
               <div className="gap-2 flex flex-col">
                 <Label htmlFor="description" className="text-gray-200">

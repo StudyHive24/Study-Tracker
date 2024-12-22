@@ -81,7 +81,6 @@ function Modal({ task }: TaskPropsModal) {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="p-3 gap-2 flex flex-col">
-            <div className="flex mb-4 gap-5">
               <div className="gap-2 flex flex-col w-50">
                 <Label htmlFor="title" className="text-gray-200">
                   Task title
@@ -89,12 +88,11 @@ function Modal({ task }: TaskPropsModal) {
                 <Input
                   id="title"
                   placeholder="Enter a task title"
-                  className="w-[30vw] border-none bg-gray-200"
+                  className="gap-2 flex flex-col mb-1 bg-gray-200"
                   onChange={(e) => handleInput2("title")(e)}
                   value={localTask?.title || ""}
                 />
               </div>
-            </div>
             <div className="flex justify-between">
               <div className="gap-2 flex flex-col">
                 <Label htmlFor="description" className="text-gray-200">
