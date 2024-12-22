@@ -72,7 +72,7 @@ function Profile() {
           </div>
         </div>
       </div>
-      <h3 className="mt-8 font-medium text-gray-100">Activity</h3>
+      <h3 className="mt-8 font-medium text-gray-100">{user.name}'s Activity</h3>
     </div>
   );
 }

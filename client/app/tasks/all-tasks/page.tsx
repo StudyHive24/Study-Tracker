@@ -37,7 +37,7 @@ function page() {
               <TaskItem key={i} task={task} />
             ))}
         <motion.button className='
-          hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out
+           transition duration-200 ease-in-out
         '  variants={item}>
           <AddTask />
           

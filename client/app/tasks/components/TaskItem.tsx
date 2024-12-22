@@ -30,7 +30,7 @@ function TaskItem({task} : TaskProps) {
   }
 
   return (
-    <div className='flex flex-col justify-between bg-white p-4 rounded-lg h-48 m-[5px] '>
+    <div className='flex flex-col justify-between bg-gray-400 p-4 rounded-lg h-48 m-[5px] '>
         <div className='flex flex-col'>
           <span className='mb-1 mt-1'>{task.title}</span>
           <span className='text-sm'>{task.description}</span>

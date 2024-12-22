@@ -64,108 +64,122 @@ function AddTask() {
   return (
     <>
     <Dialog>
-      <DialogTrigger asChild>
-    <div className='flex flex-col justify-center text-center border-2 border-dashed border-white p-2 rounded-lg h-48 m-[5px] mt-2 cursor-pointer'>
+      <DialogTrigger asChild className="">
+    <div className='flex flex-col justify-center text-center border-2 border-dashed border-gray-600 bg-none  transition duration-200 ease-in-out hover:bg-gray-700 hover:border-white p-2 rounded-lg h-48 m-[5px] mt-2 cursor-pointer'>
 
-          <span className="bg-none">
+          <span className="bg-none text-gray-200">
             Add A New Task
           </span>
     </div>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="w-[525px] h-[90vh] p-7 bg-gray-800 border-none">
         <DialogHeader className="mt-5 gap-2">
-            <DialogTitle>Create Task</DialogTitle>
-          </DialogHeader>
-          <form action=""
-            ref={ref} onSubmit={handleSubmit}
-          >
-          <div className=" p-3 gap-2 flex flex-col">
+          <DialogTitle className="text-gray-100">
+            Create Task
+            <hr className="mt-3"/>
+          </DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
+          <div className="p-3 gap-2 flex flex-col">
             <div className="flex mb-4 gap-5">
-              <div className="">
-                <Label htmlFor="title">Task title</Label>
+              <div className="gap-2 flex flex-col w-50">
+                <Label htmlFor="title" className="text-gray-200">
+                  Task title
+                </Label>
                 <Input
                   id="title"
                   placeholder="Enter a task title"
-                  className="w-50 border-none bg-gray-200"
-                  onChange={(e) => handleInput('title')(e)}
-                  name="title"
-                  value={task?.title}
-                ></Input>
-              </div>
-              <div>
-                <Label htmlFor="description">Task description</Label>
-                <Input
-                  id="description"
-                  placeholder="Enter a task description"
-                  className="border-none bg-gray-200 w-50"
-                  onChange={(e) => handleInput('description')(e)}
-                  name="description"
-                  value={task?.description}
-                ></Input>
+                  className="w-[30vw] border-none bg-gray-200"
+                  onChange={(e) => handleInput("title")(e)}
+                  value={task?.title || ""}
+                />
               </div>
             </div>
             <div className="flex justify-between">
-              <div className="">
-                <Label htmlFor="duedate">Date</Label>
+              <div className="gap-2 flex flex-col">
+                <Label htmlFor="description" className="text-gray-200">
+                  Task description
+                </Label>
+                <textarea
+                  id="description"
+                  placeholder="Enter a task description"
+                  className="border-none bg-gray-200  p-2 rounded-md"
+                  onChange={(e) => handleInput("description")(e)}
+                  value={task?.description || ""}
+                  cols={50}
+                  rows={4}
+                ></textarea>
+              </div>
+            </div>
+            <div className="mt-2 flex justify-between">
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="duedate" className="text-gray-200">
+                  Date
+                </Label>
                 <Input
                   id="duedate"
                   type="date"
                   className="border-none bg-gray-200"
-                  onChange={(e) => handleInput('duedate')(e)}
-                  name="duedate"
-                  value={task?.duedate}
-                ></Input>
-              </div>
-              <div>
-                <Label htmlFor="duration">End time</Label>
-                <Input id="time" type="time" value={task?.endTime} className="border-none bg-gray-200" 
-                  onChange={(e) => handleInput('endTime')(e)}
+                  onChange={(e) => handleInput("duedate")(e)}
+                  value={task?.duedate || ""}
                 />
               </div>
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              This task will due on the {task?.duedate || 'a specified date'} at {task?.endTime || 'a specific time'}
-            </div>
-            <div className="mt-2 flex flex-col gap-2">
-              <Label htmlFor="priority" >Priority</Label>
-              <div className="">
-              <select
-                className=" p-2 rounded-md border cursor-pointer border-none w-[30vw] bg-gray-200 focus:bg-green-200"
-                name="priority"
-                value={task?.priority}
-                onChange={(e) => handleInput("priority")(e)}
-              >
-                <option className="bg-green-300" value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
+              <div className="flex flex-col gap-2 ">
+                <Label htmlFor="duration" className="text-gray-200">
+                  End time
+                </Label>
+                <Input
+                  id="time"
+                  type="time"
+                  className="border-none bg-gray-200"
+                  onChange={(e) => handleInput("endTime")(e)}
+                  value={task?.endTime || ""}
+                />
               </div>
-
-              <div className="flex flex-col gap-1">
-          <label htmlFor="completed">Task Completed</label>
-          <div className="flex items-center justify-between  bg-gray-200 p-2 rounded-md border">
-            <label htmlFor="completed">Completed</label>
-            <div>
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="priority" className="text-gray-200">
+                  Priority
+                </Label>
+                <select
+                  className="p-2 rounded-md border cursor-pointer bg-gray-200"
+                  onChange={(e) => handleInput("priority")(e)}
+                  value={task?.priority || "Low"}
+                >
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+            </div>
+            <div className="text-gray-400 mt-1 text-[14px]">
+              This task will due on the{" "}
+              <span className="text-green-700 border-b-2 border-gray-200">
+                {task.duedate || "a specified date"}
+              </span>{" "}
+              at <span className="text-green-700 border-b-2 border-gray-200">{task.endTime || "a specific time"}</span>
+            </div>
+            <div className="flex flex-col gap-2 mt-1">
+              <Label htmlFor="completed" className="text-gray-200">Task Completed</Label>
               <select
-                className=" bg-gray-200 p-1 rounded-md border cursor-pointer"
-                name="completed"
-                value={task?.completed ? "true" : "false"}
+                className="bg-gray-200 p-2 rounded-md border cursor-pointer"
                 onChange={(e) => handleInput("completed")(e)}
+                value={task?.completed ? "true" : "false"}
               >
                 <option value="false">No</option>
                 <option value="true">Yes</option>
               </select>
             </div>
-          </div>
-          </div>
-
-              <div className="flex justify-center">
-                <Button type="submit" className="mt-6 bg-green-500 w-[20vw] hover:bg-green-600 text-white rounded-xl " >Create Task</Button>
-              </div>
+            <div className="flex justify-center">
+              <Button
+                type="submit"
+                className="mt-6 bg-green-600 w-[20vw] hover:bg-green-700 text-white rounded-xl"
+              >
+                Create Task
+              </Button>
             </div>
           </div>
-          </form>
-         </DialogContent> 
+        </form>
+      </DialogContent> 
       </Dialog>
     </>
   )
