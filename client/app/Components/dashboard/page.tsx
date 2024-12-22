@@ -310,7 +310,9 @@ const Dashboard = () => {
                         <table className="tasks-table">
                             <thead>
                                 <tr>
-                                    <th>Task Title</th>
+                                    <th>Title</th>
+                                    <th>priority</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -318,10 +320,13 @@ const Dashboard = () => {
                                     .filter((task: { duedate: string | number | Date; }) =>
                                         new Date(task.duedate).toDateString() === date.toDateString()
                                     )
-                                    .map((task: { title: string; }) => (
+                                    .map((task: { title: string, priority: string; }) => (
                                         <tr key={task.title}>
                                             <td>{task.title}</td>
+                                            <td>{task.priority}</td>
+                                            
                                         </tr>
+                                        
                                     ))}
                             </tbody>
                         </table>
