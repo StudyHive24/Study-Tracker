@@ -32,31 +32,31 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 function RadialChart() {
-  const { tasks, completedTasks, activeTasks } = useTasksContext();
+  const { tasks, completedTasks, activeTasks, pendingTasks } = useTasksContext();
   const tasksTotal = tasks.length;
 
   const chartData = [
     {
-      pending: activeTasks?.length,
+      pending: pendingTasks?.length,
       completed: completedTasks?.length,
     },
   ];
 
   return (
-    <Card className="flex flex-col border-2 border-gray-400 shadow-none bg-gray-800">
+    <Card className="flex flex-col border-none m-1 bg-gray-700 ">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Completed vs Pending Tasks</CardTitle>
-        <CardDescription>Task completion status.</CardDescription>
+        <CardTitle className="text-gray-100 text-[22px] text-center">Completed vs Pending Tasks</CardTitle>
+        <CardDescription className="text-gray-200 text-[12px]">Task completion status.</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-1 items-center pb-0">
+      <CardContent className="flex flex-1 items-center pb-0 text-gray-100">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[250px]"
+          className="aspect-square w-full max-w-[250px] mt-2"
         >
           <RadialBarChart
             data={chartData}
             endAngle={180}
-            innerRadius={80}
+            innerRadius={60}
             outerRadius={130}
           >
             <ChartTooltip
@@ -72,14 +72,14 @@ function RadialChart() {
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) - 16}
-                          className="fill-foreground text-2xl font-bold"
+                          className="fill-foreground text-2xl font-bold text-gray-50"
                         >
                           {tasksTotal}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 4}
-                          className="fill-muted-foreground"
+                          className="fill-muted-foreground text-gray-100"
                         >
                           Tasks
                         </tspan>
@@ -106,15 +106,15 @@ function RadialChart() {
           </RadialBarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
+      {/* <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Task completion improved by 12% this month{" "}
+          Task completion improved by 12% this month {" "}
           <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
           Analysis based on tasks completed in the last 30 days.
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }

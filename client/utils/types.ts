@@ -1,4 +1,5 @@
 interface Task {
+    duedate: string;
     endTime: any;
     _id: string;
     title: string;

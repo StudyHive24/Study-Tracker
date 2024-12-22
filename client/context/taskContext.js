@@ -162,6 +162,10 @@ const getTask = async (taskID) => {
     // to get pending tasks
     const pendingTasks = tasks.filter((task) => !task.completed)
 
+    // to get active tasks
+    const activeTasks = tasks.filter((task) => task.status == 'active')
+    
+
     useEffect(() => {
         getTasks()
     }, [userID])
@@ -193,7 +197,8 @@ const getTask = async (taskID) => {
             pendingTasks,
             completedTasks,
             profileModal,
-            handleInput2
+            handleInput2,
+            activeTasks
 
         }}>
             {children}

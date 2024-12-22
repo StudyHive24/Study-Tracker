@@ -60,7 +60,7 @@ export function SideBarR() {
 
   return (
     <Sidebar variant="inset" side="right" className="bg-gray-800">
-      <SidebarContent className="bg-gray-800">
+      <SidebarContent className="bg-gray-800 ">
         <Profile />
         <RadialChart />
       </SidebarContent>

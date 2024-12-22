@@ -7,7 +7,7 @@ import image from '../../../public/favicon.jpg'
 
 function Profile() {
   const { user } = useUserContext();
-  const { tasks, activeTasks, completedTasks, openProfileModal } = useTasksContext();
+  const { tasks, activeTasks, completedTasks, openProfileModal, pendingTasks } = useTasksContext();
   return (
     <div className="m-3">
       <div
@@ -32,47 +32,47 @@ function Profile() {
         </div>
       </div>
 
-      <div className="mt-6 flex flex-col gap-8 bg-gray-700 p-5">
+      <div className="mt-6 flex flex-col gap-8 bg-gray-700 rounded-xl p-5">
         <div className="grid grid-cols-2 gap-4">
           <div className="text-gray-300">
-            <p>Total Tasks:</p>
+            <p className="text-sm">Total Tasks:</p>
             <p className="pl-4 relative flex gap-2">
               <span className="absolute h-[70%] w-[0.2rem] left-[1px] top-1/2 translate-y-[-50%] bg-purple-500 rounded-[5px]"></span>
-              <span className="font-medium text-4xl text-[#333]">
+              <span className="font-medium text-4xl text-gray-200">
                 {tasks?.length}
               </span>
             </p>
           </div>
           <div className="text-gray-300">
-            <p>In Progress:</p>
+            <p className="text-sm">In Progress:</p>
             <p className="pl-4 relative flex gap-2">
               <span className="absolute h-[70%] w-[0.2rem] left-[1px] top-1/2 translate-y-[-50%] bg-[#3AAFAE] rounded-[5px]"></span>
-              <span className="font-medium text-4xl text-[#333]">
+              <span className="font-medium text-4xl text-gray-200">
+                {pendingTasks?.length}
+              </span>
+            </p>
+          </div>
+          <div className="text-gray-300">
+            <p className="text-sm">Open Tasks:</p>
+            <p className="pl-4 relative flex gap-2">
+              <span className="absolute h-[70%] w-[0.2rem] left-[1px] top-1/2 translate-y-[-50%] bg-orange-400 rounded-[5px]"></span>
+              <span className="font-medium text-4xl text-gray-200">
                 {activeTasks?.length}
               </span>
             </p>
           </div>
           <div className="text-gray-300">
-            <p>Open Tasks:</p>
-            <p className="pl-4 relative flex gap-2">
-              <span className="absolute h-[70%] w-[0.2rem] left-[1px] top-1/2 translate-y-[-50%] bg-orange-400 rounded-[5px]"></span>
-              <span className="font-medium text-4xl text-[#333]">
-                {activeTasks?.length}
-              </span>
-            </p>
-          </div>
-          <div className="text-gray-400">
-            <p>Completed:</p>
+            <p className="text-sm">Completed:</p>
             <p className="pl-4 relative flex gap-2">
               <span className="absolute h-[70%] w-[0.2rem] left-[1px] top-1/2 translate-y-[-50%] bg-green-400 rounded-[5px]"></span>
-              <span className="font-medium text-4xl text-[#333]">
+              <span className="font-medium text-4xl text-gray-200">
                 {completedTasks?.length}
               </span>
             </p>
           </div>
         </div>
       </div>
-      <h3 className="mt-8 font-medium">Activity</h3>
+      <h3 className="mt-8 font-medium text-gray-100">Activity</h3>
     </div>
   );
 }
