@@ -1,5 +1,5 @@
-"use client"
-import { useUserContext } from "@/context/userContext.js";
+"use client";
+import { useUserContext } from "@/context/userContext";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -107,7 +107,6 @@ function page({ params: { resetToken } }: Props) {
             </button>
           </div>
         </div>
-
       </form>
     </main>
   );

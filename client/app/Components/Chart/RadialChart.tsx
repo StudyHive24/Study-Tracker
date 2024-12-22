@@ -43,7 +43,7 @@ function RadialChart() {
   ];
 
   return (
-    <Card className="flex flex-col border-2 border-white shadow-none bg-[#EDEDED]">
+    <Card className="flex flex-col border-2 border-gray-400 shadow-none bg-gray-800">
       <CardHeader className="items-center pb-0">
         <CardTitle>Completed vs Pending Tasks</CardTitle>
         <CardDescription>Task completion status.</CardDescription>

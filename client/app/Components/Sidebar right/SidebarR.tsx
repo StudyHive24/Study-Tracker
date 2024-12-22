@@ -59,14 +59,14 @@ const items = [
 export function SideBarR() {
 
   return (
-    <Sidebar variant="inset" side="right">
-      <SidebarContent className="bg-[#f3f8ff]">
+    <Sidebar variant="inset" side="right" className="bg-gray-800">
+      <SidebarContent className="bg-gray-800">
         <Profile />
         <RadialChart />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="bg-gray-800 ">
           <SidebarMenu>
-            <SidebarMenuItem className="flex ">
+            <SidebarMenuItem className="flex border-t-2  rounded-xl ">
               <LogoutButton/>
             </SidebarMenuItem>
           </SidebarMenu>

@@ -17,6 +17,16 @@ import useRiderect from "@/hooks/useUserRiderect";
 import MainLayoutContent from "@/providers/MainLayoutContent";
 import TwoSidebarProvider from "@/providers/TwoBarProvider";
 
+import { Roboto } from 'next/font/google';
+
+// Configure the Roboto font
+const roboto = Roboto({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'], // Add weights as needed
+  style: ['normal', 'italic'], // Optional styles
+  variable: '--font-roboto', // Custom CSS variable for easier use
+});
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -41,13 +51,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={roboto.className}
       >
         <UserProvider>
           <Toaster position="top-center" />
           <div className="">
             <TwoSidebarProvider>
-              <main className="flex-1 p-4 bg-[#c7d9f0] overflow-auto rounded-xl">
+              <main className="flex-1 p-4 bg-gray-900 overflow-auto  ">
                 <MainLayoutContent>{children}</MainLayoutContent>
               </main>
             </TwoSidebarProvider>

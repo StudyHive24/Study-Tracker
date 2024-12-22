@@ -32,8 +32,6 @@ router.get('/user', protect, getUser)
 // user login status
 router.get('/login-status', userLoginStatus)
 
-// forgot password
-router.post("/verify-user/:verificationToken", verifyUser)
 
 // to verify user , after the email verification
 router.post('/verify-user/:verificationToken', verifyUser)

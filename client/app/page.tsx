@@ -5,6 +5,10 @@ import { SideBarL } from "./Components/Sidebar left/SidebarL";
 import Dashboard from "./Components/dashboard/page";
 import useRiderect from "@/hooks/useUserRiderect";
 
+import { Roboto } from 'next/font/google';
+
+
+
 
 export default function Home() {
   useRiderect('/login')

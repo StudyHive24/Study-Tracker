@@ -49,10 +49,10 @@ const items = [
 
 export function SideBarL() {
   return (
-    <Sidebar variant="inset">
-      <SidebarContent className="bg-[#f3f8ff]">
+    <Sidebar variant="inset" className="bg-gray-800 text-white">
+      <SidebarContent className="bg-gray-800">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-lg">StudyHive</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-lg text-white">StudyHive</SidebarGroupLabel>
           <SidebarGroupContent className="mt-10">
             <SidebarMenu className="gap-5 ">
                 <SidebarMenuItem >
@@ -102,9 +102,9 @@ export function SideBarL() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem className="flex ml-7 cursor-pointer">
+      <SidebarFooter  className="bg-gray-800 p-2">
+          <SidebarMenu className="bg-gray-900 hover:bg-gray-800 rounded-xl p-2">
+            <SidebarMenuItem className="flex ml-7 cursor-pointer ">
                 <FileX width={30} height={30} color="red"/>
                 <span className="mt-1 ml-2 mb-2 text-red-500">Delete All Tasks</span>
             </SidebarMenuItem>

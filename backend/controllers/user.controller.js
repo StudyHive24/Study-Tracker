@@ -457,7 +457,9 @@ export const resetPassword = async (req, res) => {
     const user = await User.findById(userToken.userId);
   
     // update user password
-    user.password = password;
+    const hashedPassword = hashPassword(password)
+
+    user.password = hashedPassword;
     await user.save();
   
     res.status(200).json({ message: "Password reset successfully" });
