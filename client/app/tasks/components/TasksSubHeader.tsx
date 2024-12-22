@@ -15,9 +15,9 @@ function TasksSubHeader({title} : UserProps) {
 
 
   return (
-    <div className="relative py-2 px-2 grid grid-cols-4 items-center gap-3 bg-[#F9F9F9] border-2 border-white rounded-md mt-4">
+    <div className="relative py-2 px-2 grid grid-cols-4 items-center gap-3 bg-gray-500 rounded-md mt-4">
       <span
-        className="absolute left-[5px] bg-[#EDEDED] rounded-md transition-all duration-300"
+        className="absolute left-[5px] bg-gray-700 rounded-md transition-all duration-300"
         style={{
           width: "calc(100% / 4 - 10px)",
           height: "calc(100% - 10px)",
@@ -32,7 +32,7 @@ function TasksSubHeader({title} : UserProps) {
         <button
           key={index}
           className={`relative px-1 z-10 font-medium text-sm ${
-            activeIndex === index ? "text-[#3aafae] " : "text-gray-500"
+            activeIndex === index ? "text-[#3aafae] " : "text-gray-200"
           }`}
           onClick={() => {
             setActiveIndex(index);

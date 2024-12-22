@@ -30,10 +30,12 @@ function TaskItem({task} : TaskProps) {
   }
 
   return (
-    <div className='flex flex-col justify-between bg-gray-400 p-4 rounded-lg h-48 m-[5px] '>
+    <div className='flex flex-col justify-between bg-gray-700 p-4 rounded-lg h-48 m-[5px] '>
         <div className='flex flex-col'>
-          <span className='mb-1 mt-1'>{task.title}</span>
-          <span className='text-sm'>{task.description}</span>
+          <span className='mb-1 mt-1 text-gray-300 bg-gray-600 p-2 rounded-lg'>{task.title}</span>
+          <textarea name="" disabled id="" className='text-sm p-2 text-gray-200 bg-gray-500 rounded-lg mt-1 overflow-x-scroll resize-none' rows={2} >
+            {task.description}
+          </textarea>
         </div>
         <div className='flex flex-row gap-3 text-sm justify-between'>
           <span className='text-slate-500 '>{formatTime(task.createdAt)}</span>
