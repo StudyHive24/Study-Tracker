@@ -98,3 +98,29 @@ export const deleteTimetable = async (req, res) => {
     res.status(500).json({ message: 'Error deleting timetable entry.' });
   }
 };
+
+export const deleteAllTimetables = async (req, res) => {
+  try {
+      const userID = req.user._id;
+
+      const timetables = await Timetable.find({ user: userID });
+
+      if (!timetables || timetables.length === 0) { // Also ensure timetables are not an empty array
+          return res.status(404).json({
+              message: 'No timetables found',
+          });
+      }
+
+      // Delete all timetables for the user
+      await Task.deleteMany({ user: userID });
+
+      res.status(200).json({
+          message: 'All timetables have been deleted successfully',
+      });
+  } catch (error) {
+      res.status(500).json({
+          message: 'Server error',
+          error: error.message,
+      });
+  }
+};

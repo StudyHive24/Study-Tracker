@@ -5,6 +5,7 @@ import {
   getTimetables,
   updateTimetable,
   deleteTimetable,
+  deleteAllTimetables,
 } from '../controllers/timetable.controller.js';
 
 const router = express.Router();
@@ -20,5 +21,7 @@ router.put('/:id', protect, updateTimetable);
 
 // Route to delete a timetable entry
 router.delete('/:id', protect, deleteTimetable);
+
+router.delete('/delete/all', protect, deleteAllTimetables)
 
 export default router;
