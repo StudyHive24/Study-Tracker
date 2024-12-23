@@ -248,7 +248,12 @@
     color: white;
     border-radius: 8px;
 }
-
+.react-calendar__month-view__days__day--weekend {
+    color: lightcoral;
+}
+.react-calendar__month-view__days__day--neighboringMonth {
+    color: rgba(255, 255, 255, 0.164); /* Change gray numbers to light gray */
+}
 /* calender end _______________________________________________________________________________*/
 /* tasks-for-date start _______________________________________________________________________*/
 .tasks-for-date {
