@@ -5,11 +5,13 @@ import { DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrig
 import { Dialog } from '@radix-ui/react-dialog'
 import React from 'react'
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import User from './User'
 import { useUserContext } from '@/context/userContext'
+import { useTasksContext } from '@/context/taskContext'
 
-function LogoutButton() {
+function CompletedStar() {
   const {logoutUser} = useUserContext()
+
+  const {updatedTask} = useTasksContext()
   return (
         <Dialog>
           <DialogTrigger className="bg-red-600 ml-1 mt-1 hover:bg-red-700 w-[14vw] mb-2 rounded-[10px] p-2">
@@ -30,14 +32,14 @@ function LogoutButton() {
               </DialogDescription> */}
               <div className='flex items-center justify-center'>
                 <DialogPrimitive.Close className='mr-3 '>
-                  <span className="bg-slate-900 hover:bg-slate-950  p-3 pl-10 pr-10 mb-2 rounded-[10px]">
+                  <Button className="bg-slate-900 hover:bg-slate-950 w-[13vw] mb-2 rounded-[10px]">
                     <span className='text-white'>Cancel</span>
-                  </span>
+                  </Button>
                 </DialogPrimitive.Close>
                 <DialogPrimitive.Close>
-                <span onClick={logoutUser} className="bg-red-600 hover:bg-red-700 pl-10 pr-10 mb-2 rounded-[10px] p-3">
+                <Button onClick={logoutUser} className="bg-red-600 hover:bg-red-700 w-[13vw] mb-2 rounded-[10px] p-2">
                   <span onClick={logoutUser} className='text-white'>Logout</span>
-                </span>
+                </Button>
                 </DialogPrimitive.Close>
               </div>
             </DialogHeader>
@@ -46,4 +48,4 @@ function LogoutButton() {
   )
 }
 
-export default LogoutButton
+export default CompletedStar

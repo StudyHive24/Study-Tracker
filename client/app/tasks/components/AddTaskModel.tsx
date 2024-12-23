@@ -68,9 +68,9 @@ function AddTaskModel() {
     <>
       <Dialog>
         <DialogTrigger >
-          <Button className="bg-green-500 hover:bg-green-600 rounded-3xl mt-1" >
+          <span className="bg-green-500 hover:bg-green-600 rounded-3xl mt-1 p-4 text-gray-50" >
             Add A New Task
-          </Button>
+          </span>
         </DialogTrigger>
         <DialogContent className="w-[525px] h-[90vh] p-7 bg-gray-800 border-none">
         <DialogHeader className="mt-5 gap-2">
