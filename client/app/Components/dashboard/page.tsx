@@ -85,16 +85,56 @@ const Dashboard = () => {
 
     const timerHistory = timers.slice(-3);
 
-    
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false); // State for the notification menu
+
+    const toggleNotificationMenu = () => {
+        setIsNotificationOpen((prev) => !prev); // Toggle the state
+    };
 
     return (
         <div className="dashboard-container">
             <header className="header">
                 <h1>Hello {user.name}</h1>
-                <button className="reminder-button">
+                <button className="reminder-button" onClick={toggleNotificationMenu}>
                     <img src="/Dashboeard-imgs/bell.png" alt="Bell Icon" className="bell-icon" />
                 </button>
+
+                {isNotificationOpen && <div className="background-blur" onClick={toggleNotificationMenu}></div>}
+                
+                {/* Notification Menu */}
+                {isNotificationOpen && (
+                    <div className="notification-menu">
+                        <h3>Notifications</h3>
+                        {tasks.length ? (
+                            <ul>
+                                {tasks.slice(0, 5).map((task: any, index: any) => (
+                                    <li key={index}>
+                                        <strong>{task.title}</strong> - Due: {new Date(task.duedate).toLocaleDateString()}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No notifications</p>
+                        )}
+                    </div>
+                )}
             </header>
+            {/* {isNotificationOpen && (
+                    <div className="notification-menu">
+                        <h3>Notifications</h3>
+                        {tasks.length ? (
+                            <ul>
+                                {tasks.slice(0, 5).map((task: any, index: any) => (
+                                    <li key={index}>
+                                        <strong>{task.title}</strong> - Due: {new Date(task.duedate).toLocaleDateString()}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No notifications</p>
+                        )}
+                    </div>
+                )} */}
 
             <div className="dashboard-content">
                 {/* Chatbot Section */}
