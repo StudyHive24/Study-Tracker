@@ -135,8 +135,29 @@ const getTask = async (taskID) => {
 
             setTasks(newTasks)
 
+            toast.success('Task is deleted successfully')
+
         } catch (error) {
             console.log('Error deleting task', error)
+            toast.error('Error in deleting the task')
+        }
+    }
+
+    const deleteAllTasks = async (res, req) => {
+        try {
+            res = await axios.delete(`${serverUrl}/api/tasks/delete/all`)
+
+            if (res.status == 200) {
+                setTasks([])
+                toast.success('Every tasks deleted Successfully')
+            } else {
+                toast.error('')
+            }
+            
+
+        } catch (error) {
+            console.log(error)
+            toast.error('Error in deleting all')
         }
     }
 
@@ -198,8 +219,8 @@ const getTask = async (taskID) => {
             completedTasks,
             profileModal,
             handleInput2,
-            activeTasks
-
+            activeTasks,
+            deleteAllTasks
         }}>
             {children}
         </TaskContext.Provider>

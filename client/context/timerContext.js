@@ -63,6 +63,22 @@ export const TimersProvider = ({ children }) => {
             console.log('createTimer finished');
         }
     };
+
+    const deleteAllTimers = async () => {
+        try {
+            res = await axios.delete(`${serverUrl}/api/timer/delete/all`)
+
+            if (res.status == 200) {
+                setTimers([])
+                toast.success('Every timer information deleted Successfully')
+            }
+            
+
+        } catch (error) {
+            console.log(error)
+            toast.error('Error in deleting all')
+        }
+    }
     
     
 
@@ -90,6 +106,7 @@ export const TimersProvider = ({ children }) => {
                 handleInput,
                 setLoading,
                 loading,
+                deleteAllTimers
             }}
         >
             {children}

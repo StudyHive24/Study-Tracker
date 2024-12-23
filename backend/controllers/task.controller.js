@@ -206,37 +206,26 @@ export const deleteTask = async (req, res) => {
 
 export const deleteAllTasks = async (req, res) => {
     try {
-        const userID = req.user._id
+        const userID = req.user._id;
 
-        const tasks = await Task.find({user: userID})
+        const tasks = await Task.find({ user: userID });
 
-        if (!tasks) {
-            res.status(404)
-            res.json({
-                message:'No tasks found'
-            })
+        if (!tasks || tasks.length === 0) { // Also ensure tasks are not an empty array
+            return res.status(404).json({
+                message: 'No tasks found',
+            });
         }
 
-        // check the owner of the task
-        if (!tasks.user.equals(userID)) {
-            res.status(401)
-            res.json({
-                message: 'Please login'
-            })
-        }
+        // Delete all tasks for the user
+        await Task.deleteMany({ user: userID });
 
-        await Task.deleteMany({user: userID})
-
-        res.status(200)
-        res.json({
-            message: 'All tasks deleted successfully!'
-        })
-
+        res.status(200).json({
+            message: 'All tasks have been deleted successfully',
+        });
     } catch (error) {
-        console.log('Error in deleting tasks: ', error.message)
-        res.status(500)
-        res.json({
-            message: error.message
-        })
+        res.status(500).json({
+            message: 'Server error',
+            error: error.message,
+        });
     }
-}
+};
