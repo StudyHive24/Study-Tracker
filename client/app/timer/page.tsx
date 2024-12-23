@@ -17,14 +17,16 @@ function Modal({
 }) {
   return (
     <div className="timer-reset-modal">
-      <div className="timer-reset-modal-content">
-        <p>{message}</p>
-        <button className="timer-confirm-button" onClick={onConfirm}>
+      <div className="w-[30vw]  p-[20px] bg-gray-700 rounded-lg flex justify-center flex-col">
+        <p className="text-lg text-center text-gray-100 mb-2">{message}</p>
+        <div className="flex justify-center gap-3 mt-3">
+        <button className="bg-blue-600 p-2 w-full rounded-lg" onClick={onConfirm}>
           Yes
         </button>
-        <button className="timer-cancel-button" onClick={onCancel}>
+        <button className="bg-red-600 p-2 w-full rounded-lg" onClick={onCancel}>
           No
         </button>
+        </div>
       </div>
     </div>
   );
@@ -160,29 +162,30 @@ export default function TimerPage() {
   const renderTimerHistory = () => {
     return timers.map(
       (timer: { date: string | number | Date; title: string; duration: string }, index: Key | null | undefined) => (
-        <tr key={index}>
-          <td>{new Date(timer.date).toLocaleString()}</td>
-          <td>{timer.title}</td>
-          <td>{timer.duration}</td>
+        <tr key={index} className="flex justify-evenly text-gray-200 text-center mb-2">
+          <td className=" p-2 w-full bg-gray-500  rounded-tl-lg rounded-bl-lg border-r-2 border-gray-300">{new Date(timer.date).toLocaleString()}</td>
+          <td className=" p-2 w-full bg-gray-500  border-r-2 border-gray-300">{timer.title}</td>
+          <td className=" p-2 w-full bg-gray-500  rounded-se-lg rounded-ee-lg ">{timer.duration}</td>
         </tr>
       )
     );
   };
 
   return (
-    <div className="timer-page gap-3">
-      <h1 className="timer-page-title">⏰ Timer</h1>
-      <div className="timer-container">
+    <div className="timer-page gap-5 ">
+      {/* <h1 className="timer-page-title">⏰ Timer</h1> */}
+      <div className="timer-container bg-gray-700">
         <h1 className="timer-title">
           {isStudyPhase ? `Focus Time - ${timerTitle}` : "Break Time"}
         </h1>
         <h2 className="timer-display">{formatTime(time)}</h2>
         <p className="timer-message">{message}</p>
+        <div>
         <select
-          className="timer-selector"
+          className="p-3 w-full rounded-lg"
           onChange={handleTimeChange}
           disabled={isRunning}
-          defaultValue="25 Minutes"
+          defaultValue="25 minutes"
         >
           {timeOptions.map((option) => (
             <option key={option.label} value={option.label}>
@@ -190,23 +193,24 @@ export default function TimerPage() {
             </option>
           ))}
         </select>
+        </div>
 
         {showTitleInput ? (
           <div className="timer-title-input-container">
             <input
               type="text"
-              className="timer-title-input"
+              className="p-2 rounded-lg w-full"
               placeholder="Enter title"
               value={timerTitle}
               onChange={handleTitleInputChange}
             />
-            <button className="timer-enter-button" onClick={handleEnterTitle}>
+            <button className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg text-gray-100" onClick={handleEnterTitle}>
               Enter
             </button>
           </div>
         ) : (
           <button
-            className="timer-toggle-title-button"
+            className="p-2 bg-blue-600 rounded-lg w-full mt-5 text-gray-100 hover:bg-blue-700"
             onClick={handleToggleTitleInput}
             disabled={isRunning}
           >
@@ -214,16 +218,16 @@ export default function TimerPage() {
           </button>
         )}
 
-        <div className="timer-controls">
+        <div className="timer-controls flex flex-row gap-3">
           <button
-            className="timer-start-button"
+            className="p-2 bg-green-600 hover:bg-green-700 text-gray-100 w-full rounded-lg"
             onClick={handleStart}
             disabled={isRunning}
           >
             Start
           </button>
           <button
-            className="timer-reset-button"
+            className="p-2 bg-red-600 hover:bg-red-700 w-full rounded-lg text-gray-100"
             onClick={handleReset}
             disabled={!isRunning}
           >
@@ -234,13 +238,13 @@ export default function TimerPage() {
 
       {/* Timer History */}
       <div className="timer-history-container">
-        <h2 className="timer-history-title">Timer History</h2>
-        <table className="timer-history">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Title</th>
-              <th>Duration</th>
+        <h1 className="text-gray-100 text-xl text-center p-2 mb-2 bg-gray-700 rounded-lg">Timer History</h1>
+        <table className="w-full gap-2 flex flex-col justify-evenly">
+          <thead className="  ">
+            <tr className="flex justify-evenly text-gray-100 text-center">
+              <th className=" p-2 w-full bg-gray-600  rounded-tl-lg rounded-bl-lg border-r-2 border-gray-200">Date</th>
+              <th className=" p-2 w-full bg-gray-600 border-r-2 border-gray-200">Title</th>
+              <th className=" p-2 w-full bg-gray-600 rounded-se-lg rounded-ee-lg">Duration</th>
             </tr>
           </thead>
           <tbody>{renderTimerHistory()}</tbody>

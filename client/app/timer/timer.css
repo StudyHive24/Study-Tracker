@@ -1,13 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Timer Container */
 .timer-page {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
-  align-items: center;
   height: 100vh;
   background-color: none;
   font-family: Arial, sans-serif;
-
+  padding: 30px;
 }
 
 .timer-page-title{
@@ -19,19 +22,20 @@
   margin-bottom: 3px; /* Add some space below the title */
   letter-spacing: 1px; /* Slight letter spacing for better readability */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle text shadow for effect */
+  
 }
 
 .timer-container {
   background: none;
-  background-color:rgba(255, 255, 255, 0.453);
-  padding: 30px;
   border : 0px solid black;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
   max-width: 400px;
   width: 100%;
-
+  height: 65vh;
+  margin-top: 10px;
+  @apply bg-gray-800 shadow-2xl p-8
 }
 
 /* Timer Title */
@@ -41,14 +45,15 @@ margin-bottom: 10px;
 /* font-family: 'Playfair Display', serif; */
 /* font-family: 'Montserrat', sans-serif; */
 /* font-family: 'Roboto', sans-serif; */
-font-family: 'Press Start 2P', cursive;
+/* font-family: 'Press Start 2P', cursive; */
+@apply bg-gray-700 p-2 rounded-lg text-gray-100
 }
 
 /* Timer Display */
 .timer-display {
 font-size: 5rem;
 margin: 20px 0;
-color: #0f19a7;
+@apply text-gray-300 p-2 bg-gray-700 rounded-lg
 }
 
 /* Timer Message */
@@ -59,9 +64,9 @@ font-weight: bold;
 
 /* Time Selector */
 .timer-selector {
-padding: 8px;
 margin: 10px 0;
 font-size: 1rem;
+@apply p-2
 }
 
 /* Title Input */
@@ -70,7 +75,7 @@ display: flex;
 justify-content: center;
 align-items: center;
 gap: 10px;
-margin: 10px 0;
+margin: 20px 0;
 }
 
 .timer-title-input {
@@ -181,18 +186,20 @@ color: white;
 .timer-history-container {
   margin-top: 10px;
   padding: 15px;
-  background-color: #f9f9f9; /* Light gray background */
-  border: 1px solid #ddd; /* Subtle border */
+   /* Light gray background */
+ /* Subtle border */
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
-  max-height: 300px; /* Set a maximum height for the container */
+  height: 80vh; /* Set a maximum height for the container */
   overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
   width: 80%;
+  @apply bg-gray-800
 }
 
 /* Styling for Timer History Table */
 .timer-history {
   width: 100%;
+
   border-collapse: collapse; /* Remove space between cells */
 }
 
@@ -203,7 +210,7 @@ color: white;
   border-bottom: 1px solid #ddd; /* Light gray bottom border for rows */
 }
 
-/* Styling for Table Header */
+Styling for Table Header
 .timer-history th {
   background-color: #939898; 
   color: rgb(0, 0, 1); 

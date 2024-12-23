@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FormEvent } from 'react'
 import { FilePenLine, Star, Trash2 } from 'lucide-react'
 import { edit, star, trash } from "@/utils/Icons";
 import { Task } from '@/utils/types'
@@ -13,7 +13,23 @@ interface TaskProps {
 
 function TaskItem({task} : TaskProps) {
 
-  const {deleteTask, getTask, openModalForEdit} = useTasksContext()
+  const {deleteTask, getTask, updateTask, closeModal} = useTasksContext()
+
+  let completed = task.completed
+
+  const handleSubmit = () => {
+
+    if (task.completed) {
+      task.completed = false
+      console.log(task.completed)
+    } else if (!task.completed){
+      task.completed = true
+    }
+    updateTask(task)
+
+    closeModal()
+
+  }
 
 
 
@@ -30,18 +46,17 @@ function TaskItem({task} : TaskProps) {
   }
 
   return (
-    <div className='flex flex-col justify-between bg-gray-700 p-4 rounded-lg h-48 m-[5px] '>
+    <div className='flex flex-col justify-between bg-gray-700 p-4 rounded-lg h-60 m-[5px] '>
         <div className='flex flex-col'>
           <span className='mb-1 mt-1 text-gray-300 bg-gray-600 p-2 rounded-lg'>{task.title}</span>
-          <textarea name="" disabled id="" className='text-sm p-2 text-gray-200 bg-gray-500 rounded-lg mt-1 overflow-x-scroll resize-none' rows={2} >
-            {task.description}
+          <textarea name="" disabled id="" className='text-sm p-2 text-gray-200 bg-gray-500 rounded-lg mt-1 overflow-x-scroll resize-none' value={task.description} rows={4} >
           </textarea>
         </div>
         <div className='flex flex-row gap-3 text-sm justify-between'>
-          <span className='text-slate-500 '>{formatTime(task.createdAt)}</span>
+          <span className='text-slate-400 '>{formatTime(task.createdAt)}</span>
           <span className={`${priorityColor(task.priority)}`}>{task.priority}</span>
           <div className='flex flex-row gap-1'>
-          <Star width={20} height={20} color='white' className={`${task.completed ? 'bg-yellow-500' : 'bg-slate-400'}   p-[3px] hover:bg-yellow-500 active:bg-yellow-500 rounded-xl cursor-pointer`}
+          <Star onClick={handleSubmit} width={20} height={20} color='white' className={`${task.completed ? 'bg-yellow-500' : 'bg-slate-400'}   p-[3px] hover:bg-yellow-500 active:bg-yellow-500 rounded-xl cursor-pointer`}
             />
             {/* <UpdateTaskModel /> */}
 
