@@ -162,19 +162,19 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       {/* Top Section */}
       <div className="flex space-x-6">
         {/* Daily/Weekly/Monthly Study Time */}
-        <div className="flex-1 bg-gray-500 p-6 rounded-xl shadow-lg flex flex-col items-center">
+        <div className="flex-1 bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col items-center">
           <h3 className="text-2xl  font-semibold mb-6 text-white">
             Daily/Weekly/Monthly Study Time
           </h3>
           <div className="flex space-x-6 text-white  ">
-            <TimeBox label="Daily" time={calculateTotalTime('daily')} className="w-[100px] bg-gray-300 rounded-lg p-4 shadow-md text-center bg-white bg-opacity-20" />
+            <TimeBox label="Daily" time={calculateTotalTime('daily')} className="w-[100px] bg-gray-600 rounded-lg p-4 shadow-md text-center bg-white bg-opacity-20" />
             <TimeBox label="Weekly" time={calculateTotalTime('weekly')} className=" bg-gray-300  shadow-md text-center bg-white bg-opacity-20"  />
             <TimeBox label="Monthly" time={calculateTotalTime('monthly')} className=" bg-gray-300  shadow-md text-center bg-white bg-opacity-20" />
           </div>
         </div>
 
       
-        <div className="flex-1 bg-gray-500 p-6 rounded-xl shadow-xl flex flex-col items-center justify-center text-white">
+        <div className="flex-1 bg-gray-800 p-6 rounded-xl shadow-xl flex flex-col items-center justify-center text-white">
           {/* Header */}
           <h3 className="text-lg font-semibold mb-4 text-center tracking-wide uppercase">
             Total Progress
@@ -199,7 +199,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
         
         
       {/* Weekly Tasks Goal */}
-      <div className="flex-1 bg-gray-500 p-6 rounded-lg shadow-lg flex flex-col items-center ">
+      <div className="flex-1 bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center ">
         {/* Header Section with Separate Background */}
         <div className="bg-white bg-opacity-20 text-base font-bold text-white p-7 py-2 rounded-md mb-7 shadow-md">
           Weekly Tasks Goal: <span className="font-bold">{weeklyTaskGoal}</span>
@@ -225,7 +225,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       {/* Bottom Section */}
       <div className="flex space-x-6">
         {/* Study Guide (Table) */}
-        <div className="flex-1 bg-gray-500 bg-opacity-80 p-6 rounded-lg shadow-lg">
+        <div className="flex-1 bg-gray-800 bg-opacity-80 p-6 rounded-lg shadow-lg">
           <h3 className="text-2xl font-semibold text-gray-100 mb-4">📌Tasks Study Guide</h3>
           <table className="w-full bg-white bg-opacity-20 table-auto border-separate border-spacing-2 shadow-lg rounded-lg ">
             <thead>
