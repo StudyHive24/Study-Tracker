@@ -183,7 +183,6 @@
 }
 
 /* Calendar______________________________________________________*/
-
 .calendar-container{
     display: flex;
     gap: 15px;
@@ -196,35 +195,64 @@
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     font-size: 15px;
-    color: rgb(0, 0, 0);
+    width: 60%;
     font-weight: bolder;
 }
 
 .task-highlight {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px;
+    font-size:25px;
+}
+.react-calendar {
+    background-color: #4B5563; 
+    color: white;
+    border-radius: 8px;
+    padding: 2px;
+    width: 100%;
+}
+
+/* Top navigation container */
+.react-calendar__navigation {
+    background-color: #1F2937; 
+    color: white; 
+    border-radius: 8px;
+    padding: 5px;
+}
+/* Month and year label */
+.react-calendar__navigation__label {
+    font-size:16px; /* Customize font size */
+    color: rgb(255, 166, 0); /* Change label color */
+    font-weight: bold;
+}
+/* Navigation arrows (left/right) */
+.react-calendar__navigation__arrow {
+    color: rgb(255, 174, 0); 
+    font-size: 20px; /* Adjust size */
+    cursor: pointer;
+}
+
+.react-calendar__navigation__arrow:hover {
+    color: rgb(255, 145, 0); /* Highlight color when hovered */
 }
 
 .react-calendar__tile{
-    background-color: #55555500;
+    padding-left: 0px;
 }
 .react-calendar__tile--now {
-    background-color: #000000ab; /* Current day highlight color */
+    background-color: #374151; /* Current day highlight color */
     color: white;
     border-radius: 8px;
 }
 
 .react-calendar__tile--active {
-    background-color: #66ff00ab; /* Current day highlight color */
+    background-color: #ffd90049; /* Current day highlight color */
     color: white;
     border-radius: 8px;
 }
 
-
+/* calender end _______________________________________________________________________________*/
+/* tasks-for-date start _______________________________________________________________________*/
 .tasks-for-date {
-    background-color: #1F2937;  /* Light gray background */
+    background-color: #1F2937;  
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -243,17 +271,16 @@
     font-family: 'Arial', sans-serif;
     font-size: 14px;
     border-radius: 10px;
-    overflow: hidden; /* Ensures borders stay rounded */
+    overflow: hidden; 
 }
 
 .tasks-table th,
 .tasks-table td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid #dddddd; /* Row divider */
+    border-bottom: 1px solid #dddddd; 
     color: #ffffff;
     font-size: medium;
-    /* width: 300px;  */  
 }
 
 .tasks-table th {
@@ -274,8 +301,7 @@
 
 /* Container for Upcoming Tasks ________________________________________*/
 .upcoming-tasks {
-    background-color: #1F2937; /* Light background */
-    /* grid-row: span 2; */
+    background-color: #1F2937; 
     padding: 15px;
     
 }
