@@ -18,6 +18,7 @@ export const getTimetables = async (req, res) => {
 // Create a new timetable entry
 export const createTimetable = async (req, res) => {
   try {
+    console.log("Incoming Request Body:", req.body); 
     const { date, startTime, endTime, title, subject, dayOfWeek, subjectColor } = req.body;
 
     if (!req.user || !req.user._id) {

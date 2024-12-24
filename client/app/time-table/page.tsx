@@ -48,6 +48,12 @@ export default function TimeTableApp() {
     if (form) {
       const newEntry = { ...form };
 
+      // Match the selected date with the day of the week
+      const dayIndex = daysOfWeek.findIndex((day) => form.date.includes(day));
+      if (dayIndex !== -1) {
+        newEntry.date = daysOfWeek[dayIndex]; // Set the correct day for the entry
+      }
+
       if (isEditMode && selectedEntry) {
         updateTimetable(selectedEntry._id, newEntry); // Update existing entry
       } else {
@@ -97,6 +103,19 @@ export default function TimeTableApp() {
       ...prev,
       [name]: value, // Dynamically update form fields based on input name
     }));
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setForm({
+      date: "",
+      startTime: "",
+      endTime: "",
+      title: "",
+      subject: "",
+      subjectColor: "#F0A1C2", // Reset to default color
+    });
+    setIsEditMode(false);
   };
 
   return (
@@ -241,12 +260,20 @@ export default function TimeTableApp() {
                   Delete
                 </button>
               )}
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={handleAddEntry}
-              >
-                {isEditMode ? "Update" : "Add"}
-              </button>
+              <div>
+                <button
+                  className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+                  onClick={handleCloseModal}
+                >
+                  Close
+                </button>
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  onClick={handleAddEntry}
+                >
+                  {isEditMode ? "Update" : "Add"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
