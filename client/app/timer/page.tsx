@@ -48,6 +48,8 @@ export default function TimerPage() {
 
   const { createTimer, timers } = useTimerContext();
 
+  const timerUpAudio = new Audio ("./TimerUp.mp3"); 
+
   // Timer options
   const timeOptions = [
     { label: "25 Minutes", study: 25 * 60, break: 5 * 60 },
@@ -135,6 +137,9 @@ export default function TimerPage() {
           if (prevTime === 1) {
             clearInterval(timer!);
             setIsRunning(false);
+
+             //play the timer up sound
+             timerUpAudio.play();
 
             // Switch between study and break
             const nextPhase = isStudyPhase ? "Break" : "Focus";
