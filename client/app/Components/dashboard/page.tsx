@@ -59,16 +59,24 @@ const Dashboard = () => {
     const completedTasks = tasks.filter((task: { completed: boolean; }) => task.completed === true).length;
     const taskCompletionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     
-    // Find the first upcoming task
-    const upcomingTasks = tasks
-    .filter((task: { completed: any; duedate: string | number | Date; }) => !task.completed && new Date(task.duedate) > new Date()) // Filter for incomplete and future tasks
-    .sort((a: { duedate: string | number | Date; }, b: { duedate: string | number | Date; }) => 
-        new Date(a.duedate).getTime() - new Date(b.duedate).getTime()
-    );
+    function normalizeDate(date: Date) {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
     
-    const firstUpcomingTask1= upcomingTasks[0];
-    const firstUpcomingTask2= upcomingTasks[1];
-    const firstUpcomingTask3= upcomingTasks[2];
+    const today = normalizeDate(new Date());
+    
+    const upcomingTasks = tasks
+        .filter((task: { duedate: string | number | Date; completed: any; }) => {
+            const taskDueDate = normalizeDate(new Date(task.duedate));
+            return !task.completed && taskDueDate >= today; // Compare only the dates
+        })
+        .sort((a: { duedate: string | number | Date; }, b: { duedate: string | number | Date; }) => 
+            new Date(a.duedate).getTime() - new Date(b.duedate).getTime()
+        );
+    
+    const firstUpcomingTask1 = upcomingTasks[0];
+    const firstUpcomingTask2 = upcomingTasks[1];
+    const firstUpcomingTask3 = upcomingTasks[2];
 
     const chatbotMessage = getStudyInstructorMessages(upcomingTasks);
 
@@ -113,7 +121,7 @@ const Dashboard = () => {
                 {/* Chatbot Section */}
                 <div className="grid-item chatbot">
                     <img
-                        src="/Dashboeard-imgs/bot-img.PNG"
+                        src="favicon.jpg"
                         alt="Chatbot"
                         className="chatbot-icon"
                     />
@@ -196,97 +204,7 @@ const Dashboard = () => {
                     </table>
                 </div>
 
-                {/* Calendar Section */}
-                {/* <div className="grid-item calendar">
-                    <Calendar />
-                </div> */}
-
-                {/* <div className="grid-item calendar">
-                    <Calendar
-                        onChange={(value) => {
-                            if (value instanceof Date) {
-                                setDate(value); // Ensure the value is a Date
-                            }
-                        }}
-                        value={date}
-                        tileContent={({ date, view }) => {
-                            // Highlight tasks due on the calendar
-                            if (view === 'month') {
-                                const taskOnDate = tasks.find(
-                                    (task: { duedate: string | number | Date; }) =>
-                                        new Date(task.duedate).toDateString() === date.toDateString()
-                                );
-                                return taskOnDate ? (
-                                    <div className="task-highlight">
-                                        📌
-                                    </div>
-                                ) : null;
-                            }
-                        }}
-                    />
-                    
-                </div>
-                <div className="tasks-for-date">
-                    <h3>Tasks for {date.toDateString()}</h3>
-                    <ul>
-                        {tasks
-                            .filter((task: { duedate: string | number | Date; }) =>
-                                new Date(task.duedate).toDateString() === date.toDateString()
-                            )
-                            .map((task: { title: string; }) => (
-                                <li key={task.title}>{task.title}</li>
-                            ))}
-                    </ul>
-                </div> */}
-
                 
-                
-
-                {/* Today's Time Table Section */}
-                {/* <div className="grid-item today-timetable">
-                    <h2>📌Today Time Table</h2>
-                    <table className="styled-table">
-                        <thead className="styled-table-head">
-                            <tr>
-                                <th>Time</th>
-                                <th>Read books</th> 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>9:00</td>
-                                <td>Read books</td> 
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                </div> */}
-
-                
-
-                
-
-                {/* Upcoming Events Section */}
-                {/* <div className="grid-item upcoming-events">
-                    <h2>📌Upcoming Events</h2>
-                    <table className="styled-events-table">
-                        <thead>
-                            <tr>
-                                <th>Event Name</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Course Introduction</td>
-                                <td>Nov 20, 2024</td>
-                                <td>10:00 AM</td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                </div> */}
             </div>
 
             <div className='calendar-container'>
