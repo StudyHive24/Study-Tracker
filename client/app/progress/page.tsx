@@ -46,6 +46,7 @@ const ProgressPage: React.FC<ProgressPageProps> = (props) => {
   }, []);
 
   // Convert duration to total minutes
+  // Convert duration to total minutes
 // Convert duration to total minutes
 const calculateTotalTime = (period: 'daily' | 'weekly' | 'monthly' | 'lifetime') => {
   const now = new Date();
