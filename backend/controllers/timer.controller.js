@@ -38,3 +38,28 @@ export const createTimer = async (req, res) => {
     }
 };
 
+export const deleteAllTimers = async (req, res) => {
+    try {
+        const userID = req.user._id;
+
+        const timers = await Timer.find({ user: userID });
+
+        if (!timers || timers.length === 0) { // Also ensure tasks are not an empty array
+            return res.status(404).json({
+                message: 'No time information found',
+            });
+        }
+
+        // Delete all tasks for the user
+        await Timer.deleteMany({ user: userID });
+
+        res.status(200).json({
+            message: 'All timer information have been deleted successfully',
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server error',
+            error: error.message,
+        });
+    }
+};

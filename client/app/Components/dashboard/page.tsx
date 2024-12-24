@@ -45,7 +45,6 @@ const getStudyInstructorMessages = (upcomingTasks: any[]) => {
     return messages;
 };
 
-
 const Dashboard = () => {
 
     const { user, getUser } = useUserContext();
@@ -55,15 +54,10 @@ const Dashboard = () => {
     const [chatbotMessages, setChatbotMessages] = useState(["Welcome to your dashboard!"]);
     
     const [messageIndex, setMessageIndex] = useState(0);
-    //const onDateChange = (newDate: Date) => {setDate(newDate);};
-    //const [progress, setProgress] = useState(0); // Task completion progress
-    
 
     const totalTasks = tasks.length
     const completedTasks = tasks.filter((task: { completed: boolean; }) => task.completed === true).length;
     const taskCompletionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-    
-
     
     // Find the first upcoming task
     const upcomingTasks = tasks
@@ -76,24 +70,43 @@ const Dashboard = () => {
     const firstUpcomingTask2= upcomingTasks[1];
     const firstUpcomingTask3= upcomingTasks[2];
 
-    // // Utility function to generate a chatbot message
-    // const getStudyInstructorMessage = (upcomingTasks: { duedate: string | number | Date; }) => {
-    //     return `The due date is: ${new Date(upcomingTasks.duedate).toLocaleDateString()}`;
-    
-    // };
     const chatbotMessage = getStudyInstructorMessages(upcomingTasks);
 
     const timerHistory = timers.slice(-3);
 
-    
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false); // State for the notification menu
+
+    const toggleNotificationMenu = () => {
+        setIsNotificationOpen((prev) => !prev); // Toggle the state
+    };
 
     return (
         <div className="dashboard-container">
             <header className="header">
                 <h1>Hello {user.name}</h1>
-                <button className="reminder-button">
+                <button className="reminder-button" onClick={toggleNotificationMenu}>
                     <img src="/Dashboeard-imgs/bell.png" alt="Bell Icon" className="bell-icon" />
                 </button>
+
+                {isNotificationOpen && <div className="background-blur" onClick={toggleNotificationMenu}></div>}
+
+                {/* Notification Menu */}
+                {isNotificationOpen && (
+                    <div className="notification-menu">
+                        <h3>Notifications</h3>
+                        {tasks.length ? (
+                            <ul>
+                                {tasks.slice(0, 5).map((task: any, index: any) => (
+                                    <li key={index}>
+                                        <strong>{task.title}</strong> - Due: {new Date(task.duedate).toLocaleDateString()}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No notifications</p>
+                        )}
+                    </div>
+                )}
             </header>
 
             <div className="dashboard-content">
@@ -150,7 +163,6 @@ const Dashboard = () => {
                             ) : (
                                 <tr></tr>
                             )}
-                            {/* Add additional rows as needed */}
                         </tbody>
                     </table>
                 </div>
@@ -297,14 +309,17 @@ const Dashboard = () => {
                                         <div className="task-highlight">
                                             📌
                                         </div>
-                                    ) : null;
+                                    ) : 
+                                    (
+                                        <div className="task-highlight opacity-0">
+                                            -
+                                        </div>
+                                    );
                                 }
                             }}
                         />
-
-                        
-                        
                     </div>
+
                     <div className="tasks-for-date">
                         <h3>📌Tasks for {date.toDateString()}</h3>
                         <table className="tasks-table">

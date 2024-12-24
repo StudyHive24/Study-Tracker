@@ -65,7 +65,7 @@ function AddTask() {
     <>
     <Dialog>
       <DialogTrigger asChild className="">
-    <div className='flex flex-col justify-center text-center border-2 border-dashed border-gray-600 bg-none  transition duration-200 ease-in-out hover:bg-gray-700 hover:border-white p-2 rounded-lg h-48 m-[5px] mt-2 cursor-pointer'>
+    <div className='flex flex-col justify-center text-center border-2 border-dashed border-gray-600 bg-none  transition duration-200 ease-in-out hover:bg-gray-700 hover:border-white p-2 rounded-lg h-60 m-[5px] mt-2 cursor-pointer'>
 
           <span className="bg-none text-gray-200">
             Add A New Task

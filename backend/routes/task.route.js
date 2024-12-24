@@ -8,7 +8,7 @@ const router = express.Router()
 router.get('/', protect ,getTasks)
 
 // to delete all tasks
-router.delete('/all', protect,deleteAllTasks)
+router.delete('/delete/all', protect, deleteAllTasks)
 
 // to create a task
 router.post('/create', protect, createTask)

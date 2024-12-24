@@ -19,6 +19,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 import { Button } from "@/components/ui/button"
 import { UserProfile } from "../User-Profile/UserProfile"
 import { TaskAccordion } from "./Component/TaskAccordion";
+import { useTasksContext } from "@/context/taskContext";
+import { useTimerContext } from "@/context/timerContext";
+import { useTimetableContext } from "@/context/timetableContext";
+import toast from "react-hot-toast";
+import { useUserContext } from "@/context/userContext";
 
 
 
@@ -48,6 +53,37 @@ const items = [
 ]
 
 export function SideBarL() {
+
+
+  const { tasks, deleteAllTasks } = useTasksContext()
+  
+  const { timers, deleteAllTimers } = useTimerContext()
+
+  const { timetables, deleteAllTimetables } = useTimetableContext()
+
+  const handleClick = () => {
+
+    if (tasks.length == 0) {
+      toast.error('There are no tasks to delete')
+    } else {
+      deleteAllTasks()
+    }
+
+    if (timers.length == 0) {
+      toast.error('There are no timer information to delete')
+    } else {
+      deleteAllTimers()
+    }
+
+    if (timetables.length == 0) {
+      toast.error('There are no time tables to delete')
+    } else {
+      deleteAllTimetables
+    }
+
+
+  }  
+
   return (
     <Sidebar variant="inset" className="bg-gray-800 text-white">
       <SidebarContent className="bg-gray-800">
@@ -104,9 +140,9 @@ export function SideBarL() {
       </SidebarContent>
       <SidebarFooter  className="bg-gray-800 p-2">
           <SidebarMenu className="bg-gray-900 hover:bg-gray-800 rounded-xl p-2">
-            <SidebarMenuItem className="flex ml-7 cursor-pointer ">
+            <SidebarMenuItem className="flex ml-7 cursor-pointer " onClick={handleClick}>
                 <FileX width={30} height={30} color="red"/>
-                <span className="mt-1 ml-2 mb-2 text-red-500">Delete All Tasks</span>
+                <span className="mt-1 ml-2 mb-2 text-red-500">Delete All</span>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>

@@ -21,7 +21,7 @@ interface TaskPropsModal {
 }
 
 function Modal({ task }: TaskPropsModal) {
-  const { updateTask, openModalForEdit } = useTasksContext();
+  const { updateTask, openModalForEdit, handleInput } = useTasksContext();
 
   const [localTask, setLocalTask] = useState(task);
 
@@ -51,6 +51,8 @@ function Modal({ task }: TaskPropsModal) {
   
   // Combine into endTime string
   const endTime2 = `${hours}:${minutes}`;
+
+
   
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -88,7 +90,7 @@ function Modal({ task }: TaskPropsModal) {
                 <Input
                   id="title"
                   placeholder="Enter a task title"
-                  className="gap-2 flex flex-col mb-1 bg-gray-200"
+                  className="gap-2 flex flex-col mb-1"
                   onChange={(e) => handleInput2("title")(e)}
                   value={localTask?.title || ""}
                 />

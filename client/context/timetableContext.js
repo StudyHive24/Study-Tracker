@@ -97,6 +97,23 @@ export const TimetableProvider = ({ children }) => {
     }
   };
 
+  const deleteAllTimetables = async () => {
+    try {
+        res = await axios.delete(`${serverUrl}/api/timetable/delete/all`)
+
+        if (res.status == 200) {
+          setTimetable([])
+          toast.success('Every time tables deleted Successfully')
+        }
+        
+
+    } catch (error) {
+        console.log(error)
+        toast.error('Error in deleting all')
+    }
+}
+
+
   useEffect(() => {
     if (userID) {
       getTimetable();
@@ -111,6 +128,7 @@ export const TimetableProvider = ({ children }) => {
     deleteTimetable,
     setLoading,
     loading,
+    deleteAllTimetables
   }), [timetables, loading]);
 
   return (

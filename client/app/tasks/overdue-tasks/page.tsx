@@ -30,7 +30,7 @@ function page() {
 
   return (
     <div>
-      <TaskHeader totalTasks={totalTasks} Status={' Overdue Tasks'} firstPhrase={'There are '}/>
+      <TaskHeader totalTasks={totalTasks} Status={'Overdue Tasks'} firstPhrase={'There are '}/>
       <h1>Overdue Tasks</h1>
       <TasksSubHeader title={"All Tasks"}/>
       <motion.div className='mt-3 grid grid-cols-3 gap-2'>
