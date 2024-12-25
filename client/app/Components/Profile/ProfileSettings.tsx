@@ -8,6 +8,7 @@ import React, { useRef, useState } from "react";
 import { BadgeCheck, Check, Github, Target } from "lucide-react";
 import image from '@/public/favicon.jpg'
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 const ProfileSettings = () => {
   const ref = useRef(null);
@@ -82,6 +83,7 @@ const ProfileSettings = () => {
           className="mt-1 pt-2 flex flex-col gap-4  border-t-[#323232]/10 bg-gray-700 p-12 rounded-lg"
           onSubmit={(e) => {
             e.preventDefault();
+
             updateUser(e, {
               name: userState.name,
               email: userState.email,
@@ -151,7 +153,17 @@ const ProfileSettings = () => {
               type="button"
               className="py-3 px-4 bg-blue-500 text-white text-sm font-medium rounded-md
                 hover:bg-blue-600 transition-all duration-300"
-              onClick={() => changePassword(oldPassword, newPassword)}
+              onClick={() => {
+                
+                if (newPassword.length < 8) {
+                  toast.error('New Password must contain atleast 8 Characters')
+                } else {
+                  changePassword(oldPassword, newPassword)
+                }
+                
+                
+              
+              }}
             >
               Change Password
             </button>
