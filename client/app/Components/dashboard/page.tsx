@@ -72,23 +72,9 @@ const Dashboard = () => {
             const taskDueDate = normalizeDate(new Date(task.duedate));
             return !task.completed && taskDueDate >= today; // Compare only the dates
         })
-        // .sort((a: { duedate: string | number | Date; }, b: { duedate: string | number | Date; }) => 
-        //     new Date(a.duedate).getTime() - new Date(b.duedate).getTime()
-        // );
-        .sort((a: { duedate: string | number | Date; startTime: string; }, b: { duedate: string | number | Date; startTime: string; }) => {
-            // Compare by duedate first
-            const dueDateA = new Date(a.duedate).getTime();
-            const dueDateB = new Date(b.duedate).getTime();
-            
-            if (dueDateA === dueDateB) {
-                // If dates are the same, compare by startTime
-                const startTimeA = new Date(a.startTime).getTime();
-                const startTimeB = new Date(b.startTime).getTime();
-                return startTimeA - startTimeB;
-            }
-            return dueDateA - dueDateB; // Otherwise, compare by due date
-        });
-    
+        .sort((a: { endTime: string | number | Date; }, b: { endTime: string | number | Date; }) => 
+            new Date(a.endTime).getTime() - new Date(b.endTime).getTime()
+        );
     const firstUpcomingTask1 = upcomingTasks[0];
     const firstUpcomingTask2 = upcomingTasks[1];
     const firstUpcomingTask3 = upcomingTasks[2];
@@ -107,12 +93,12 @@ const Dashboard = () => {
         setIsNotificationOpen((prev) => !prev); // Toggle the state
     };
 
-    const todayTasks = tasks.filter((task: any) => new Date(task.duedate).toDateString() === today.toDateString());
+    const todayTasks = tasks.filter((task: any) => new Date(task.endTime).toDateString() === today.toDateString());
     const nextTask = tasks
-    .filter((task: any) => !task.completed && new Date(task.duedate) > today)
-    .sort((a: any, b: any) => new Date(a.duedate).getTime() - new Date(b.duedate).getTime())[0];
+    .filter((task: any) => !task.completed && new Date(task.endTime) > today)
+    .sort((a: any, b: any) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime())[0];
 
-    const completedTodayTasks = tasks.filter((task: any) => task.completed && new Date(task.duedate).toDateString() === today.toDateString());
+    const completedTodayTasks = tasks.filter((task: any) => task.completed && new Date(task.endTime).toDateString() === today.toDateString());
     const totalTodayTasks = todayTasks.length;
     const completedPercentage = totalTodayTasks > 0 ? Math.floor((completedTodayTasks.length / totalTodayTasks) * 100) : 0;
     const remainingTasks = totalTodayTasks - completedTodayTasks.length;
@@ -145,7 +131,7 @@ const Dashboard = () => {
 
                                 // 2. Next task reminder
                                 if (nextTask) {
-                                    const nextTaskDate = new Date(nextTask.duedate);
+                                    const nextTaskDate = new Date(nextTask.endTime);
                                     const nextTaskTime = new Date(nextTask.endTime);
                                     const formattedTime = nextTaskDate.toLocaleTimeString("en-US", {
                                         hour: "2-digit",
@@ -154,7 +140,7 @@ const Dashboard = () => {
                                       });
                                       
                                     const daysDifference = Math.ceil(
-                                        (nextTaskDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+                                        (nextTaskDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24) -1
                                     );
                                     let dateMessage;
                                     if (daysDifference === 1) dateMessage = 'today';
