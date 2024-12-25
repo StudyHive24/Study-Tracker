@@ -99,7 +99,7 @@ const Dashboard = () => {
                 {isNotificationOpen && <div className="background-blur" onClick={toggleNotificationMenu}></div>}
 
                 {/* Notification Menu */}
-                {isNotificationOpen && (
+                {/* {isNotificationOpen && (
                     <div className="notification-menu">
                         <h3>Notifications</h3>
                         {tasks.length ? (
@@ -114,7 +114,81 @@ const Dashboard = () => {
                             <p>No notifications</p>
                         )}
                     </div>
+                )} */}
+                {/* Notification Menu */}
+                {isNotificationOpen && (
+                    <div className="notification-menu">
+                        <h3>Reminders🔔</h3>
+                        <ul>
+                            {(() => {
+                                const today = new Date();
+                                const todayTasks = tasks.filter((task: any) => new Date(task.duedate).toDateString() === today.toDateString());
+                                const nextTask = tasks.find((task: any) => new Date(task.duedate) > today);
+                                const completedTodayTasks = tasks.filter((task: any) => task.completed && new Date(task.duedate).toDateString() === today.toDateString());
+                                const totalTodayTasks = todayTasks.length;
+                                const completedPercentage = totalTodayTasks > 0 ? Math.floor((completedTodayTasks.length / totalTodayTasks) * 100) : 0;
+                                const remainingTasks = totalTodayTasks - completedTodayTasks.length;
+                                const timerUsedToday = timerHistory.some((entry: any) => new Date(entry.date).toDateString() === today.toDateString());
+
+                                const notifications = [];
+
+                                // 1. Tasks today
+                                notifications.push(
+                                    `You have ${totalTodayTasks} task${totalTodayTasks !== 1 ? 's' : ''} scheduled for today.`
+                                );
+
+                                // 2. Next task reminder
+                                if (nextTask) {
+                                    const nextTaskDate = new Date(nextTask.duedate);
+                                    const daysDifference = Math.ceil(
+                                        (nextTaskDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+                                    );
+                                    let dateMessage;
+                                    if (daysDifference === 0) dateMessage = 'today';
+                                    else if (daysDifference === 1) dateMessage = 'tomorrow';
+                                    else dateMessage = `in ${daysDifference} days`;
+                                    notifications.push(
+                                        `Next task: "${nextTask.title}" is due ${dateMessage} at ${nextTaskDate.toLocaleTimeString([], {
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}.`
+                                    );
+                                }
+
+                                // 3. Completion percentage
+                                if (completedPercentage < 100) {
+                                    notifications.push(
+                                        `You have completed ${completedPercentage}% of today's tasks. Keep going to reach 100%!`
+                                    );
+                                } else {
+                                    notifications.push("Great job! You've completed 100% of today's tasks.");
+                                }
+
+                                // 4. Remaining tasks
+                                if (remainingTasks > 0) {
+                                    notifications.push(
+                                        `You have ${remainingTasks} task${remainingTasks !== 1 ? 's' : ''} left to complete today.`
+                                    );
+                                }
+
+                                // 5. Timer usage
+                                if (!timerUsedToday) {
+                                    notifications.push("You haven't used the timer today. Use it to boost your productivity!");
+                                } else {
+                                    notifications.push("Great! You've used the timer today. Consider using it again to stay on track.");
+                                }
+
+                                return notifications.map((message, index) => (
+                                    <li key={index} className="flex items-center space-x-1">
+                                        <p>📌</p>
+                                        <p>{message}</p>
+                                    </li>
+                                ));
+                            })()}
+                        </ul>
+                    </div>
                 )}
+
             </header>
 
             <div className="dashboard-content">

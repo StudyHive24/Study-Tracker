@@ -26,7 +26,6 @@ interface ProgressPageProps {
 
 
 const ProgressPage: React.FC<ProgressPageProps> = (props) => {
-  const { dailyTime = "0h", weeklyTime = "0h", monthlyTime = "0h" } = props;
   useRiderect('/login');
 
   const { tasks } = useTasksContext();
@@ -45,8 +44,6 @@ const ProgressPage: React.FC<ProgressPageProps> = (props) => {
       });
   }, []);
 
-  // Convert duration to total minutes
-  // Convert duration to total minutes
 // Convert duration to total minutes
 const calculateTotalTime = (period: 'daily' | 'weekly' | 'monthly' | 'lifetime') => {
   const now = new Date();
@@ -124,6 +121,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
 
   
   type Task = {
+    completed: any;
     priority: 'High' | 'Medium' | 'Low';  // Only allow these 3 values
     duedate: string;  // Assuming this is an ISO string or a valid Date string
     endTime: string;  // Same as above
@@ -132,6 +130,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
   
   const sortedTasks = tasks
     .slice()  // Clone the array to avoid mutating the original
+    .filter((task: Task) => !task.completed)
     .sort((a: Task, b: Task) => {
       // Priority mapping for sorting
       const priorityMap = { High: 1, Medium: 2, Low: 3 };
@@ -200,25 +199,25 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
         
         
       {/* Weekly Tasks Goal */}
-      <div className="flex-1 bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center ">
-        {/* Header Section with Separate Background */}
-        <div className="bg-white bg-opacity-20 text-base font-bold text-white p-7 py-2 rounded-md mb-7 shadow-md">
-          Weekly Tasks Goal: <span className="font-bold">{weeklyTaskGoal}</span>
+        <div className="flex-1 bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col items-center ">
+          {/* Header Section with Separate Background */}
+          <div className="bg-white bg-opacity-20 text-base font-bold text-white p-7 py-2 rounded-md mb-7 shadow-md">
+            Weekly Tasks Goal: <span className="font-bold">{weeklyTaskGoal}</span>
+          </div>
+          {/* Completion Title */}
+          <h1 className="text-2xl font-bold text-white">Completion</h1>
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-200 rounded-full h-4 mt-4">
+            <div
+              className="bg-green-500 h-4 rounded-full"
+              style={{ width: `${weeklyCompletionPercentage}%` }}
+            ></div>
+          </div>
+          {/* Completion Percentage */}
+          <h2 className="text-xl font-bold text-white mt-2">
+            {weeklyCompletionPercentage}%
+          </h2>
         </div>
-        {/* Completion Title */}
-        <h1 className="text-2xl font-bold text-white">Completion</h1>
-        {/* Progress Bar */}
-        <div className="w-full bg-gray-200 rounded-full h-4 mt-4">
-          <div
-            className="bg-green-500 h-4 rounded-full"
-            style={{ width: `${weeklyCompletionPercentage}%` }}
-          ></div>
-        </div>
-        {/* Completion Percentage */}
-        <h2 className="text-xl font-bold text-white mt-2">
-          {weeklyCompletionPercentage}%
-        </h2>
-      </div>
 
 
       </div>
@@ -272,43 +271,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
 
       </div>
 
-      <div>
-        {/* Study Guide (Table) */}
-        <div className="flex-1 bg-gray-200 bg-opacity-80 p-6 rounded-lg shadow-lg">
-          <h3 className="text-lg font-semibold mb-4">Time-table Study Guide</h3>
-          <table className="w-full table-auto border-separate border-spacing-2">
-            <thead>
-              <tr className="bg-gray-300 bg-opacity-80">
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Priority Level</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Event</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Date</th>
-                <th className="p-3 text-left text-sm font-medium text-gray-700">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Example Rows */}
-              <tr className="hover:bg-gray-100 transition duration-300">
-                <td className="p-3 text-sm text-gray-600">High</td>
-                <td className="p-3 text-sm text-gray-600">Study React</td>
-                <td className="p-3 text-sm text-gray-600">2024-12-05</td>
-                <td className="p-3 text-sm text-gray-600">10:00 AM</td>
-              </tr>
-              <tr className="hover:bg-gray-100 transition duration-300">
-                <td className="p-3 text-sm text-gray-600">Medium</td>
-                <td className="p-3 text-sm text-gray-600">Practice SQL</td>
-                <td className="p-3 text-sm text-gray-600">2024-12-06</td>
-                <td className="p-3 text-sm text-gray-600">2:00 PM</td>
-              </tr>
-              <tr className="hover:bg-gray-100 transition duration-300">
-                <td className="p-3 text-sm text-gray-600">Low</td>
-                <td className="p-3 text-sm text-gray-600">Read Data Science Book</td>
-                <td className="p-3 text-sm text-gray-600">2024-12-07</td>
-                <td className="p-3 text-sm text-gray-600">4:00 PM</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+  
     </div>
   );
 };
