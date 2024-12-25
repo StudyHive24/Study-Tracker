@@ -5,14 +5,15 @@ import useDetectOutside from "@/hooks/usedetectOutside";
 import { badge, check, github, mail } from "@/utils/Icons";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import { BadgeCheck, Check, Github } from "lucide-react";
+import { BadgeCheck, Check, Github, Target } from "lucide-react";
 import image from '@/public/favicon.jpg'
+import Link from "next/link";
 
 const ProfileSettings = () => {
   const ref = useRef(null);
 
   const { closeModal } = useTasksContext();
-  const { user, updateUser, handlerUserInput, userState, changePassword } = useUserContext();
+  const { user, updateUser, handlerUserInput, userState, changePassword, removeUserInput, setUserState } = useUserContext();
 
   useDetectOutside({
     ref,
@@ -34,6 +35,8 @@ const ProfileSettings = () => {
       setNewPassword(e.target.value);
     }
   };
+
+
 
   return (
     <div className="">
@@ -59,9 +62,11 @@ const ProfileSettings = () => {
             </div>
           </div>
           <div className="self-end flex items-center gap-2">
+            <Link href={'https://github.com/StudyHive24/Study-Tracker/'} target="_blank">
             <button className="flex items-center gap-2  rounded-md py-1 px-3 text-xs font-medium text-gray-300">
             <Github/> Github
             </button>
+            </Link>
             <button className="flex items-center gap-2 border-2 border-[#323232]/10 rounded-md py-1 px-3 text-xs font-medium text-gray-300">
               <BadgeCheck/> Verified
             </button>
@@ -91,7 +96,7 @@ const ProfileSettings = () => {
               type="text"
               id="name"
               name="name"
-              defaultValue={name}
+              defaultValue={user.name}
               onChange={(e) => handlerUserInput("name")(e)} // Correct usage
               className="py-[0.4rem] px-3 font-medium rounded-lg border-2 border-[#323232]/10"
             />
@@ -107,9 +112,9 @@ const ProfileSettings = () => {
                 name="email"
                 value={email}
                 onChange={(e) => handlerUserInput("email")(e)} // Correct usage
-                className="w-full py-[0.4rem] px-3 font-medium rounded-lg border-2 border-[#323232]/10"
+                className="w-full py-[0.4rem] px-3 font-medium rounded-lg border-none text-gray-600"
               />
-              <span className="absolute left-0 top-0 bottom-0 flex items-center px-3 text-[#323232]/50">
+              <span className="absolute left-0 top-0 bottom-0 flex items-center px-3 ">
                 {mail}
               </span>
           </div>
@@ -154,14 +159,8 @@ const ProfileSettings = () => {
 
           <div className="flex justify-end gap-4 border-t-2 border-t-[#323232]/10">
             <button
-              className="mt-3 py-2 px-4 bg-red-600 text-white text-sm font-medium rounded-md border-2 border-[#323232]/10
-                hover:bg-red-700 hover:border-transparent hover:text-white transition-all duration-300"
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
-              className="mt-3 py-2 px-4 bg-[#3aafae] text-white text-sm font-medium rounded-md
+              className="mt-3 py-2 px-4 bg-[#3aafae] w-full text-white text-sm font-medium rounded-md
                 hover:bg-[#2e8d8c]/90 transition-all duration-300"
             >
               Save Changes

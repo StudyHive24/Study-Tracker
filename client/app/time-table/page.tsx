@@ -99,6 +99,10 @@ export default function TimeTableApp() {
     }));
   };
 
+  const handleSubmit = () => {
+      
+  }
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6 text-center">📅 Weekly Time Table</h1>
@@ -159,6 +163,7 @@ export default function TimeTableApp() {
       </div>
 
       {isModalOpen && (
+      <form>
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-lg font-semibold mb-4">{isEditMode ? "Edit Time Table Entry" : "Add Time Table Entry"}</h2>
@@ -250,7 +255,9 @@ export default function TimeTableApp() {
             </div>
           </div>
         </div>
+        </form>
       )}
     </div>
+    
   );
 }

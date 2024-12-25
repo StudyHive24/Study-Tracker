@@ -50,6 +50,6 @@ export const overdueTasks = (tasks: Task[]) => {
 
   // filter tasks that are not completed and the due date is before today
   return tasks.filter((task) => {
-    return !task.completed && moment(task.dueDate).isBefore(todayDate);
+    return !task.completed && moment(task.duedate).isBefore(todayDate);
   });
 };

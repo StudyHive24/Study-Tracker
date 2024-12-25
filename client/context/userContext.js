@@ -324,6 +324,17 @@ export const UserContextProvider = ({children}) => {
         }))
     }
 
+    const removeUserInput = (name, defaulValue) => () => {
+        setUserState((prevState) => {
+            const newState = {...prevState}
+            delete newState[name]
+            return {
+                ...newState,
+                [name]: defaulValue
+            }
+        })
+    }
+
     useEffect(() => {
         const loginStatusGetUser = async () => {
             const isLoggedIn =  await userLoginStatus()
@@ -351,7 +362,9 @@ export const UserContextProvider = ({children}) => {
                 resetPassword,
                 changePassword,
                 updateUser,
-                deleteUser
+                deleteUser,
+                removeUserInput,
+                setUserState
             }}
         > {children} 
         </UserContext.Provider>
