@@ -157,7 +157,10 @@ const ProfileSettings = () => {
                 
                 if (newPassword.length < 8) {
                   toast.error('New Password must contain atleast 8 Characters')
-                } else {
+                } else if (oldPassword == newPassword){
+                  toast.error('Old and New passwords are same')
+                } 
+                else {
                   changePassword(oldPassword, newPassword)
                 }
                 
