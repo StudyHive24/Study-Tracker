@@ -1,4 +1,5 @@
 import Timer from '../models/timer/timer.model.js';
+import convertDurationToSeconds from '../helpers/convertDuationtoSecs.js'
 
 //get all timer entries
 export const getTimers = async (req, res) => {
@@ -63,3 +64,70 @@ export const deleteAllTimers = async (req, res) => {
         });
     }
 };
+
+export const topUsersByTimeSpent = async (req, res) => {
+    try {
+        const leaderboard = await Timer.aggregate([
+            {
+                $addFields: {
+                    durationParts: {
+                        $map: {
+                            input: { $split: ['$duration', ':'] }, // Split "mm:ss" into parts
+                            as: 'part',
+                            in: { $toInt: '$$part' } // Convert each part to an integer
+                        }
+                    }
+                }
+            },
+            {
+                $addFields: {
+                    durationInSeconds: {
+                        $add: [
+                            { $multiply: [{ $arrayElemAt: ['$durationParts', 0] }, 60] }, // Minutes to seconds
+                            { $arrayElemAt: ['$durationParts', 1] } // Seconds
+                        ]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: '$user', // Group by user ID
+                    totalTimeSpent: { $sum: '$durationInSeconds' }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users', // Reference to the User model
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'userDetails'
+                }
+            },
+            {
+                $unwind: '$userDetails' // Flatten the array to get user details
+            },
+            {
+                $project: {
+                    _id: 0,
+                    name: '$userDetails.name', // Get the user's name
+                    totalTimeSpent: 1
+                }
+            },
+            {
+                $sort: { totalTimeSpent: -1 } // Sort by total time spent in descending order
+            },
+            {
+                $limit: 10 // Get the top 10 users
+            }
+        ]);
+
+        return res.json({ topUsersByTimeSpent: leaderboard });
+    } catch (error) {
+        console.error('Error fetching top users by time spent', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
+
+

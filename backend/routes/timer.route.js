@@ -4,6 +4,7 @@ import {
     getTimers,
     createTimer,
     deleteAllTimers,
+    topUsersByTimeSpent
     
 } from '../controllers/timer.controller.js';
 import { protect } from '../middleware/authentcationMiddleware.js';
@@ -16,6 +17,9 @@ router.post('/create', protect,createTimer);
 
 // to delete all timer info
 router.delete('/delete/all', protect, deleteAllTimers)
+
+
+router.get('/top-users', protect, topUsersByTimeSpent)
 
 
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import {getTasks, createTask, getTask, updateTask, deleteTask, deleteAllTasks} from '../controllers/task.controller.js'
+import {getTasks, createTask, getTask, updateTask, deleteTask, deleteAllTasks, topUsers} from '../controllers/task.controller.js'
 import { protect } from '../middleware/authentcationMiddleware.js'
 
 const router = express.Router()
@@ -21,6 +21,8 @@ router.patch('/update/:id', protect, updateTask)
 
 // to delete a task
 router.delete('/delete/:id', protect, deleteTask)
+
+router.get('/topusers', protect, topUsers)
 
 
 export default router

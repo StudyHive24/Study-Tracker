@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList, User2, ChevronUp, Loader, FileX } from "lucide-react"
+import { Calendar, CircleGauge, Timer, Search, Settings, ClipboardList, User2, ChevronUp, Loader, FileX, Users } from "lucide-react"
 import Link from "next/link";
 import {
   Sidebar,
@@ -123,6 +123,14 @@ export function SideBarL() {
                     <Link href="/progress" className="flex flex-row gap-5 ml-5">
                         <Loader />
                         <span>Progress</span>
+                      </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
+                    <Link href="/leaderboard" className="flex flex-row gap-5 ml-5">
+                        <Users />
+                        <span>Leaderboard</span>
                       </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

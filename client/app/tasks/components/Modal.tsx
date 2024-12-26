@@ -33,35 +33,23 @@ function Modal({ task }: TaskPropsModal) {
     setLocalTask((prevTask) => ({ ...prevTask, [fieldName]: e.target.value }));
   };
 
-  // to get due date to normal date
-  const duedate = localTask?.duedate;
-  const date = new Date(duedate);
-  const updatedDueDate = date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
-
-  const endDate = new Date(`${localTask.duedate}T${localTask.endTime}:00`);
-
-  // Extract hours and minutes
-  const hours = endDate.getHours().toString().padStart(2, '0'); // Ensures 2-digit format
-  const minutes = endDate.getMinutes().toString().padStart(2, '0'); // Ensures 2-digit format
-  
-  // Combine into endTime string
-  const endTime2 = `${hours}:${minutes}`;
-
 
   
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const endDate = new Date(`${localTask.duedate}T${localTask.endTime}:00`);
-    const updatedTask = { ...localTask, endTime: endDate };
+    const endDate = new Date(`${localTask.duedate}T${task.endTime}:00`);
 
-    updateTask(updatedTask);
+    
+
+    const updatedTask = {...localTask, endTime: endDate}
+
+    console.log(updatedTask)
+
+    task = updatedTask
+
+    updateTask(task);
   };
 
   return (
@@ -154,7 +142,7 @@ function Modal({ task }: TaskPropsModal) {
             <div className="text-gray-400 mt-1 text-[14px]">
               This task will due on the{" "}
               <span className="text-green-700 border-b-2 border-gray-200">
-                {updatedDueDate || "a specified date"}
+                {localTask.duedate || "a specified date"}
               </span>{" "}
               at <span className="text-green-700 border-b-2 border-gray-200">{localTask.endTime || "a specific time"}</span>
             </div>

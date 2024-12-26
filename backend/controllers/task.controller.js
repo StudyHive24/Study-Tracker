@@ -229,3 +229,53 @@ export const deleteAllTasks = async (req, res) => {
         });
     }
 };
+
+export const topUsers = async (req, res) => {
+    try {
+        // Aggregate task count, completed tasks, and pending tasks by user
+        const usersWithTaskData = await Task.aggregate([
+            {
+                $group: {
+                    _id: '$user',  // Group by user ID
+                    totalTasks: { $sum: 1 },
+                    completedTasks: { $sum: { $cond: [{ $eq: ['$completed', true] }, 1, 0] } },
+                    pendingTasks: { $sum: { $cond: [{ $eq: ['$completed', false] }, 1, 0] } }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',  // Reference to the User model
+                    localField: '_id',  // Field to match
+                    foreignField: '_id',  // Field in User model
+                    as: 'userDetails'  // Name the field to store user data
+                }
+            },
+            {
+                $unwind: '$userDetails'  // Unwind the array to get user details
+            },
+            {
+                $project: {
+                    _id: 1,
+                    name: '$userDetails.name',  // Get the user's name
+                    totalTasks: 1,
+                    completedTasks: 1,
+                    pendingTasks: 1,
+                    completionPercentage: { 
+                        $cond: {
+                            if: { $eq: ['$totalTasks', 0] }, 
+                            then: 0, 
+                            else: { $multiply: [{ $divide: ['$completedTasks', '$totalTasks'] }, 100] }
+                        }
+                    }
+                }
+            },
+            { $sort: { completedTasks: -1 } },  // Sort by completed tasks in descending order
+            { $limit: 10 }  // Get the top 10 users
+        ]);
+
+        return res.json({ topUsers: usersWithTaskData });
+    } catch (error) {
+        console.error('Error fetching top users', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+};

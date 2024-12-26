@@ -56,6 +56,7 @@ function AddTask() {
 
     const updatedTask = {...task, endTime: endDate}
 
+    console.log(updateTask)
 
     createTask(updatedTask)
 

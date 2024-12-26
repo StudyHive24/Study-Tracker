@@ -13,6 +13,7 @@ export const TimersProvider = ({ children }) => {
 
     const [timers, setTimers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [topUsersTime, setTopUsersTime] = useState([]);
 
     // Get timers
     const getTimers = async () => {
@@ -91,9 +92,19 @@ export const TimersProvider = ({ children }) => {
         }
     };
 
+    const topUsersByTimeSpent = async () => {
+        try {
+            const res = await axios.get(`${serverUrl}/api/timer/top-users`);
+            setTopUsersTime(res.data.topUsersByTimeSpent);
+        } catch (error) {
+            console.error('Error fetching top users by time spent:', error);
+        }
+    }
+
     useEffect(() => {
         if (userID) {
             getTimers();
+            topUsersByTimeSpent()
         }
     }, [userID]);
 
@@ -106,7 +117,9 @@ export const TimersProvider = ({ children }) => {
                 handleInput,
                 setLoading,
                 loading,
-                deleteAllTimers
+                deleteAllTimers,
+                topUsersTime,
+                topUsersByTimeSpent
             }}
         >
             {children}

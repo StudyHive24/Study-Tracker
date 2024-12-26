@@ -9,8 +9,17 @@ import { BadgeCheck, Check, Github, Target } from "lucide-react";
 import image from '@/public/favicon.jpg'
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { cp } from "fs";
+import { color } from "framer-motion";
+import {useRouter} from "next/navigation";
+import Router from "next/router";
+
+
 
 const ProfileSettings = () => {
+
+  const router = useRouter()
+
   const ref = useRef(null);
 
   const { closeModal, } = useTasksContext();
@@ -23,7 +32,7 @@ const ProfileSettings = () => {
     },
   });
 
-  const { name, email, photo } = user;
+  const { name, email, photo, isVerifed } = user;
 
   // state
   const [oldPassword, setOldPassword] = useState("");
@@ -36,6 +45,26 @@ const ProfileSettings = () => {
       setNewPassword(e.target.value);
     }
   };
+
+  let color1 = 'text-gray-400'
+  let color2 = 'lightGray'
+  let verifyText = ''
+
+  
+
+  if (!isVerifed) {
+    color1 = 'text-gray-400'
+    color2 = 'lightGray'
+    verifyText = 'Please Verify'
+  } else {
+    verifyText = 'Verified'
+  }
+
+  console.log(isVerifed)
+
+  const clickHandle = () => {
+    router.push('/send-verification-code')
+  }
 
 
 
@@ -68,8 +97,8 @@ const ProfileSettings = () => {
             <Github/> Github
             </button>
             </Link>
-            <button onClick={emailVerification} className="flex items-center gap-2 border-2 border-[#323232]/10 rounded-md py-1 px-3 text-xs font-medium text-gray-300">
-              <BadgeCheck/> Verified
+            <button onClick={clickHandle} className="flex items-center gap-2 border-2 border-[#323232]/10 rounded-md py-1 px-3 text-xs font-medium text-gray-300">
+              <BadgeCheck color={`${color2}`}/> <span className={`${color1}`}>{verifyText}</span>
             </button>
           </div>
         </div>

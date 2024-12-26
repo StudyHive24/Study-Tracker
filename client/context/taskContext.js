@@ -15,6 +15,7 @@ export const TasksProvider = ({children}) => {
     const [tasks, setTasks] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     const [task, setTask] = React.useState({});
+    const [topUsers, setTopUsers] = React.useState([]); 
   
     const [isEditing, setIsEditing] = React.useState(false);
     const [priority, setPriority] = React.useState("all");
@@ -161,6 +162,22 @@ const getTask = async (taskID) => {
         }
     }
 
+    const getTopUsersByCompletion = async () => {
+        try {
+            const res = await axios.get(`${serverUrl}/api/tasks/topusers`);
+            
+            // Check if the data is structured correctly before setting it
+            if (res.data.topUsers) {
+                setTopUsers(res.data.topUsers);  // Set the top users data
+            } else {
+                console.error('No top users found in the response');
+            }
+        } catch (error) {
+            console.error('Error fetching top users:', error);
+        }
+    };
+    
+
     const handleInput = (name) => (e) => {
         if (name === 'setTask') {
             setTask(e)
@@ -189,6 +206,7 @@ const getTask = async (taskID) => {
 
     useEffect(() => {
         getTasks()
+        getTopUsersByCompletion(); 
     }, [userID])
 
 
@@ -220,7 +238,9 @@ const getTask = async (taskID) => {
             profileModal,
             handleInput2,
             activeTasks,
-            deleteAllTasks
+            deleteAllTasks,
+            getTopUsersByCompletion,
+            topUsers
         }}>
             {children}
         </TaskContext.Provider>
