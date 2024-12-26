@@ -28,8 +28,6 @@ interface ProgressPageProps {
 
 const ProgressPage: React.FC<ProgressPageProps> = (props) => {
   useRiderect('/login');
-
-
   const { tasks } = useTasksContext();
   const [weeklyTaskGoal, setWeeklyTaskGoal] = useState(0);
   const [weeklyCompletionPercentage, setWeeklyCompletionPercentage] = useState(0);
@@ -124,10 +122,10 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
   
   type Task = {
     completed: any;
-    priority: 'High' | 'Medium' | 'Low';  // Only allow these 3 values
-    duedate: string;  // Assuming this is an ISO string or a valid Date string
-    endTime: string;  // Same as above
-    // Include other fields as necessary...
+    priority: 'High' | 'Medium' | 'Low';
+    duedate: string;  
+    endTime: string;  
+    
   };
   
 
@@ -157,8 +155,13 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       const endTimeB = new Date(b.endTime);
       return endTimeA.getTime() - endTimeB.getTime();
     });
-  
-    const totalTasks2 = sortedTasks.length;
+
+    //GET Total Completed Tasks 
+    const completdtasks = tasks
+    .slice() 
+    .filter((task: Task) => task.completed)
+
+    const totalTasks2 = completdtasks.length;
 
 
   return (
