@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 import { Task } from '@/utils/types'
 import TaskItem from '../components/TaskItem'
 import AddTask from '../components/AddTask'
-import useVerifyRiderect from '@/hooks/useUserVerifyRiderect'
+
 
 function page() {
   useRiderect('/login')

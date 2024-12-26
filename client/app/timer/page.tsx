@@ -4,7 +4,7 @@ import { useState, useEffect, ReactElement, Key, ReactNode } from "react"; // Im
 import "./timer.css"; // Importing the CSS file for styling
 import useRiderect from "@/hooks/useUserRiderect";
 import { useTimerContext } from "@/context/timerContext"; // Import the context for handling timer data
-import useVerifyRiderect from "@/hooks/useUserVerifyRiderect";
+
 
 // Modal Component for reset confirmation
 function Modal({

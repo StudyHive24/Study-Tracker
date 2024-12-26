@@ -11,7 +11,6 @@ import { Task } from '@/utils/types'
 import TaskItem from '../components/TaskItem'
 import AddTaskModel from '../components/AddTaskModel'
 import { container, item } from "@/utils/animations";
-import useVerifyRiderect from '@/hooks/useUserVerifyRiderect'
 
 
 function page() {

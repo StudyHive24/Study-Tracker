@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useTimetableContext } from "@/context/timetableContext"; // Import context
 import useRiderect from "@/hooks/useUserRiderect";
-import useVerifyRiderect from "@/hooks/useUserVerifyRiderect";
+
 
 // Define TimetableEntry type
 type TimetableEntry = {
