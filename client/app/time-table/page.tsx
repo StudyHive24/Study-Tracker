@@ -1,266 +1,326 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useTimetableContext } from "@/context/timetableContext"; // Import context
+
+import { useState, ReactElement } from "react";
+import { useTimetableContext } from '@/context/timetableContext'; // Import the context
 import useRiderect from "@/hooks/useUserRiderect";
 
-
-// Define TimetableEntry type
-type TimetableEntry = {
-  _id: string;
+interface TimetableEntry {
+  id: number;
   date: string;
   startTime: string;
   endTime: string;
   title: string;
   subject: string;
-  subjectColor: string;
-};
+  color: string;
+}
 
-type TimetableForm = {
-  date: string;
-  startTime: string;
-  endTime: string;
-  title: string;
-  subject: string;
-  subjectColor: string;
-};
-
-export default function TimeTableApp() {
-  useRiderect("/login");
-
-
-  const { timetables, createTimetable, updateTimetable, deleteTimetable, setLoading, loading } = useTimetableContext();
-
-  const [form, setForm] = useState<TimetableForm>({
-    date: "",
-    startTime: "",
-    endTime: "",
-    title: "",
-    subject: "",
-    subjectColor: "#F0A1C2", // Default color
-  });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedEntry, setSelectedEntry] = useState<TimetableEntry | null>(null); // Updated type
-  const [newSubject, setNewSubject] = useState("");
-  const [subjects, setSubjects] = useState(["Math", "Science", "History"]);
-
+export default function TimetablePage(): ReactElement {
+   useRiderect("/login");
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  const timeSlots = Array.from({ length: 8 }, (_, index) => `${index + 8}:00`);
+  const { timetable, createTimetableEntry, updateTimetableEntry, deleteTimetableEntry, loading } = useTimetableContext(); // Use context
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [currentEntry, setCurrentEntry] = useState<Partial<TimetableEntry>>({});
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalEntry, setModalEntry] = useState<TimetableEntry | null>(null);
+  const [subjects, setSubjects] = useState(["Math", "Science", "History", "English"]);
+  const [newSubject, setNewSubject] = useState("");
+  const [selectedColor, setSelectedColor] = useState("#000000");
+  const [isButtonVisible, setIsButtonVisible] = useState(true); // Manage button visibility
 
-  const handleAddEntry = () => {
-    if (form) {
-      const newEntry = { ...form };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setCurrentEntry({ ...currentEntry, [e.target.name]: e.target.value });
+  };
 
-      if (isEditMode && selectedEntry) {
-        updateTimetable(selectedEntry._id, newEntry); // Update existing entry
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(e.target.value);
+  };
+
+  const handleAddTimetable = () => {
+    if (selectedDate && currentEntry.startTime && currentEntry.endTime && currentEntry.title && currentEntry.subject && selectedColor) {
+      const entry: TimetableEntry = {
+        id: currentEntry.id || Date.now(), // Use Date.now() for new entries
+        date: selectedDate,
+        startTime: currentEntry.startTime!,
+        endTime: currentEntry.endTime!,
+        title: currentEntry.title!,
+        subject: currentEntry.subject!,
+        color: selectedColor,
+      };
+
+      if (currentEntry.id) {
+        // Update existing entry
+        updateTimetableEntry(currentEntry.id, entry);
       } else {
-        createTimetable(newEntry); // Create new entry
+        // Create new entry
+        createTimetableEntry(entry);
       }
 
-      // Reset form after submission
-      setForm({
-        date: "",
-        startTime: "",
-        endTime: "",
-        title: "",
-        subject: "",
-        subjectColor: "#F0A1C2", // Reset to default color
-      });
-      setIsModalOpen(false);
-      setIsEditMode(false);
+      // Reset form
+      setCurrentEntry({});
+      setSelectedDate("");
+      setSelectedColor("#000000");
+      setIsFormVisible(false);
+      setIsButtonVisible(true);
     }
   };
 
-  const handleEntryClick = (entry: TimetableEntry) => {
-    setSelectedEntry(entry);
-    setForm(entry);
-    setIsEditMode(true);
-    setIsModalOpen(true);
+  const handleEditTimetable = (entry: TimetableEntry) => {
+    setCurrentEntry(entry);
+    setSelectedDate(entry.date);
+    setSelectedColor(entry.color);
+    setIsFormVisible(true);
+    setIsButtonVisible(false);
+    setIsModalVisible(false); // Close the modal when editing
   };
 
-  const handleDeleteEntry = () => {
-    if (selectedEntry) {
-      deleteTimetable(selectedEntry._id); // Delete selected entry
-      setIsModalOpen(false);
-      setSelectedEntry(null);
-      setIsEditMode(false);
-    }
+  const handleDeleteTimetable = (entryId: number) => {
+    deleteTimetableEntry(entryId);
+    setIsModalVisible(false);
   };
 
-  const addNewSubject = () => {
-    if (newSubject.trim() && !subjects.includes(newSubject.trim())) {
-      setSubjects((prev: string[]) => [...prev, newSubject.trim()]);
+  const openModal = (entry: TimetableEntry) => {
+    setModalEntry(entry);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleAddSubject = () => {
+    if (newSubject && !subjects.includes(newSubject)) {
+      setSubjects((prevSubjects) => [...prevSubjects, newSubject]);
       setNewSubject("");
     }
   };
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: value, // Dynamically update form fields based on input name
-    }));
-  };
-
-  const handleSubmit = () => {
-      
-  }
-
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6 text-center">📅 Weekly Time Table</h1>
+    <div className="p-5 max-w-6xl mx-auto text-gray-100">
+      {loading && <div className="text-center">Loading...</div>} {/* Loading indicator */}
 
-      <button
-        className="bg-blue-500 text-white px-4 py-2 mb-4 rounded-lg"
-        onClick={() => setIsModalOpen(true)}
-      >
-        + Add Time Table
-      </button>
+      {isButtonVisible && (
+        <button
+          className="px-4 py-2 rounded bg-blue-600 text-white mb-5 hover:bg-blue-700"
+          onClick={() => {
+            setIsFormVisible(true);
+            setIsButtonVisible(false);
+          }}
+        >
+          Add Timetable
+        </button>
+      )}
 
-      <div className="overflow-auto border border-gray-300 rounded-lg shadow-lg bg-white">
-        <table className="w-full table-auto border-collapse">
-          <thead className="bg-gray-200">
+      {isFormVisible && (
+        <div className="relative max-w-md mx-auto bg-gray-800 p-5 rounded-lg">
+          <span
+            className="absolute top -3 right-3 text-xl cursor-pointer text-gray-100"
+            onClick={() => {
+              setIsFormVisible(false);
+              setIsButtonVisible(true);
+            }}
+          >
+            ✖
+          </span>
+          <h2 className="text-center text-lg font-semibold mb-4">
+            {currentEntry.id ? "Edit Timetable Entry" : "Add Timetable Entry"}
+          </h2>
+          <div className="mb-4">
+            <label className="block font-semibold mb-1">Select Date</label>
+            <input
+              type="date"
+              name="date"
+              className="w-full p-2 rounded border border-gray-600 bg-gray-700 text-gray-100"
+              value={selectedDate}
+              onChange={handleDateChange}
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <div className="w-1/2">
+              <label className="block font-semibold mb-1">Start Time</label>
+              <input
+                type="time"
+                name="startTime"
+                className="w-full p-2 rounded border border-gray-600 bg-gray-700 text-gray-100"
+                value={currentEntry.startTime || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="w-1/2">
+              <label className="block font-semibold mb-1">End Time</label>
+              <input
+                type="time"
+                name="endTime"
+                className="w-full p-2 rounded border border-gray-600 bg-gray-700 text-gray-100"
+                value={currentEntry.endTime || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="block font-semibold mb-1">Title</label>
+            <input
+              type="text"
+              name="title"
+              className="w-full p-2 rounded border border-gray-600 bg-gray-700 text-gray-100"
+              value={currentEntry.title || ""}
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className="mt-4">
+            <label className="block font-semibold mb-1">Subject</label>
+            <div className="flex items-center gap-2">
+              <select
+                name="subject"
+                className="w-full p-2 rounded border border-gray-600 bg-gray-700 text-gray-100"
+                value={currentEntry.subject || ""}
+                onChange={handleInputChange}
+              >
+                <option value="" disabled>
+                  Select Subject
+                </option>
+                {subjects.map((subject) => (
+                  <option key={subject} value={subject}>
+                    {subject}
+                  </option>
+                ))}
+              </select>
+              {currentEntry.subject && (
+                <div
+                  className="h-4 w-4 rounded-full"
+                  style={{ backgroundColor: selectedColor }}
+                />
+              )}
+            </div>
+            <div className="flex justify-between mt-2">
+              <input
+                type="text"
+                placeholder="New Subject"
+                className="p-2 rounded border border-gray-600 bg-gray-700 text-gray-100"
+                value={newSubject}
+                onChange={(e) => setNewSubject(e.target.value)}
+              />
+              <button
+                onClick={handleAddSubject}
+                className="px-4 py-2 ml-2 rounded bg-green-600 text-white hover:bg-green-700"
+              >
+                Add Subject
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <label className="block font-semibold mb-1">Select Color</label>
+            <div className="flex overflow-x-auto space-x-2">
+              {["#FF5733", "#33FF57", "#3357FF", "#F5F5F5", "#FFC300", "#FF33F6", "#33FFF6"].map((color) => (
+                <div
+                  key={color}
+                  className={`w-8 h-8 rounded-full cursor-pointer ${selectedColor === color ? "border-4 border-blue-500" : ""}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => setSelectedColor(color)}
+                  title="Click to select color"
+                />
+              ))}
+            </div>
+          </div>
+
+          <button
+            className="mt-4 px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+            onClick={handleAddTimetable}
+          >
+            {currentEntry.id ? "Update Entry" : "Add Entry"}
+          </button>
+        </div>
+      )}
+
+      {/* Timetable Display */}
+      <div className="mt-8">
+        <table className="w-full border-collapse">
+          <thead>
             <tr>
               {daysOfWeek.map((day) => (
-                <th key={day} className="border border-gray-300 px-4 py-2 text-center">
+ <th
+                  key={day}
+                  className="bg-gray-700 text-gray-100 py-3 text-center border border-gray-600"
+                >
                   {day}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {timeSlots.map((slot, index) => (
-              <tr key={index}>
-                {daysOfWeek.map((day) => {
-                  const entry = timetables.find((entry: TimetableEntry) => {
-                    const startTime = new Date(`${entry.date}T${entry.startTime}:00`);
-                    return startTime.getHours() === index + 8; // Match hour based on the slot
-                  });
-
-                  return (
-                    <td
-                      key={day}
-                      className="border border-gray-300 px-4 py-2 text-center cursor-pointer"
-                      onClick={() => entry && handleEntryClick(entry)}
-                    >
-                      {entry ? (
-                        <div
-                          key={entry._id}
-                          className="mb-2 p-2 rounded-lg"
-                          style={{ backgroundColor: entry.subjectColor }}
+            <tr>
+              {daysOfWeek.map((day) => (
+                <td
+                  key={day}
+                  className="bg-gray-600 text-gray-100 p-4 align-top border border-gray-600"
+                >
+                  {timetable[day] && timetable[day].length > 0 ? (
+                    <ul className="list-none pl-0">
+                      {timetable[day].map((entry: TimetableEntry) => (
+                        <li
+                          key={entry.id}
+                          className="cursor-pointer mb-3 bg-gray-700 rounded p-3 hover:bg-gray-600"
+                          onClick={() => openModal(entry)} // Open modal on entry click
                         >
-                          <div className="font-semibold">{entry.title}</div>
-                          <div className="text-sm">{entry.subject}</div>
-                          <div className="text-xs text-gray-600">
+                          <div className="text-center text-lg font-semibold text-white mb-2">
+                            {entry.title}
+                          </div>
+                          <div className="flex items-center justify-center gap-2 text-center text-md text-gray-300 mb-2">
+                            {entry.subject}
+                            <div
+                              className="h-4 w-4 rounded-full"
+                              style={{ backgroundColor: entry.color }}
+                            />
+                          </div>
+                          <div className="text-center text-sm text-gray-400">
                             {entry.startTime} - {entry.endTime}
                           </div>
-                        </div>
-                      ) : null}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    "No entries"
+                  )}
+                </td>
+              ))}
+            </tr>
           </tbody>
         </table>
       </div>
 
-      {isModalOpen && (
-      <form>
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-semibold mb-4">{isEditMode ? "Edit Time Table Entry" : "Add Time Table Entry"}</h2>
-            <div className="space-y-4">
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Date:</label>
-                <input
-                  type="date"
-                  name="date"
-                  className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form.date || ""}
-                  onChange={handleFormChange}
-                />
-              </div>
-              <div className="flex space-x-4">
-                <div className="flex flex-col w-1/2">
-                  <label className="text-sm mb-2">Start Time:</label>
-                  <input
-                    type="time"
-                    name="startTime"
-                    className="w-full border border-gray-300 px-4 py-2 rounded"
-                    value={form.startTime || ""}
-                    onChange={handleFormChange}
-                  />
-                </div>
-                <div className="flex flex-col w-1/2">
-                  <label className="text-sm mb-2">End Time:</label>
-                  <input
-                    type="time"
-                    name="endTime"
-                    className="w-full border border-gray-300 px-4 py-2 rounded"
-                    value={form.endTime || ""}
-                    onChange={handleFormChange}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Title:</label>
-                <input
-                  type="text"
-                  name="title"
-                  className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form.title || ""}
-                  onChange={handleFormChange}
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Subject:</label>
-                <select
-                  name="subject"
-                  className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form.subject || ""}
-                  onChange={handleFormChange}
-                >
-                  <option value="">Select a subject</option>
-                  {subjects.map((subject, index) => (
-                    <option key={index} value={subject}>
-                      {subject}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Color:</label>
-                <input
-                  type="color"
-                  name="subjectColor"
-                  className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form.subjectColor || "#F0A1C2"}
-                  onChange={handleFormChange}
-                />
-              </div>
-            </div>
-            <div className="flex justify-between mt-4">
-              {isEditMode && (
-                <button
-                  className="bg-red-500 text-white px-4 py-2 rounded"
-                  onClick={handleDeleteEntry}
-                >
-                  Delete
-                </button>
-              )}
+      {/* Confirmation Modal */}
+      {isModalVisible && modalEntry && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-gray-900 p-6 rounded-lg">
+            <h3 className="text-white text-lg mb-4">Entry Details</h3>
+            <p className="text-gray-400 mb-4">
+              <strong>{modalEntry.title}</strong>
+              <br />
+              {modalEntry.subject} on {modalEntry.date}
+              <br />
+              {modalEntry.startTime} - {modalEntry.endTime}
+            </p>
+            <div className="flex justify-between">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={handleAddEntry}
+                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                onClick={() => handleEditTimetable(modalEntry)} // Edit button
               >
-                {isEditMode ? "Update" : "Add"}
+                Edit Entry
+              </button>
+              <button
+                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                onClick={() => handleDeleteTimetable(modalEntry.id)} // Delete button
+              >
+                Delete Entry
               </button>
             </div>
           </div>
         </div>
-        </form>
       )}
     </div>
-    
   );
 }

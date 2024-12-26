@@ -28,8 +28,6 @@ interface ProgressPageProps {
 
 const ProgressPage: React.FC<ProgressPageProps> = (props) => {
   useRiderect('/login');
-
-
   const { tasks } = useTasksContext();
   const [weeklyTaskGoal, setWeeklyTaskGoal] = useState(0);
   const [weeklyCompletionPercentage, setWeeklyCompletionPercentage] = useState(0);
@@ -124,11 +122,13 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
   
   type Task = {
     completed: any;
-    priority: 'High' | 'Medium' | 'Low';  // Only allow these 3 values
-    duedate: string;  // Assuming this is an ISO string or a valid Date string
-    endTime: string;  // Same as above
-    // Include other fields as necessary...
+    priority: 'High' | 'Medium' | 'Low';
+    duedate: string;  
+    endTime: string;  
+    
   };
+  
+
   
   const sortedTasks = tasks
     .slice()  // Clone the array to avoid mutating the original
@@ -155,8 +155,13 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       const endTimeB = new Date(b.endTime);
       return endTimeA.getTime() - endTimeB.getTime();
     });
-  
 
+    //GET Total Completed Tasks 
+    const completdtasks = tasks
+    .slice() 
+    .filter((task: Task) => task.completed)
+
+    const totalTasks2 = completdtasks.length;
 
 
   return (
@@ -185,7 +190,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
           {/* Tasks Progress */}
           <div className="bg-white bg-opacity-20 p-2 rounded-lg shadow-md mb-4 w-full">
             <h1 className="text-xl font-extrabold text-center text-white ">
-              Tasks:<br /> <span className="text-green-300">{weeklyTaskGoal}</span>
+              Tasks:<br /> <span className="text-green-300">{totalTasks2}</span>
             </h1>
           </div>
 

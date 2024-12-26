@@ -93,7 +93,8 @@ const Dashboard = () => {
         setIsNotificationOpen((prev) => !prev); // Toggle the state
     };
 
-    const todayTasks = tasks.filter((task: any) => new Date(task.endTime).toDateString() === today.toDateString());
+    const todayTasks = tasks.filter((task: any) => new Date(task.endTime).toDateString() === today.toDateString()); 
+    const notcompletedtodayTasks = tasks.filter((task: any) => !task.completed && new Date(task.endTime).toDateString() === today.toDateString());
     const nextTask = tasks
     .filter((task: any) => !task.completed && new Date(task.endTime) > today)
     .sort((a: any, b: any) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime())[0];
@@ -126,7 +127,7 @@ const Dashboard = () => {
 
                                 // 1. Tasks today
                                 notifications.push(
-                                    `You have ${totalTodayTasks} task${totalTodayTasks !== 1 ? 's' : ''} scheduled for today.`
+                                    `You have ${notcompletedtodayTasks.length} task${totalTodayTasks !== 1 ? 's' : ''} scheduled for today.`
                                 );
 
                                 // 2. Next task reminder
@@ -140,7 +141,7 @@ const Dashboard = () => {
                                       });
                                       
                                     const daysDifference = Math.ceil(
-                                        (nextTaskDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24) -1
+                                        (nextTaskDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24) 
                                     );
                                     let dateMessage;
                                     if (daysDifference === 1) dateMessage = 'today';
@@ -157,7 +158,11 @@ const Dashboard = () => {
                                 }
 
                                 // 3. Completion percentage
-                                if (completedPercentage < 100) {
+                                if (completedPercentage === 0) {
+                                    notifications.push(
+                                        
+                                    );
+                                }else if(completedPercentage < 100){
                                     notifications.push(
                                         `You have completed ${completedPercentage}% of today's tasks. Keep going to reach 100%!`
                                     );

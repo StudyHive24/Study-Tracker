@@ -36,6 +36,7 @@
     "react-hot-toast": "^2.4.1",
     "react-tag-input": "^6.10.3",
     "react-tag-input-component": "^2.0.2",
+    "react-time-picker": "^7.0.0",
     "react-tooltip": "^5.28.0",
     "recharts": "^2.15.0",
     "tailwind-merge": "^2.5.4",
