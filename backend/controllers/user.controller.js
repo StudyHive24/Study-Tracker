@@ -3,10 +3,11 @@ import jwt from 'jsonwebtoken'
 import User from '../models/authentication/user.model.js'
 import generateToken from '../helpers/generateToken.js'
 import Token from '../models/authentication/Token.js'
-import crypto from 'node:crypto'
+import crypto from 'crypto'
 import hashToken from '../helpers/hashToken.js'
 import emailSend from '../helpers/emailSend.js'
 import bcrypt from 'bcrypt'
+import nodemailer from 'nodemailer'
 
 
 export const test = (req, res) => {
@@ -226,65 +227,233 @@ export const userLoginStatus = async (req, res) => {
 
 // email verification
 export const emailVerify = async (req, res) => {
-    const user = await User.findById(req.user._id)
-
-    // to check user's existence
+    const user = await User.findById(req.user._id);
+  
+    // if user exists
     if (!user) {
-        res.status(404)
-        res.json({
-            message: 'User not found'
-        })
+      return res.status(404).json({ message: "User not found" });
     }
-
-    // check the verified status of the user
-    if (user.isVerifed) {
-        res.status(400)
-        res.json({
-            message: 'User is verified already'
-        })
+  
+    // check if user is already verified
+    if (user.isVerified) {
+      return res.status(400).json({ message: "User is already verified" });
     }
-
-    const token = await Token.findOne({ userID: user._id })
-
-    // if token exists then delte the token
+  
+    let token = await Token.findOne({ userId: user._id });
+  
+    // if token exists --> delete the token
     if (token) {
-        await token.deleteOne()
+      await token.deleteOne();
     }
-
-    // to create a verification token using the user id
-    const verificationToken = crypto.randomBytes(64).toString('hex') + user._id
-
-    // to hash the verification token
-    const HashedToken = hashToken(verificationToken)
-
+  
+    // create a verification token using the user id --->
+    const verificationToken = crypto.randomBytes(64).toString("hex") + user._id;
+  
+    // hast the verification token
+    const hashedToken = hashToken(verificationToken);
+  
     await new Token({
-        userID: user._id,
-        verificationToken: HashedToken,
-        createdAt: Date.now(),
-        expiresAt: Date.now() + 24 * 60 * 60 * 1000   // expires after 24 hours
-    }).save()
-
-    // verfication link
-    const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`
-
+      userId: user._id,
+      verificationToken: hashedToken,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+    }).save();
+  
+    // verification link
+    const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+  
     // send email
-    const subject = 'Email Verification AuthKit'
-    const send_to = user.email
-    const reply_to = 'noreply@gmail.com'
-    const template = 'emailVerification'
-    const send_from = process.env.USER_EMAIL
-    const name = user.name
-    const url = verificationLink
-
+    const subject = "Email Verification - AuthKit";
+    const send_to = user.email;
+    const reply_to = "noreply@gmail.com";
+    const template = "emailVerification";
+    const send_from = process.env.USER_EMAIL;
+    const name = user.name;
+    const url = verificationLink;
+  
     try {
-        await emailSend(subject, send_to, send_from, reply_to, template, name, url)
+      // order matters ---> subject, send_to, send_from, reply_to, template, name, url
+      await sendEmail(subject, send_to, send_from, reply_to, template, name, url);
+      return res.json({ message: "Email sent" });
     } catch (error) {
-        res.status(500)
-        return res.json({
-            message: "Email couldn't be sent"
-        })
+      console.log("Error sending email: ", error);
+      return res.status(500).json({ message: "Email could not be sent" });
     }
-}
+};
+
+
+export const emailVerificationCode = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Find the user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.isVerified) {
+            return res.status(400).json({ message: "User is already verified" });
+        }
+
+        // Generate a 6-digit verification code
+        const verificationCode = crypto.randomInt(100000, 999999).toString();
+
+        // Set expiration time (e.g., 15 minutes from now)
+        const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
+
+        // Save code and expiration to the user document
+        user.verificationCode = verificationCode;
+        user.verificationCodeExpires = expirationTime;
+        await user.save();
+
+            // send email
+        const subject = "Email Verification - StudyHive";
+        const send_to = user.email;
+        const reply_to = "noreply@gmail.com";
+        const template = "emailVerification";
+        const send_from = process.env.USER_EMAIL;
+        const name = user.name;
+        const code = verificationCode;
+
+        await emailSend(subject, send_to, send_from, reply_to, template, name, code);
+
+        res.status(200).json({ message: "Verification code sent to your email" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+export const verifyCode = async (req, res) => {
+    try {
+        const { email, verificationCode } = req.body;
+
+        // Find the user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (user.isVerified) {
+            return res.status(400).json({ message: "User is already verified" });
+        }
+
+        // Check if the code matches and is not expired
+        if (
+            user.verificationCode !== verificationCode ||
+            user.verificationCodeExpires < Date.now()
+        ) {
+            return res.status(400).json({ message: "Invalid or expired verification code" });
+        }
+
+        // Mark the user as verified
+        user.isVerified = true;
+        user.verificationCode = null; // Clear the code
+        user.verificationCodeExpires = null; // Clear the expiration
+        await user.save();
+
+        res.status(200).json({ message: "User verified successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+// reset password request
+export const requestPasswordReset = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        // Find the user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Generate a 6-digit password reset code
+        const resetCode = crypto.randomInt(100000, 999999).toString();
+
+        // Set expiration time (e.g., 15 minutes from now)
+        const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
+
+        // Save the code and expiration to the user document
+        user.verificationCode = resetCode;
+        user.verificationCodeExpires = expirationTime;
+        await user.save();
+
+            // send email
+            const subject = "Password Reset - StudyHive";
+            const send_to = user.email;
+            const reply_to = "noreply@gmail.com";
+            const template = "forgotPassword";
+            const send_from = process.env.USER_EMAIL;
+            const name = user.name;
+            const code = resetCode;
+    
+            await emailSend(subject, send_to, send_from, reply_to, template, name, code);
+
+        res.status(200).json({ message: "Password reset code sent to your email" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+// verify password reset code
+export const verifyPasswordResetCode = async (req, res) => {
+    try {
+        const { email, resetCode } = req.body;
+
+        // Find the user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if the code matches and is not expired
+        if (
+            user.verificationCode !== resetCode ||
+            user.verificationCodeExpires < Date.now()
+        ) {
+            return res.status(400).json({ message: "Invalid or expired reset code" });
+        }
+
+        res.status(200).json({ message: "Reset code verified" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+// password reset 
+export const passwordReset = async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+
+        // Find the user by email
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Hash the new password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update the user's password
+        user.password = hashedPassword;
+        user.verificationCode = null; // Clear the code
+        user.verificationCodeExpires = null; // Clear the expiration
+        await user.save();
+
+        res.status(200).json({ message: "Password reset successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
 
 
 export const getUsers = async (req, res) => {
@@ -311,54 +480,42 @@ export const getUser = async (req, res) => {
     }
 }
 
-// verify user
 export const verifyUser = async (req, res) => {
-    const {verificationToken} = req.params
-
+    const { verificationToken } = req.params;
+  
     if (!verificationToken) {
-        res.status(400)
-        return res.json({
-            message: 'Invalid verification token'
-        })
+      return res.status(400).json({ message: "Invalid verification token" });
     }
-
-    // hash the verification token
-    const hashedToken = hashToken(verificationToken)
-
-    // to find user with the verification token
+    // hash the verification token --> because it was hashed before saving
+    const hashedToken = hashToken(verificationToken);
+  
+    // find user with the verification token
     const userToken = await Token.findOne({
-        verificationToken: hashedToken,
-
-        // to check the expiration of the token
-        expiresAt: { $gt: Date.now() }
-    })
-
+      verificationToken: hashedToken,
+      // check if the token has not expired
+      expiresAt: { $gt: Date.now() },
+    });
+  
     if (!userToken) {
-        res.status(400)
-        res.json({
-            message: 'Invalid or expired verification token'
-        })
+      return res
+        .status(400)
+        .json({ message: "Invalid or expired verification token" });
     }
-
-    // to find user with the user id in the token
-    const user = await User.findById(userToken.userID)
-
-    if (user.isVerifed) {
-        res.status(400)
-        return res.json({
-            message: 'User is already verified'
-        })
+  
+    //find user with the user id in the token
+    const user = await User.findById(userToken.userId);
+  
+    if (user.isVerified) {
+      // 400 Bad Request
+      return res.status(400).json({ message: "User is already verified" });
     }
-
-    // to update user to verified
-    user.isVerifed = true
-    await user.save()
-    res.status(200)
-    res.json({
-        message: 'User is verified'
-    })
-    
-}
+  
+    // update user to verified
+    user.isVerified = true;
+    await user.save();
+    res.status(200).json({ message: "User verified" });
+};
+  
 
 // forgot password
 export const forgotPassowrd = async (req, res) => {
@@ -439,31 +596,44 @@ export const resetPassword = async (req, res) => {
       return res.status(400).json({ message: "Password is required" });
     }
   
-    // hash the reset token
+    // Hash the reset token
     const hashedToken = hashToken(resetPasswordToken);
   
-    // check if token exists and has not expired
-    const userToken = await Token.findOne({
-      passwordResetToken: hashedToken,
-      // check if the token has not expired
-      expiresAt: { $gt: Date.now() },
-    });
+    try {
+      // Check if token exists and is valid
+      const userToken = await Token.findOne({
+        passwordResetToken: hashedToken,
+        expiresAt: { $gt: Date.now() },
+      });
   
-    if (!userToken) {
-      return res.status(400).json({ message: "Invalid or expired reset token" });
+      if (!userToken) {
+        return res.status(400).json({ message: "Invalid or expired token" });
+      }
+  
+      // Find the user by ID
+      const user = await User.findById(userToken.userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      // Hash the new password
+      const hashedPassword = hashPassword(password);
+  
+      // Update the user's password
+      user.password = hashedPassword;
+      await user.save();
+  
+      // Remove the token after successful password reset
+      await userToken.deleteOne();
+  
+      res.status(200).json({ message: "Password reset successfully" });
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
+  };
   
-    // find user with the user id in the token
-    const user = await User.findById(userToken.userId);
-  
-    // update user password
-    const hashedPassword = hashPassword(password)
-
-    user.password = hashedPassword;
-    await user.save();
-  
-    res.status(200).json({ message: "Password reset successfully" });
-};
 
   // change password
   export const changePassword = async (req, res) => {

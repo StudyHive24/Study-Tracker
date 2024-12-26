@@ -9,9 +9,11 @@ import { motion } from 'framer-motion'
 import { Task } from '@/utils/types'
 import TaskItem from '../components/TaskItem'
 import AddTask from '../components/AddTask'
+import useVerifyRiderect from '@/hooks/useUserVerifyRiderect'
 
 function page() {
 
+  useVerifyRiderect('/send-verification-code')
   useRiderect('/login')
 
   const { tasks, priority, setPriority,  completedTasks} = useTasksContext()

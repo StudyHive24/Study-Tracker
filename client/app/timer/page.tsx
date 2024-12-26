@@ -4,6 +4,7 @@ import { useState, useEffect, ReactElement, Key, ReactNode } from "react"; // Im
 import "./timer.css"; // Importing the CSS file for styling
 import useRiderect from "@/hooks/useUserRiderect";
 import { useTimerContext } from "@/context/timerContext"; // Import the context for handling timer data
+import useVerifyRiderect from "@/hooks/useUserVerifyRiderect";
 
 // Modal Component for reset confirmation
 function Modal({
@@ -33,6 +34,7 @@ function Modal({
 }
 
 export default function TimerPage() {
+  useVerifyRiderect('/send-verification-code')
   useRiderect("/login");
 
   const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)

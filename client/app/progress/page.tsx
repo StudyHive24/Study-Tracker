@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTasksContext } from '@/context/taskContext.js';
 import { useTimerContext } from "@/context/timerContext";
 import axios from "axios";
+import useVerifyRiderect from "@/hooks/useUserVerifyRiderect";
 
 // Reusable Sub-box Component
 interface TimeBoxProps {
@@ -26,7 +27,9 @@ interface ProgressPageProps {
 
 
 const ProgressPage: React.FC<ProgressPageProps> = (props) => {
+  useVerifyRiderect('/send-verification-code')
   useRiderect('/login');
+
 
   const { tasks } = useTasksContext();
   const [weeklyTaskGoal, setWeeklyTaskGoal] = useState(0);

@@ -13,8 +13,8 @@ import toast from "react-hot-toast";
 const ProfileSettings = () => {
   const ref = useRef(null);
 
-  const { closeModal } = useTasksContext();
-  const { user, updateUser, handlerUserInput, userState, changePassword, removeUserInput, setUserState } = useUserContext();
+  const { closeModal, } = useTasksContext();
+  const { user, updateUser, handlerUserInput, userState, changePassword, removeUserInput, setUserState, emailVerification, verifyUser } = useUserContext();
 
   useDetectOutside({
     ref,
@@ -68,7 +68,7 @@ const ProfileSettings = () => {
             <Github/> Github
             </button>
             </Link>
-            <button className="flex items-center gap-2 border-2 border-[#323232]/10 rounded-md py-1 px-3 text-xs font-medium text-gray-300">
+            <button onClick={emailVerification} className="flex items-center gap-2 border-2 border-[#323232]/10 rounded-md py-1 px-3 text-xs font-medium text-gray-300">
               <BadgeCheck/> Verified
             </button>
           </div>

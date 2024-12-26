@@ -244,6 +244,28 @@ export const UserContextProvider = ({children}) => {
         }
     }
 
+        // email verification
+        const emailVerification = async () => {
+            setLoading(true);
+            
+            try {
+              const res = await axios.post(
+                `${serverUrl}/api/v1/verify-email`,
+                {},
+                {
+                  withCredentials: true, // send cookies to the server
+                }
+              );
+        
+              toast.success("Email verification sent successfully");
+              setLoading(false);
+            } catch (error) {
+              console.log("Error sending email verification", error);
+              setLoading(false);
+              toast.error(error.response.data.message);
+            }
+          };
+
       // reset password
   const resetPassword = async (token, password) => {
 
@@ -311,6 +333,105 @@ export const UserContextProvider = ({children}) => {
       setLoading(false);
     }
   };
+
+
+
+  // verify user
+  const verifyUser = async (token) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/verify-user/${token}`,
+        {},
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("User verified successfully");
+
+      // refresh the user details
+      getUser();
+      console.log(getUser())
+
+      setLoading(false);
+      // redirect to home page
+      router.push("/");
+    } catch (error) {
+      console.log("Error verifying user", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
+// to send the user verification code
+const sendCode = async (email) => {
+    try {
+        const response = await axios.post(`${serverUrl}/api/v1/send-verification-code`, { email });
+        // console.log(response.data.message);
+        toast.success('Verification Code sent successfully!')
+        router.push('/verify-user')
+    } catch (error) {
+        console.error(error.message || "Something went wrong");
+        toast.error(error.message || "Something went wrong")
+    }
+};
+
+// to verify the user
+const verifyCode = async (email, verificationCode) => {
+  try {
+      const response = await axios.post(`${serverUrl}/api/v1/verify-code`, { email, verificationCode });
+      // console.log(response.data.message);\
+      toast.success('User is verified!')
+      router.push('/')
+  } catch (error) {
+      toast.error('Somethinfg went wrong')
+  }
+};
+
+
+// to request the password rest code
+const requestResetCode = async (email) => {
+  try {
+      const response = await axios.post(`${serverUrl}/api/v1/request-password-reset`, { email });
+      console.log(response.data.message);
+      toast.success('Password Reset Code sent successfully!')
+      router.push('/verify-password-reset')
+  } catch (error) {
+      console.error(error.response?.data?.message || "Something went wrong");
+  }
+};
+
+// to verify the reset code
+const verifyResetCode = async (email, resetCode) => {
+  try {
+      const response = await axios.post(`${serverUrl}/api/v1/verify-password-reset-code`, {
+          email,
+          resetCode,
+      });
+      console.log(response.data.message);
+      toast.success('Password Reset Request is verified!')
+      router.push('/reset-password')
+  } catch (error) {
+      console.error(error.message || "Something went wrong");
+  }
+};
+
+// to reset the password
+const passwordReset = async (email, newPassword) => {
+  try {
+      const response = await axios.post(`${serverUrl}/api/v1/reset-password`, {
+          email,
+          newPassword,
+      });
+      console.log(response.data.message);
+      toast.success('Password is changed successfully!')
+      router.push('/login')
+  } catch (error) {
+      console.error(error.response?.data?.message || "Something went wrong");
+      toast.success(error.message)
+  }
+};
     
 
 
@@ -364,7 +485,14 @@ export const UserContextProvider = ({children}) => {
                 updateUser,
                 deleteUser,
                 removeUserInput,
-                setUserState
+                setUserState,
+                verifyUser,
+                emailVerification,
+                requestResetCode,
+                verifyResetCode,
+                passwordReset,
+                sendCode,
+                verifyCode
             }}
         > {children} 
         </UserContext.Provider>

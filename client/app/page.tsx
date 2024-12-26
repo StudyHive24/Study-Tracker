@@ -6,12 +6,16 @@ import Dashboard from "./Components/dashboard/page";
 import useRiderect from "@/hooks/useUserRiderect";
 
 import { Roboto } from 'next/font/google';
+import useVerifyRiderect from "@/hooks/useUserVerifyRiderect";
 
 
 
 
 export default function Home() {
+  useVerifyRiderect('/send-verification-code')
   useRiderect('/login')
+
+
 
   return (
     <div>

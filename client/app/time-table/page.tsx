@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useTimetableContext } from "@/context/timetableContext"; // Import context
 import useRiderect from "@/hooks/useUserRiderect";
+import useVerifyRiderect from "@/hooks/useUserVerifyRiderect";
 
 // Define TimetableEntry type
 type TimetableEntry = {
@@ -24,7 +25,10 @@ type TimetableForm = {
 };
 
 export default function TimeTableApp() {
+  useVerifyRiderect('/send-verification-code')
   useRiderect("/login");
+
+
   const { timetables, createTimetable, updateTimetable, deleteTimetable, setLoading, loading } = useTimetableContext();
 
   const [form, setForm] = useState<TimetableForm>({

@@ -11,6 +11,11 @@ interface TwoSidebarProviderProps {
 
 function TwoSidebarProvider({ children }: TwoSidebarProviderProps) {
     const userID = useUserContext().user._id
+
+    
+    
+
+    const {user} = useUserContext()
   return (
     <div>
         {/* <main className={`${userID ? 'pr-[20rem]' : ''}`}>
