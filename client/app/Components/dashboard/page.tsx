@@ -11,9 +11,8 @@ import { useTimerContext } from "@/context/timerContext";
 // Utility function to generate chatbot messages
 const getStudyInstructorMessages = (upcomingTasks: any[]) => {
     const messages = [];
-
     if (!upcomingTasks.length) {
-        messages.push("No tasks found. Use this time to plan ahead or add new tasks!");
+        messages.push("No tasks found. Use this time to plan ahead or add new tasks!.. ");
         return messages;
     }
 
@@ -21,7 +20,7 @@ const getStudyInstructorMessages = (upcomingTasks: any[]) => {
 
     // Condition 1: Task due today
     if (upcomingTasks[0] && new Date(upcomingTasks[0].duedate).toDateString() === today.toDateString()) {
-        messages.push(`Your task "${upcomingTasks[0].title}" is due today! Make sure to complete it.`);
+        messages.push(`Your task "${upcomingTasks[0].title}" is due today! Make sure to complete it... `);
     }
 
     // Condition 2: More than 3 tasks due within 3 days
@@ -29,32 +28,34 @@ const getStudyInstructorMessages = (upcomingTasks: any[]) => {
         const dueDate = new Date(task.duedate);
         return dueDate > today && dueDate <= new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000);
     });
+    
     if (tasksDueInThreeDays.length > 3) {
-        messages.push(`You have ${tasksDueInThreeDays.length} tasks due within the next 3 days. Prioritize your work!`);
+        messages.push(`You have ${tasksDueInThreeDays.length} tasks due within the next 3 days. Prioritize your work!.. `);
     }
 
     // Condition 3: Reminder to use Timer
-    messages.push("Don't forget to use the Timer to stay focused while studying!");
+    messages.push("Don't forget to use the Timer to stay focused while studying!.. ");
 
     // Condition 4: High-priority task due within 3 days
-    const highPriorityTasks = tasksDueInThreeDays.filter((task: { priority: string; }) => task.priority === "high");
+    const highPriorityTasks = tasksDueInThreeDays.filter((task: { priority: string; }) => task.priority === "High");
     if (highPriorityTasks.length > 0) {
-        messages.push(`Your high-priority task "${highPriorityTasks[0].title}" is due within 3 days! Focus on it first.`);
+        messages.push(`Your high-priority task "${highPriorityTasks[0].title}" is due within 3 days! Focus on it first... `);
     }
 
     return messages;
 };
 
 const Dashboard = () => {
-
+    //get db 
     const { user, getUser } = useUserContext();
     const { tasks, getTasks } = useTasksContext();
     const { timers } = useTimerContext();
     const [date, setDate] = useState(new Date());
     const [chatbotMessages, setChatbotMessages] = useState(["Welcome to your dashboard!"]);
     
-    const [messageIndex, setMessageIndex] = useState(0);
+    // const [messageIndex, setMessageIndex] = useState(0);
 
+    //progress bar
     const totalTasks = tasks.length
     const completedTasks = tasks.filter((task: { completed: boolean; }) => task.completed === true).length;
     const taskCompletionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
@@ -63,6 +64,7 @@ const Dashboard = () => {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
     
+    //upcomming tasks
     const today = normalizeDate(new Date());
     
     const upcomingTasks = tasks
@@ -70,23 +72,38 @@ const Dashboard = () => {
             const taskDueDate = normalizeDate(new Date(task.duedate));
             return !task.completed && taskDueDate >= today; // Compare only the dates
         })
-        .sort((a: { duedate: string | number | Date; }, b: { duedate: string | number | Date; }) => 
-            new Date(a.duedate).getTime() - new Date(b.duedate).getTime()
+        .sort((a: { endTime: string | number | Date; }, b: { endTime: string | number | Date; }) => 
+            new Date(a.endTime).getTime() - new Date(b.endTime).getTime()
         );
-    
     const firstUpcomingTask1 = upcomingTasks[0];
     const firstUpcomingTask2 = upcomingTasks[1];
     const firstUpcomingTask3 = upcomingTasks[2];
 
+    //chat bot
     const chatbotMessage = getStudyInstructorMessages(upcomingTasks);
-
+    
+    //timer 
     const timerHistory = timers.slice(-3);
 
+
+    //notification
     const [isNotificationOpen, setIsNotificationOpen] = useState(false); // State for the notification menu
 
     const toggleNotificationMenu = () => {
         setIsNotificationOpen((prev) => !prev); // Toggle the state
     };
+
+    const todayTasks = tasks.filter((task: any) => new Date(task.endTime).toDateString() === today.toDateString());
+    const nextTask = tasks
+    .filter((task: any) => !task.completed && new Date(task.endTime) > today)
+    .sort((a: any, b: any) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime())[0];
+
+    const completedTodayTasks = tasks.filter((task: any) => task.completed && new Date(task.endTime).toDateString() === today.toDateString());
+    const totalTodayTasks = todayTasks.length;
+    const completedPercentage = totalTodayTasks > 0 ? Math.floor((completedTodayTasks.length / totalTodayTasks) * 100) : 0;
+    const remainingTasks = totalTodayTasks - completedTodayTasks.length;
+    const timerUsedToday = timerHistory.some((entry: any) => new Date(entry.date).toDateString() === today.toDateString());
+
 
     return (
         <div className="dashboard-container">
@@ -98,38 +115,13 @@ const Dashboard = () => {
 
                 {isNotificationOpen && <div className="background-blur" onClick={toggleNotificationMenu}></div>}
 
-                {/* Notification Menu */}
-                {/* {isNotificationOpen && (
-                    <div className="notification-menu">
-                        <h3>Notifications</h3>
-                        {tasks.length ? (
-                            <ul>
-                                {tasks.slice(0, 5).map((task: any, index: any) => (
-                                    <li key={index}>
-                                        <strong>{task.title}</strong> - Due: {new Date(task.duedate).toLocaleDateString()}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>No notifications</p>
-                        )}
-                    </div>
-                )} */}
+            
                 {/* Notification Menu */}
                 {isNotificationOpen && (
                     <div className="notification-menu">
                         <h3>Reminders🔔</h3>
                         <ul>
                             {(() => {
-                                const today = new Date();
-                                const todayTasks = tasks.filter((task: any) => new Date(task.duedate).toDateString() === today.toDateString());
-                                const nextTask = tasks.find((task: any) => new Date(task.duedate) > today);
-                                const completedTodayTasks = tasks.filter((task: any) => task.completed && new Date(task.duedate).toDateString() === today.toDateString());
-                                const totalTodayTasks = todayTasks.length;
-                                const completedPercentage = totalTodayTasks > 0 ? Math.floor((completedTodayTasks.length / totalTodayTasks) * 100) : 0;
-                                const remainingTasks = totalTodayTasks - completedTodayTasks.length;
-                                const timerUsedToday = timerHistory.some((entry: any) => new Date(entry.date).toDateString() === today.toDateString());
-
                                 const notifications = [];
 
                                 // 1. Tasks today
@@ -139,20 +131,29 @@ const Dashboard = () => {
 
                                 // 2. Next task reminder
                                 if (nextTask) {
-                                    const nextTaskDate = new Date(nextTask.duedate);
+                                    const nextTaskDate = new Date(nextTask.endTime);
+                                    const nextTaskTime = new Date(nextTask.endTime);
+                                    const formattedTime = nextTaskDate.toLocaleTimeString("en-US", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        timeZone: "Asia/Colombo", // Specify your local timezone
+                                      });
+                                      
                                     const daysDifference = Math.ceil(
-                                        (nextTaskDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+                                        (nextTaskDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24) -1
                                     );
                                     let dateMessage;
-                                    if (daysDifference === 0) dateMessage = 'today';
-                                    else if (daysDifference === 1) dateMessage = 'tomorrow';
+                                    if (daysDifference === 1) dateMessage = 'today';
+                                    else if (daysDifference === 2) dateMessage = 'tomorrow';
                                     else dateMessage = `in ${daysDifference} days`;
                                     notifications.push(
-                                        `Next task: "${nextTask.title}" is due ${dateMessage} at ${nextTaskDate.toLocaleTimeString([], {
+                                        `Next task: "${nextTask.title}" is due ${dateMessage} at ${nextTaskTime .toLocaleTimeString([], {
                                             hour: '2-digit',
-                                            minute: '2-digit'
+                                            minute: '2-digit',
+                                            
                                         })}.`
                                     );
+    
                                 }
 
                                 // 3. Completion percentage
