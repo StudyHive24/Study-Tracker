@@ -11,8 +11,6 @@ const useRiderect = (redirect: string) => {
     useEffect(() => {
         if (!user || !user.email) {
             router.push(redirect)
-        } else if (user.isVerified == 'no') {
-            router.push('/send-verification-code')
         } 
     }, [user, redirect, router])
 }
