@@ -385,7 +385,7 @@ const verifyCode = async (email, verificationCode) => {
       toast.success('User is verified!')
       router.push('/')
   } catch (error) {
-      toast.error('Somethinfg went wrong')
+      toast.error('Something went wrong')
   }
 };
 

@@ -27,7 +27,6 @@ interface ProgressPageProps {
 
 
 const ProgressPage: React.FC<ProgressPageProps> = (props) => {
-  useVerifyRiderect('/send-verification-code')
   useRiderect('/login');
 
 

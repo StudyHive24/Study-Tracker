@@ -12,7 +12,6 @@ import AddTask from '../components/AddTask'
 import useVerifyRiderect from '@/hooks/useUserVerifyRiderect'
 
 function page() {
-  useVerifyRiderect('/send-verification-code')
   useRiderect('/login')
 
 

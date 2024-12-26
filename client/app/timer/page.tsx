@@ -34,7 +34,6 @@ function Modal({
 }
 
 export default function TimerPage() {
-  useVerifyRiderect('/send-verification-code')
   useRiderect("/login");
 
   const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)

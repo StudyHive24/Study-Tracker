@@ -7,12 +7,13 @@ import useRiderect from "@/hooks/useUserRiderect";
 
 import { Roboto } from 'next/font/google';
 import useVerifyRiderect from "@/hooks/useUserVerifyRiderect";
-
+import { useUserContext } from "@/context/userContext";
 
 
 
 export default function Home() {
-  useVerifyRiderect('/send-verification-code')
+
+  
   useRiderect('/login')
 
 

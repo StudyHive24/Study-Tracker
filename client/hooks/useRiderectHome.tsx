@@ -4,17 +4,15 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
 
-const useRiderect = (redirect: string) => {
+const useHomeRiderect = (redirect: string) => {
     const {user, loading} = useUserContext()
     const router = useRouter()
 
     useEffect(() => {
-        if (!user || !user.email) {
+        if (user.isVerified == 'yes') {
             router.push(redirect)
-        } else if (user.isVerified == 'no') {
-            router.push('/send-verification-code')
         } 
     }, [user, redirect, router])
 }
 
-export default useRiderect
+export default useHomeRiderect

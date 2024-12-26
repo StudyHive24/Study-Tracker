@@ -292,7 +292,7 @@ export const emailVerificationCode = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        if (user.isVerified) {
+        if (user.isVerified == "yes") {
             return res.status(400).json({ message: "User is already verified" });
         }
 
@@ -335,7 +335,7 @@ export const verifyCode = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        if (user.isVerified) {
+        if (user.isVerified == 'yes') {
             return res.status(400).json({ message: "User is already verified" });
         }
 
@@ -348,7 +348,7 @@ export const verifyCode = async (req, res) => {
         }
 
         // Mark the user as verified
-        user.isVerified = true;
+        user.isVerified = 'yes';
         user.verificationCode = null; // Clear the code
         user.verificationCodeExpires = null; // Clear the expiration
         await user.save();

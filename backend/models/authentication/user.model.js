@@ -26,8 +26,8 @@ const UserSchema = mongoose.Schema(
             default: 'I am a new user'
         },
         isVerified: {
-            type: Boolean,
-            default: false
+            type: String,
+            default: 'no'
         },
         verificationCode: {
             type: String,

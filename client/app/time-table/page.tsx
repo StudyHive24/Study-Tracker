@@ -25,7 +25,6 @@ type TimetableForm = {
 };
 
 export default function TimeTableApp() {
-  useVerifyRiderect('/send-verification-code')
   useRiderect("/login");
 
 

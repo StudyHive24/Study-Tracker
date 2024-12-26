@@ -13,7 +13,6 @@ import useVerifyRiderect from '@/hooks/useUserVerifyRiderect'
 
 function page() {
 
-  useVerifyRiderect('/send-verification-code')
   useRiderect('/login')
 
   const { tasks, priority, setPriority,  completedTasks} = useTasksContext()
