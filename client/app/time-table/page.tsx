@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, ReactElement } from "react";
+import { useTimetableContext } from '@/context/timetableContext'; // Import the context
 import useRiderect from "@/hooks/useUserRiderect";
 
 interface TimetableEntry {
@@ -14,23 +15,7 @@ interface TimetableEntry {
 }
 
 export default function TimetablePage(): ReactElement {
-  useRiderect("/login");
-  const { timetables, createTimetable, updateTimetable, deleteTimetable, setLoading, loading } = useTimetableContext();
-
-  const [form, setForm] = useState<TimetableForm>({
-    date: "",
-    startTime: "",
-    endTime: "",
-    title: "",
-    subject: "",
-    subjectColor: "#F0A1C2", // Default color
-  });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedEntry, setSelectedEntry] = useState<TimetableEntry | null>(null); // Updated type
-  const [newSubject, setNewSubject] = useState("");
-  const [subjects, setSubjects] = useState(["Math", "Science", "History"]);
-
+   useRiderect("/login");
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
   const { timetable, createTimetableEntry, updateTimetableEntry, deleteTimetableEntry, loading } = useTimetableContext(); // Use context
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -108,14 +93,6 @@ export default function TimetablePage(): ReactElement {
       setSubjects((prevSubjects) => [...prevSubjects, newSubject]);
       setNewSubject("");
     }
-  };
-
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: value, // Dynamically update form fields based on input name
-    }));
   };
 
   return (
@@ -315,89 +292,25 @@ export default function TimetablePage(): ReactElement {
         </table>
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-semibold mb-4">{isEditMode ? "Edit Time Table Entry" : "Add Time Table Entry"}</h2>
-            <div className="space-y-4">
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Date:</label>
-                <input
-                  type="date"
-                  name="date"
-                  className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form.date || ""}
-                  onChange={handleFormChange}
-                />
-              </div>
-              <div className="flex space-x-4">
-                <div className="flex flex-col w-1/2">
-                  <label className="text-sm mb-2">Start Time:</label>
-                  <input
-                    type="time"
-                    name="startTime"
-                    className="w-full border border-gray-300 px-4 py-2 rounded"
-                    value={form.startTime || ""}
-                    onChange={handleFormChange}
-                  />
-                </div>
-                <div className="flex flex-col w-1/2">
-                  <label className="text-sm mb-2">End Time:</label>
-                  <input
-                    type="time"
-                    name="endTime"
-                    className="w-full border border-gray-300 px-4 py-2 rounded"
-                    value={form.endTime || ""}
-                    onChange={handleFormChange}
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Title:</label>
-                <input
-                  type="text"
-                  name="title"
-                  className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form.title || ""}
-                  onChange={handleFormChange}
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Subject:</label>
-                <select
-                  name="subject"
-                  className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form.subject || ""}
-                  onChange={handleFormChange}
-                >
-                  <option value="">Select a subject</option>
-                  {subjects.map((subject, index) => (
-                    <option key={index} value={subject}>
-                      {subject}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="flex flex-col">
-                <label className="text-sm mb-2">Color:</label>
-                <input
-                  type="color"
-                  name="subjectColor"
-                  className="w-full border border-gray-300 px-4 py-2 rounded"
-                  value={form.subjectColor || "#F0A1C2"}
-                  onChange={handleFormChange}
-                />
-              </div>
-            </div>
-            <div className="flex justify-between mt-4">
-              {isEditMode && (
-                <button
-                  className="bg-red-500 text-white px-4 py-2 rounded"
-                  onClick={handleDeleteEntry}
-                >
-                  Delete
-                </button>
-              )}
+      {/* Confirmation Modal */}
+      {isModalVisible && modalEntry && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-gray-900 p-6 rounded-lg">
+            <h3 className="text-white text-lg mb-4">Entry Details</h3>
+            <p className="text-gray-400 mb-4">
+              <strong>{modalEntry.title}</strong>
+              <br />
+              {modalEntry.subject} on {modalEntry.date}
+              <br />
+              {modalEntry.startTime} - {modalEntry.endTime}
+            </p>
+            <div className="flex justify-between">
+              <button
+                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                onClick={() => handleEditTimetable(modalEntry)} // Edit button
+              >
+                Edit Entry
+              </button>
               <button
                 className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
                 onClick={() => handleDeleteTimetable(modalEntry.id)} // Delete button
@@ -407,9 +320,7 @@ export default function TimetablePage(): ReactElement {
             </div>
           </div>
         </div>
-        </form>
       )}
     </div>
-    
   );
 }
