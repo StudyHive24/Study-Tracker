@@ -130,6 +130,8 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
     // Include other fields as necessary...
   };
   
+
+  
   const sortedTasks = tasks
     .slice()  // Clone the array to avoid mutating the original
     .filter((task: Task) => !task.completed)
@@ -156,7 +158,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
       return endTimeA.getTime() - endTimeB.getTime();
     });
   
-
+    const totalTasks2 = sortedTasks.length;
 
 
   return (
@@ -185,7 +187,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
           {/* Tasks Progress */}
           <div className="bg-white bg-opacity-20 p-2 rounded-lg shadow-md mb-4 w-full">
             <h1 className="text-xl font-extrabold text-center text-white ">
-              Tasks:<br /> <span className="text-green-300">{weeklyTaskGoal}</span>
+              Tasks:<br /> <span className="text-green-300">{totalTasks2}</span>
             </h1>
           </div>
 
