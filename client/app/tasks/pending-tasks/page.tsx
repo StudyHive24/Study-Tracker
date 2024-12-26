@@ -12,6 +12,7 @@ import AddTask from '../components/AddTask'
 
 function page() {
 
+
   useRiderect('/login')
 
   const { tasks, priority, setPriority,  pendingTasks} = useTasksContext()
@@ -26,7 +27,7 @@ function page() {
 
   return (
     <div>
-      <TaskHeader totalTasks={totalTasks} Status={'Active'} firstPhrase={'You have'}/>
+      <TaskHeader totalTasks={totalTasks} Status={'Acitve tasks'} firstPhrase={'There are '}/>
       <TasksSubHeader title={"All Tasks"}/>
       <motion.div className='mt-3 grid grid-cols-3 gap-2'>
             {filtered.map((task: Task, i: number) => (

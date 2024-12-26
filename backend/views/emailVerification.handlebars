@@ -1,0 +1,38 @@
+<html lang="en">
+    <head>
+        <title>Verify Your Email</title>
+        <style>
+                  *{text-decoration: none;} .container{ margin: 0 auto; max-width: 500px;
+      width: 100%; } .btn-link{ display: inline-block; padding: 10px 20px;
+      background-color: #007bff; color: #fff !important; text-decoration: none;
+      border-radius: 5px; } img{ width: 30px; border-radius: 50%;}
+      .verifyCode {
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+      }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <img src="" alt="" />
+            <h2 class="color-primary">{{subject}}</h2>
+            <hr />
+            <p>Hello {{name}},</p>
+            <p>
+                Please use the verification below to verify your account. <br/> This verification code is valid for 15 mins
+            </p>
+
+            <span class="verifyCode">{{code}}</span>
+
+            <p style="margin-bottom: 50px;">
+                If you did not create an account on StudyHive, you can ignore this email.
+            </p>
+
+            <hr />
+            <p>Regards,</p>
+            <p><b>StudyHive</b> Team</p>
+
+        </div>
+    </body>
+</html>

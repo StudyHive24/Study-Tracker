@@ -2,10 +2,14 @@
 import useRiderect from "@/hooks/useUserRiderect";
 import ProfileSettings from "../Components/Profile/ProfileSettings";
 
+
 // app/settings/page.tsx
 export default function Settings() {
 
     useRiderect('/login')
+
+
+
 
     return (
         <div className="flex">

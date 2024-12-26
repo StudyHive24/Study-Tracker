@@ -5,6 +5,7 @@ import "./timer.css"; // Importing the CSS file for styling
 import useRiderect from "@/hooks/useUserRiderect";
 import { useTimerContext } from "@/context/timerContext"; // Import the context for handling timer data
 
+
 // Modal Component for reset confirmation
 function Modal({
   onConfirm,
@@ -47,6 +48,8 @@ export default function TimerPage() {
   const [showSaveConfirm, setShowSaveConfirm] = useState(false); // Save confirmation
 
   const { createTimer, timers } = useTimerContext();
+
+  const timerUpAudio = new Audio ("./TimerUp.mp3"); 
 
   // Timer options
   const timeOptions = [
@@ -135,6 +138,9 @@ export default function TimerPage() {
           if (prevTime === 1) {
             clearInterval(timer!);
             setIsRunning(false);
+
+             //play the timer up sound
+             timerUpAudio.play();
 
             // Switch between study and break
             const nextPhase = isStudyPhase ? "Break" : "Focus";

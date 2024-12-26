@@ -10,6 +10,7 @@ import { Task } from '@/utils/types'
 import TaskItem from '../components/TaskItem'
 import AddTask from '../components/AddTask'
 
+
 function page() {
 
   useRiderect('/login')
@@ -24,9 +25,9 @@ function page() {
     setPriority('All')
   }, [])
 
-  let totalTasks = completedTasks.length 
+  let totalTasks = overdue.length
 
-  
+  console.log('overdue: ', overdue.length)
 
   return (
     <div>
@@ -37,10 +38,6 @@ function page() {
             {filtered.map((task: Task, i: number) => (
               <TaskItem key={i} task={task} />
             ))}
-        <motion.button className='
-          hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out
-        '>
-        </motion.button>
         </motion.div>
       </div>
   )

@@ -10,9 +10,10 @@ import { Task } from '@/utils/types'
 import TaskItem from '../components/TaskItem'
 import AddTask from '../components/AddTask'
 
-function page() {
 
+function page() {
   useRiderect('/login')
+
 
   const { tasks, priority, setPriority,  completedTasks} = useTasksContext()
 

@@ -7,7 +7,7 @@ import { useUserContext } from '@/context/userContext'
 import AddTask from './AddTask'
 
 interface TaskHeaderProps {
-  totalTasks: string,
+  totalTasks: number,
   Status: string,
   firstPhrase: string
 }

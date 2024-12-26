@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { type } from 'os'
 
 const UserSchema = mongoose.Schema(
     {
@@ -25,8 +26,16 @@ const UserSchema = mongoose.Schema(
             default: 'I am a new user'
         },
         isVerified: {
-            type: Boolean,
-            default: false
+            type: String,
+            default: 'no'
+        },
+        verificationCode: {
+            type: String,
+            default: null
+        },
+        verificationCodeExpires: {
+            type: Date,
+            default: null
         }
     },
     {

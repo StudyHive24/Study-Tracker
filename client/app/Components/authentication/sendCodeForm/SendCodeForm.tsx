@@ -2,23 +2,25 @@
 import { useUserContext } from '@/context/userContext'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 
-function ForgotPasswordForm() {
-
-    const { requestResetCode } = useUserContext()
+function SendCodeForm() {
+    const { sendCode} = useUserContext()
     
     const [email, setEmail] = useState('')
+    
 
     const emailChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
     }
 
+
+
     const submitHandle = (e: any) => {
         e.preventDefault()
-        requestResetCode(email)
 
-        // clear the input email
-        setEmail('')
+        sendCode(email)
+
     }
 
 
@@ -27,10 +29,10 @@ function ForgotPasswordForm() {
       <form className="">
         <div className="flex flex-col gap-4 bg-white p-12 rounded-lg h-[65vh] mt-3">
           <div className="flex justify-center">
-            <span className="text-xl">Enter email to reset your password</span>
+            <span className="text-xl">Verify your StudyHive Account</span>
           </div>
           <span className="text-sm text-gray-400 text-center mb-5">
-            Login now, Don't have an account? 
+            Don't have an account? 
             <Link href={"/register"} className="text-green-500">
               {"  "}
               Register Here
@@ -49,6 +51,8 @@ function ForgotPasswordForm() {
               ></input>
               <hr />
             </div>
+
+
             
             <button
               disabled={ !email }
@@ -56,7 +60,7 @@ function ForgotPasswordForm() {
               onClick={submitHandle}
               className="bg-blue-300 p-2 rounded-lg mt-3 hover:bg-blue-400 cursor-pointer"
             >
-              Reset Password
+              Send Email
             </button>
           </div>
         </div>
@@ -65,4 +69,4 @@ function ForgotPasswordForm() {
   )
 }
 
-export default ForgotPasswordForm
+export default SendCodeForm

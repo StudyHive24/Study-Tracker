@@ -3,22 +3,27 @@ import { useUserContext } from '@/context/userContext'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-function ForgotPasswordForm() {
-
-    const { requestResetCode } = useUserContext()
+function PasswordVerifyCodeForm() {
+    const { verifyResetCode } = useUserContext()
     
     const [email, setEmail] = useState('')
+    const [resetCode, setResetCode] = useState('')
 
     const emailChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
     }
 
+    const verificationCodeChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setResetCode(e.target.value)
+    }
+
     const submitHandle = (e: any) => {
         e.preventDefault()
-        requestResetCode(email)
+        verifyResetCode(email, resetCode)
 
         // clear the input email
         setEmail('')
+        setResetCode('')
     }
 
 
@@ -27,10 +32,10 @@ function ForgotPasswordForm() {
       <form className="">
         <div className="flex flex-col gap-4 bg-white p-12 rounded-lg h-[65vh] mt-3">
           <div className="flex justify-center">
-            <span className="text-xl">Enter email to reset your password</span>
+            <span className="text-xl">Enter email and verification code to reset your password</span>
           </div>
           <span className="text-sm text-gray-400 text-center mb-5">
-            Login now, Don't have an account? 
+            Don't have an account? 
             <Link href={"/register"} className="text-green-500">
               {"  "}
               Register Here
@@ -46,6 +51,18 @@ function ForgotPasswordForm() {
                 placeholder="Enter email"
                 value={email}
                 onChange={emailChangeHandle}
+              ></input>
+              <hr />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label>Verification Code</label>
+              <hr />
+              <input
+                type="password"
+                className="p-1 w-[30vw] outline-none focus:border-2 border-blue-300 rounded-md"
+                placeholder="Enter verification code"
+                value={resetCode}
+                onChange={verificationCodeChangeHandle}
               ></input>
               <hr />
             </div>
@@ -65,4 +82,4 @@ function ForgotPasswordForm() {
   )
 }
 
-export default ForgotPasswordForm
+export default PasswordVerifyCodeForm

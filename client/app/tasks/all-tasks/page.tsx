@@ -14,8 +14,8 @@ import { container, item } from "@/utils/animations";
 
 
 function page() {
-
   useRiderect('/login')
+
 
   const { tasks, priority, setPriority, pendingTasks } = useTasksContext()
 

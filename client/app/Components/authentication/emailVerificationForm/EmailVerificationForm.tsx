@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 
 function ForgotPasswordForm() {
 
-    const { requestResetCode } = useUserContext()
+    const { emailVerification } = useUserContext()
     
     const [email, setEmail] = useState('')
 
@@ -15,10 +15,9 @@ function ForgotPasswordForm() {
 
     const submitHandle = (e: any) => {
         e.preventDefault()
-        requestResetCode(email)
+        emailVerification()
 
-        // clear the input email
-        setEmail('')
+        // clear the input emai
     }
 
 

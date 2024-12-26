@@ -11,7 +11,7 @@ const useRiderect = (redirect: string) => {
     useEffect(() => {
         if (!user || !user.email) {
             router.push(redirect)
-        }
+        } 
     }, [user, redirect, router])
 }
 
