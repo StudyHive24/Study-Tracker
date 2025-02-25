@@ -105,6 +105,11 @@ export default function TimetablePage(): ReactElement {
       return;
     }
 
+    if (entry.startTime > entry.endTime) {
+      setError("Start time cannot be later than end time.");
+      return;
+    }
+
     if (editingEntry) {
       // Update existing entry
       setEntries(
@@ -209,14 +214,14 @@ export default function TimetablePage(): ReactElement {
       {/* Modal for adding/editing an entry */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg w-96">
-            <h2 className="text-xl font-bold mb-4">
+          <div className="bg-gray-500 p-6 rounded shadow-lg w-96">
+            <h2 className="text-xl font-bold text-white mb-3">
               {editingEntry ? "Edit Timetable Entry" : "Add Timetable Entry"}
             </h2>
 
-            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+            {error && <p className="text-red-300 text-md mb-2 ">{error}</p>}
 
-            <input type="text" name="title" placeholder="Title" value={entry.title} onChange={handleChange} className="w-full border p-2 rounded mb-2" />
+            <input type="text" name="title" placeholder="Title" value={entry.title} onChange={handleChange} className="w-full border p-2 rounded mb-2 " />
 
             <select name="day" value={entry.day} onChange={handleChange} className="w-full border p-2 rounded mb-2">
               {days.map((day) => <option key={day} value={day}>{day}</option>)}
@@ -234,7 +239,7 @@ export default function TimetablePage(): ReactElement {
 
             {/* Submit and cancel buttons */}
             <div className="flex justify-end">
-              <button onClick={() => setIsModalOpen(false)} className="bg-gray-400 text-white px-4 py-2 rounded mr-2">Cancel</button>
+              <button onClick={() => setIsModalOpen(false)} className="bg-gray-400 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Cancel</button>
               <button onClick={saveEntry} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{editingEntry ? "Update" : "Add"}</button>
             </div>
           </div>
