@@ -6,6 +6,7 @@ import useRiderect from "@/hooks/useUserRiderect";
 
 interface TimetableEntry {
   id: number;
+  day: string;
   startTime: string;
   endTime: string;
   title: string;
