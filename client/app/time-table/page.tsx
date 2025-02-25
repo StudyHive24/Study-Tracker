@@ -134,23 +134,42 @@ export default function TimetablePage(): ReactElement {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4 text-center text-white">Study Timetable</h1>
+    <div className="p-3">
 
+
+      <div className="flex justify-between items-center bg-gray-800 p-3 rounded-lg shadow-lg">
+        <div className="text-left">
+          <h1 className="text-2xl font-bold text-white">Study Timetable</h1>
+        </div>
+        <div className="text-right">
+          <button
+            onClick={() => {
+              setEditingEntry(null);
+              setEntry(defaultEntry);
+              setIsModalOpen(true);
+            }}
+            className="bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition-all">
+            Add Entry
+          </button>
+        </div>
+      </div>
+
+      
+      
       <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300">
+        <table className="table-fixed w-full border border-gray-600  ">
           <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-300 p-2 text-center">Time</th>
+            <tr className="bg-gray-700 text-white ">
+              <th className="border border-gray-500 p-0 text-center">Time</th>
               {days.map((day) => (
-                <th key={day} className="border border-gray-300 p-2 text-center">{day}</th>
+                <th key={day} className="border border-gray-500 p-2 text-center">{day}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {timeSlots.map((slot, index) => (
-              <tr key={index} className="border border-gray-300">
-                <td className="border border-gray-300 p-2 text-white">{slot}</td>
+              <tr key={index} className="border border-gray-500">
+                <td className="border border-gray-500 p-2 text-center bg-gray-700 text-white">{slot}</td>
                 {days.map((day) => {
                   const matchingEntry = entries.find((e) => {
                     const startIndex = timeSlots.indexOf(e.startTime);
@@ -159,18 +178,18 @@ export default function TimetablePage(): ReactElement {
                   });
 
                   return (
-                    <td key={day} className="border border-gray-300 p-2 h-12 relative">
+                    <td key={day} className="border border-gray-600 p-0 h-0 relative bg-gray-800 text-center">
                       {matchingEntry && (
                         <div
-                          className="p-2 text-white text-center rounded relative"
+                          className="p-1 text-white text-center  h-full flex flex-col justify-between"
                           style={{ backgroundColor: matchingEntry.color, height: "100%" }}
                         >
                           {matchingEntry.startTime === slot && (
                             <>
-                              <p>{matchingEntry.title}</p>
-                              <div className="flex gap-1">
-                                <button onClick={() => editEntry(matchingEntry)} className="text-white p-1 rounded text-xs bg-gray-800">✏️</button>
-                                <button onClick={() => deleteEntry(matchingEntry.id)} className="text-white p-1 rounded text-xs bg-gray-800">❌</button>
+                              <p className="font-semibold">{matchingEntry.title}</p>
+                              <div className=" flex justify-center flex gap-1 mt-2">
+                                <button onClick={() => editEntry(matchingEntry)} className="text-white  w-2/3 p-1 rounded text-xs bg-gray-100/50 hover:bg-gray-600 transition">✏️</button>
+                                <button onClick={() => deleteEntry(matchingEntry.id)} className="text-white w-2/3 p-1 rounded text-xs bg-gray-100/50  hover:bg-gray-600 transition">❌</button>
                               </div>
                             </>
                           )}
@@ -185,17 +204,7 @@ export default function TimetablePage(): ReactElement {
         </table>
       </div>
 
-      {/* Add Entry Button */}
-      <button
-        onClick={() => {
-          setEditingEntry(null);
-          setEntry(defaultEntry);
-          setIsModalOpen(true);
-        }}
-        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-      >
-        Add Entry
-      </button>
+
 
       {/* Modal for adding/editing an entry */}
       {isModalOpen && (
