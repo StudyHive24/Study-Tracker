@@ -73,7 +73,7 @@ function AddTask() {
           </span>
     </div>
         </DialogTrigger>
-        <DialogContent className="w-[525px] h-[90vh] p-7 bg-gray-800 border-none">
+        <DialogContent className="w-[525px] h-[98vh] p-7 bg-gray-800 border-none">
         <DialogHeader className="mt-5 gap-2">
           <DialogTitle className="text-gray-100">
             Create Task
@@ -150,13 +150,13 @@ function AddTask() {
                 </select>
               </div>
             </div>
-            <div className="text-gray-400 mt-1 text-[14px]">
+            {/* <div className="text-gray-400 mt-1 text-[14px]">
               This task will due on the{" "}
               <span className="text-green-700 border-b-2 border-gray-200">
                 {task.duedate || "a specified date"}
               </span>{" "}
               at <span className="text-green-700 border-b-2 border-gray-200">{task.endTime || "a specific time"}</span>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-2 mt-1">
               <Label htmlFor="completed" className="text-gray-200">Task Completed</Label>
               <select

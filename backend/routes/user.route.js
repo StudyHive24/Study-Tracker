@@ -1,7 +1,8 @@
 import express from 'express'
 const router = express.Router()
-import { registerUser, loginUser, getUsers, getUser, logoutUser, updateUser, userLoginStatus, emailVerify, verifyUser, forgotPassowrd, changePassword, resetPassword, emailVerificationCode, verifyCode, requestPasswordReset, verifyPasswordResetCode, passwordReset } from '../controllers/user.controller.js'
+import { registerUser, loginUser, getUsers, getUser, logoutUser, updateUser, userLoginStatus, emailVerify, verifyUser, forgotPassowrd, changePassword, resetPassword, emailVerificationCode, verifyCode, requestPasswordReset, verifyPasswordResetCode, passwordReset, uploadProfileImage } from '../controllers/user.controller.js'
 import { protect } from '../middleware/authentcationMiddleware.js'
+import upload from '../middleware/multer.js'
 
 // to get all users
 router.get('/', getUsers)
@@ -59,5 +60,10 @@ router.post('/reset-password/:resetPasswordToken', resetPassword)
 
 // change password
 router.patch('/change-password', protect, changePassword)
+
+// add profile image
+router.post('/upload-profile', protect, upload.single('image'), uploadProfileImage)
+
+
 
 export default router

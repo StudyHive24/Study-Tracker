@@ -110,6 +110,7 @@ export const topUsersByTimeSpent = async (req, res) => {
                 $project: {
                     _id: 0,
                     name: '$userDetails.name', // Get the user's name
+                    image: '$userDetails.image',
                     totalTimeSpent: 1
                 }
             },

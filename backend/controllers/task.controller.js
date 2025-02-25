@@ -257,6 +257,7 @@ export const topUsers = async (req, res) => {
                 $project: {
                     _id: 1,
                     name: '$userDetails.name',  // Get the user's name
+                    image: '$userDetails.image',  // Get the user's image
                     totalTasks: 1,
                     completedTasks: 1,
                     pendingTasks: 1,

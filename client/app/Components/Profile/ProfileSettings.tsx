@@ -13,6 +13,8 @@ import { cp } from "fs";
 import { color } from "framer-motion";
 import {useRouter} from "next/navigation";
 import Router from "next/router";
+import blankImage from '@/public/blank_profile.webp'
+import { ImageModal } from "@/app/settings/components/imageModal/ImageModal";
 
 
 
@@ -71,26 +73,12 @@ const ProfileSettings = () => {
   return (
     <div className="">
       <div
-        className="py-5 px-6 max-w-[] w-full flex flex-col gap-3 bg-gray-900 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md"
+        className="mt-6 py-5 px-6 max-w-[] w-full flex flex-col gap-3 bg-gray-900 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md"
       >
         <div className="absolute left-0 top-0 w-full h-[80px] bg-[#323232]/10 rounded-tr-md rounded-tl-md "></div>
 
         <div className="mt-4 relative flex justify-between bg-gray-700 rounded-xl p-2 ">
-          <div className="relative inline-block p-2">
-            <Image
-              src={image}
-              alt="profile"
-              width={80}
-              height={80}
-              className="rounded-full"
-            />
-            <div className="absolute bottom-0 right-1 shadow-sm">
-              <span className="text-lg text-gray-400">{badge}</span>
-              <span className="absolute z-20 left-[50%] top-[50%] translate-x-[-100%] translate-y-[-110%] text-xs text-white">
-                <BadgeCheck color="lightBlue"/>
-              </span>
-            </div>
-          </div>
+          <ImageModal />
           <div className="self-end flex items-center gap-2">
             <Link href={'https://github.com/StudyHive24/Study-Tracker/'} target="_blank">
             <button className="flex items-center gap-2  rounded-md py-1 px-3 text-xs font-medium text-gray-300">
@@ -141,8 +129,8 @@ const ProfileSettings = () => {
                 type="text"
                 id="email"
                 name="email"
-                value={email}
-                onChange={(e) => handlerUserInput("email")(e)} // Correct usage
+                defaultValue={user.email}
+                onChange={(e) => handlerUserInput('email')(e)} // Correct usage
                 className="w-full py-[0.4rem] px-3 font-medium rounded-lg border-none text-gray-600"
               />
               <span className="absolute left-0 top-0 bottom-0 flex items-center px-3 ">

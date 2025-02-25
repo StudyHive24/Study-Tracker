@@ -3,7 +3,7 @@ import { useTasksContext } from "@/context/taskContext";
 import { useUserContext } from "@/context/userContext";
 import Image from "next/image";
 import React from "react";
-import image from '../../../public/favicon.jpg'
+import image from '../../../public/blank_profile.webp'
 
 function Profile() {
   const { user } = useUserContext();
@@ -17,7 +17,7 @@ function Profile() {
       >
         <div>
           <Image
-            src={image}
+            src={user?.image || image}
             alt="avatar"
             width={70}
             height={70}

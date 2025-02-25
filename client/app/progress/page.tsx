@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useTasksContext } from '@/context/taskContext.js';
 import { useTimerContext } from "@/context/timerContext";
 import axios from "axios";
+import userSection from "./components/userSection/userSection";
+import UserSection from "./components/userSection/userSection";
 
 
 // Reusable Sub-box Component
@@ -165,7 +167,8 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
 
 
   return (
-    <div className="p-6 font-sans space-y-6">
+    <div className="p-5 -mt-5 font-sans space-y-6">
+      <UserSection />
       {/* Top Section */}
       <div className="flex space-x-6">
         {/* Daily/Weekly/Monthly Study Time */}

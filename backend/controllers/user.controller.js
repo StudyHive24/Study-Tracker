@@ -8,6 +8,7 @@ import hashToken from '../helpers/hashToken.js'
 import emailSend from '../helpers/emailSend.js'
 import bcrypt from 'bcrypt'
 import nodemailer from 'nodemailer'
+import { uploadToCloudinary } from '../config/cloudinary.js'
 
 
 export const test = (req, res) => {
@@ -175,6 +176,7 @@ export const updateUser = async (req, res) => {
             user.name = req.body.name || user.name
             user.bio = req.body.bio || user.bio
             user.photo = req.body.photo || user.photo
+
 
             // to save the updated data
             const updated = await user.save()
@@ -684,6 +686,29 @@ export const resetPassword = async (req, res) => {
         return res.status(500).json({ message: "An error occurred while changing the password." });
     }
 };
+
+// image upload
+export const uploadProfileImage = async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    
+        // Upload file to Cloudinary
+        const imageUrl = await uploadToCloudinary(req.file.path);
+    
+        // Assuming you have a user in your session or database (e.g., req.user)
+        const user = await User.findById(req.user.id);  // Modify this depending on your authentication logic
+        user.image = imageUrl;  // Save Cloudinary URL in the user's document
+        await user.save();
+    
+        res.json({ imageUrl }); // Send Cloudinary URL to frontend
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+      }
+}
+
+
+
 
  
 export const getProfile = (req, res) => {

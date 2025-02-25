@@ -194,6 +194,10 @@ const getTask = async (taskID) => {
         }
       };
 
+      const handleInputDate = (name) => (e) => {
+        
+      }
+
     // to get completed tasks
     const completedTasks = tasks.filter((task) => task.completed)
 
