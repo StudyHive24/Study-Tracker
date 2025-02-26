@@ -107,13 +107,13 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
   useEffect(() => {
     const { monday, sunday } = getCurrentWeekRange();
 
-    const weeklyTasks = tasks.filter((task: { duedate: string | Date; completed: boolean }) => {
+    const weeklyTasks = tasks.filter((task: { duedate: string | Date; completed: string }) => {
       const taskDate = new Date(task.duedate);
       return taskDate >= monday && taskDate <= sunday;
     });
 
     const totalTasks = weeklyTasks.length;
-    const completedTasks = weeklyTasks.filter((task: { completed: boolean }) => task.completed).length;
+    const completedTasks = weeklyTasks.filter((task: { completed: string }) => task.completed == 'yes').length;
 
     setWeeklyTaskGoal(totalTasks);
     setWeeklyCompletionPercentage(

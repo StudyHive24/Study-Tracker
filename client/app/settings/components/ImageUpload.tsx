@@ -44,8 +44,8 @@ function ImageUpload() {
   
         setUploadedImage(data.imageUrl); // Set the URL of the uploaded image
 
-        
-        router.refresh()
+        toast.success('Photo Uploaded Successfully')
+        router.push('/')
       } catch (error) {
         toast.error('Upload Error')
       }
