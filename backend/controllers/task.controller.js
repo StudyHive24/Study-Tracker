@@ -238,8 +238,8 @@ export const topUsers = async (req, res) => {
                 $group: {
                     _id: '$user',  // Group by user ID
                     totalTasks: { $sum: 1 },
-                    completedTasks: { $sum: { $cond: [{ $eq: ['$completed', true] }, 1, 0] } },
-                    pendingTasks: { $sum: { $cond: [{ $eq: ['$completed', false] }, 1, 0] } }
+                    completedTasks: { $sum: { $cond: [{ $eq: ['$completed', 'yes'] }, 1, 0] } },
+                    pendingTasks: { $sum: { $cond: [{ $eq: ['$completed', 'no'] }, 1, 0] } }
                 }
             },
             {
