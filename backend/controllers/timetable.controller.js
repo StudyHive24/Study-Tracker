@@ -35,12 +35,22 @@ export const createTimetableEntry = async (req, res) => {
         if (!title || !day || !startTime || !endTime || !color ) {
             return res.status(400).json ({message: 'Title, day, startTime and endTime are required'});
         }
-        const timetable = await Timetable.create ({title, day, startTime,endTime,color, user: req.user._id});
+        // const timetable = await Timetable.create ({title, day, startTime,endTime,color, user: req.user._id});
+        const timetable = new Timetable({ 
+            title, 
+            day, 
+            startTime, 
+            endTime, 
+            color, 
+            user: req.user._id 
+        });
         await timetable.save()
-        return res.status(201).json(timetable)
+        return res.status(201).json({ message: 'Timetable entry created successfully', timetable })
 
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        // res.status(400).json({ message: error.message });
+        console.error('Error in creating timetable entry:', error);
+        res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 };
 
@@ -57,9 +67,10 @@ export const deleteTimetableEntry = async (req, res) => {
         }
 
         await Timetable.findByIdAndDelete(id);
-        res.status(204).send();
+        res.status(200).json({ message: 'Timetable entry deleted successfully' });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Error in deleting timetable entry:', error);
+        res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 };
 
@@ -68,11 +79,11 @@ export const updateTimetableEntry = async (req, res) => {
     try {
         const userID = req.user._id
         const { id } = req.params;
-        const { title, day, duedate, startTime, endTime, color } = req.body
+        const { title, day, startTime, endTime, color } = req.body
         
         const updatedEntry = await Timetable.findOneAndUpdate(
             { _id: id, user: userID }, 
-            { title, day, duedate, startTime, endTime, color },
+            { title, day, startTime, endTime, color },
             { new: true }
         );
         
@@ -80,9 +91,10 @@ export const updateTimetableEntry = async (req, res) => {
             return res.status(404).json({ message: 'Timetable entry not found' });
         }
 
-        res.status(200).json(updatedEntry);
+        res.status(200).json({ message: 'Timetable entry updated successfully', updatedEntry });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Error in updating timetable entry:', error);
+        res.status(500).json({ message: 'Server error. Please try again later.' });
     }
 };
 

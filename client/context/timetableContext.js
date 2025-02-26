@@ -1,11 +1,11 @@
 "use client";
 import axios from 'axios';
 import React, { createContext, useEffect, useState, useContext } from 'react';
-import { useUserContext } from '../context/userContext'; // Assuming you have a user context
+import { useUserContext } from '../context/userContext.js'; 
 import toast from 'react-hot-toast';
 
 const TimetableContext = createContext();
-const serverUrl = 'http://localhost:8000'; // Adjust the server URL as needed
+const serverUrl = 'http://localhost:8000'; 
 
 export const TimetableProvider = ({ children }) => {
     const userID = useUserContext().user._id; // Get user ID from user context
