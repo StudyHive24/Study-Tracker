@@ -50,10 +50,8 @@ const Dashboard = () => {
     const { user, getUser } = useUserContext();
     const { tasks, getTasks } = useTasksContext();
     const { timers } = useTimerContext();
-    //const [date, setDate] = useState(new Date());
     const [date, setDate] = useState(() => new Date());
     const [chatbotMessages, setChatbotMessages] = useState(["Welcome to your dashboard!"]);
-    // const [messageIndex, setMessageIndex] = useState(0);
 
     //progress bar
     const totalTasks = tasks.length
@@ -62,36 +60,17 @@ const Dashboard = () => {
  
     // Reusable normalizeDate function
     const normalizeDate = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
+    
     // Upcoming tasks
     const today = normalizeDate(new Date());
-
+    
     const upcomingTasks = tasks
-        .filter((task: { duedate: string | number | Date; completed: string; }) => {
-            const taskDueDate = normalizeDate(new Date(task.duedate));
-            return task.completed == 'no' && taskDueDate >= today; // Compare only the dates
-        })
-        .sort((a: { endTime: string | number | Date; }, b: { endTime: string | number | Date; }) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime());
-
-    // function normalizeDate(date: Date) {
-    //     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    // }
+    .filter((task: { duedate: string | number | Date; completed: String; }) => {
+        const taskDueDate = normalizeDate(new Date(task.duedate));
+        return task.completed == "no" && taskDueDate >= today; // Compare only the dates
+    })
+    .sort((a: { endTime: string | number | Date; }, b: { endTime: string | number | Date; }) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime());
     
-    // //upcomming tasks
-    // const today = normalizeDate(new Date());
-    
-    // const upcomingTasks = tasks
-    //     .filter((task: { duedate: string | number | Date; completed: any; }) => {
-    //         const taskDueDate = normalizeDate(new Date(task.duedate));
-    //         return !task.completed && taskDueDate >= today; // Compare only the dates
-    //     })
-    //     .sort((a: { endTime: string | number | Date; }, b: { endTime: string | number | Date; }) => 
-    //         new Date(a.endTime).getTime() - new Date(b.endTime).getTime()
-    //     );
-    // const firstUpcomingTask1 = upcomingTasks[0];
-    // const firstUpcomingTask2 = upcomingTasks[1];
-    // const firstUpcomingTask3 = upcomingTasks[2];
-
     //chat bot
     const chatbotMessage = getStudyInstructorMessages(upcomingTasks);
     
@@ -218,7 +197,7 @@ const Dashboard = () => {
                         alt="Chatbot"
                         className="chatbot-icon"
                     />
-                    <p>{chatbotMessage}</p>
+                    <p>{chatbotMessage.join(' ')}</p> 
                 </div>
 
                 {/* Tasks Complete Section */}
@@ -239,34 +218,9 @@ const Dashboard = () => {
                                 <th>Due Date</th>
                             </tr>
                         </thead>
-                        {/* <tbody>
-                            {firstUpcomingTask1 ? (
-                            <tr>
-                                <td>{firstUpcomingTask1.title}</td>
-                                <td>{new Date(firstUpcomingTask1.duedate).toLocaleDateString()}</td>
-                            </tr>
-                            ) : (
-                                <tr></tr>
-                            )}
-                            {firstUpcomingTask2 ? (
-                            <tr>
-                                <td>{firstUpcomingTask2.title}</td>
-                                <td>{new Date(firstUpcomingTask2.duedate).toLocaleDateString()}</td>
-                            </tr>
-                            ) : (
-                                <tr></tr>
-                            )}
-                            {firstUpcomingTask3 ? (
-                            <tr>
-                                <td>{firstUpcomingTask3.title}</td>
-                                <td>{new Date(firstUpcomingTask3.duedate).toLocaleDateString()}</td>
-                            </tr>
-                            ) : (
-                                <tr></tr>
-                            )}
-                        </tbody> */}
+                        
                         <tbody>
-                            {upcomingTasks.slice(0, 3).map((task: { title: string | number | bigint | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined; duedate: string | number | Date; }, index: React.Key | null | undefined) => (
+                            {upcomingTasks.slice(0, 3).map((task:any, index: any) => (
                                 <tr key={index}>
                                     <td>{task.title}</td>
                                     <td>{new Date(task.duedate).toLocaleDateString()}</td>
@@ -335,11 +289,7 @@ const Dashboard = () => {
                                             📌
                                         </div>
                                     ) : null; // Return null instead of an empty div
-                                    // (
-                                    //     <div className="task-highlight opacity-0">
-                                    //         -
-                                    //     </div>
-                                    // );
+                                    
                                 }
                             }}
                         />
@@ -364,9 +314,7 @@ const Dashboard = () => {
                                         <tr key={task.title}>
                                             <td>{task.title}</td>
                                             <td>{task.priority}</td>
-                                            
                                         </tr>
-                                        
                                     ))}
                             </tbody>
                         </table>
