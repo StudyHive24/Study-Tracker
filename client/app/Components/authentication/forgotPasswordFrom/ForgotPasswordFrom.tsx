@@ -2,6 +2,7 @@
 import { useUserContext } from '@/context/userContext'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
 
 function ForgotPasswordForm() {
 
@@ -15,17 +16,24 @@ function ForgotPasswordForm() {
 
     const submitHandle = (e: any) => {
         e.preventDefault()
+
+        if (email == '') {
+          toast.error('Enter the email')
+        } else {
+            
         requestResetCode(email)
 
         // clear the input email
         setEmail('')
+        }
+
     }
 
 
   return (
     <div className="flex justify-center p-3 ">
       <form className="">
-        <div className="flex flex-col gap-4 bg-white p-12 rounded-lg h-[65vh] mt-3">
+        <div className="flex flex-col gap-4 bg-white p-12 rounded-lg  mt-3">
           <div className="flex justify-center">
             <span className="text-xl">Enter email to reset your password</span>
           </div>
@@ -51,7 +59,7 @@ function ForgotPasswordForm() {
             </div>
             
             <button
-              disabled={ !email }
+              
               type="submit"
               onClick={submitHandle}
               className="bg-blue-300 p-2 rounded-lg mt-3 hover:bg-blue-400 cursor-pointer"

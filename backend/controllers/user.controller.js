@@ -722,4 +722,3 @@ export const getProfile = (req, res) => {
         return res.json(null)
     }
 }
-

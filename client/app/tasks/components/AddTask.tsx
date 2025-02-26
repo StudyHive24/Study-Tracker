@@ -16,6 +16,7 @@ import { MoveRight, Tag, Tags } from "lucide-react";
 import {TagsInput} from 'react-tag-input-component'
 import { useTasksContext } from "@/context/taskContext.js";
 import { time } from "console";
+import toast from "react-hot-toast";
 
 
 function AddTask() {
@@ -57,6 +58,10 @@ function AddTask() {
     const updatedTask = {...task, endTime: endDate}
 
     console.log(updateTask)
+
+    if (updateTask.title == '') {
+      toast.error('Enter a title')
+    }
 
     createTask(updatedTask)
 

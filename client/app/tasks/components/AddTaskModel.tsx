@@ -16,6 +16,7 @@ import { MoveRight, Tag, Tags } from "lucide-react";
 import {TagsInput} from 'react-tag-input-component'
 import { useTasksContext } from "@/context/taskContext.js";
 import { time } from "console";
+import toast from "react-hot-toast";
 
 
 function AddTaskModel() {
@@ -46,7 +47,9 @@ function AddTaskModel() {
 
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+
     e.preventDefault()
+
 
     // if (modalMode === 'edit') {
     //   updateTask(task)
@@ -60,6 +63,7 @@ function AddTaskModel() {
 
     createTask(updatedTask)
 
+    
   }
 
   const [tags, setTags] = useState(['Coding'])

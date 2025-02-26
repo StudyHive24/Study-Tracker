@@ -44,7 +44,7 @@ function ResetPasswordForm() {
   return (
     <div className="flex justify-center p-3 ">
       <form className="">
-        <div className="flex flex-col gap-4 bg-white p-12 rounded-lg h-[65vh] mt-3">
+        <div className="flex flex-col gap-4 bg-white p-12 rounded-lg mt-3">
           <div className="flex justify-center">
             <span className="text-xl">Change your StudyHive Password</span>
           </div>

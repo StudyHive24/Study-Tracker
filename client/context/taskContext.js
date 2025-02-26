@@ -92,12 +92,23 @@ const getTask = async (taskID) => {
 
             console.log('Task created', res.data)
 
-            setTasks([...tasks, res.data])
-            toast.success('Task created succcessfully')
+            
+
+            if (res.data.error) {
+                toast.error(res.data.error)
+                return
+            } else {
+                setTasks([...tasks, res.data])
+                toast.success('Task created succcessfully')
+            }
+
+            
 
         } catch (error) {
             console.log('Error in creating a task', error)
-            toast.error("Error in Creating the task")
+            const errorMessage = 'Failed to create the task'
+
+            toast.error(errorMessage)
         }
     }
 

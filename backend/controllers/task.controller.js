@@ -5,19 +5,32 @@ export const createTask = asyncHandler(async (req, res) => {
     try {
         const { title, description, duedate, startTime, endTime, status, completed, priority, tags, attachments } =  req.body
         
-            if (!title || title.trim() === '') {
-                res.status(400)
+            if(!title) {
                 return res.json({
-                    message: 'Title is required'
+                    error: 'Title is required'
                 })
             }
 
-            if (!description || description.trim() === '') {
-                res.status(400)
+            if (!duedate) {
                 return res.json({
-                    message: 'Description is required'
+                    error: 'Duedate is required'
                 })
             }
+
+            if (!endTime) {
+                return res.json({
+                    error: 'End Time is required'
+                })
+            }
+
+            if (title) {
+                return res.json({
+                    error: 'Task name is taken'
+                })
+            }
+            
+
+           
 
             const task = new Task({
                 title,
@@ -39,6 +52,10 @@ export const createTask = asyncHandler(async (req, res) => {
 
     } catch (error) {
         console.log('Error in creating task: ', error.message)
+        res.status(500)
+        return res.json({
+            message: error.message
+        })
     }
 })
 
@@ -61,7 +78,8 @@ export const getTasks = asyncHandler(async (req, res) => {
 
     } catch (error) {
         console.log('Error in getting tasks: ', error.message)
-        res.status(400).json({
+        res.status(500)
+        return res.json({
             message: error.message
         })
     }

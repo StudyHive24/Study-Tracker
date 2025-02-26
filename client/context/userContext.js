@@ -92,40 +92,41 @@ export const UserContextProvider = ({children}) => {
 
         } catch (error) {
             console.log('Error registering user', error)
-            toast.error(error.message)
+            toast.error('Error registering user')
         }
     }
 
-    // login user
-    const loginUser = async (e) => {
-        e.preventDefault()
+// login user
+const loginUser = async (e) => {
+  e.preventDefault(); // Prevent the default form submission
 
-        try {
-             await axios.post(`${serverUrl}/api/v1/login`, 
-            {
-                email: userState.email,
-                password: userState.password
-            },
-            {
-                withCredentials: true,   // this wil send cookies to the server
-            })
+  try {
+      // Make the POST request to login
+      await axios.post(`${serverUrl}/api/v1/login`, 
+      {
+          email: userState.email,
+          password: userState.password
+      },
+      {
+          withCredentials: true,  // this will send cookies to the server
+      });
 
-            toast.success('User logged in successfully')
+      // Clear the form after successful login
+      setUserState({
+          email: '',
+          password: ''
+      });
 
-            // to clear the form
-            setUserState({
-                email: '',
-                password: ''
-            })
+      // Refresh the user details
+      await getUser();
 
-            // to refresh the user details
-            await getUser()
+  } catch (error) {
+      console.log('Error logging in user', error);
+      toast.error('Error logging in user');
+  }
+};
 
-        } catch (error) {
-            console.log('Error logging in user', error)
-            toast.error(error.message)
-        }
-    }
+
 
     // logout user
     const logoutUser = async (req, res) => {
@@ -143,7 +144,7 @@ export const UserContextProvider = ({children}) => {
 
         } catch (error) {
             console.log('Error on loggin out the user')
-            toast.error(error.message)
+            toast.error('Error on loggin out the user')
         }
     }
 
@@ -167,7 +168,7 @@ export const UserContextProvider = ({children}) => {
         } catch (error) {
             console.log('Error getting user details', error)
             setLoading(false)
-            toast.error(error.message)
+            toast.error('Error getting user details')
         }
     }
 
@@ -195,7 +196,7 @@ export const UserContextProvider = ({children}) => {
     } catch (error) {
       console.log("Error updating user details", error);
       setLoading(false);
-      toast.error(error.response.data.message);
+      toast.error("Error updating user details");
     }
   };
 
@@ -240,7 +241,7 @@ export const UserContextProvider = ({children}) => {
             setLoading(false)
         } catch (error) {
             console.log('Error while sending the password reset email', error)
-            toast.error(error.message)
+            toast.error('Error while sending the password reset email')
             setLoading(false)
         }
     }
@@ -263,7 +264,7 @@ export const UserContextProvider = ({children}) => {
             } catch (error) {
               console.log("Error sending email verification", error);
               setLoading(false);
-              toast.error(error.response.data.message);
+              toast.error("Error sending email verification");
             }
           };
 
@@ -286,7 +287,7 @@ export const UserContextProvider = ({children}) => {
       router.push("/login");
     } catch (error) {
       console.log("Error resetting password", error);
-      toast.error(error.response.message);
+      toast.error("Error resetting password");
     }
   };
 
@@ -307,33 +308,11 @@ export const UserContextProvider = ({children}) => {
           setLoading(false);
         } catch (error) {
           console.log("Error changing password", error);
-          toast.error(error.response.data.message);
+          toast.error("Error changing password");
           setLoading(false);
         }
       };
 
-      // delete user
-  const deleteUser = async (id) => {
-    setLoading(true);
-    try {
-      const res = await axios.delete(
-        `${serverUrl}/api/v1/admin/users/${id}`,
-        {},
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-
-      toast.success("User deleted successfully");
-      setLoading(false);
-      // refresh the users list
-      getAllUsers();
-    } catch (error) {
-      console.log("Error deleting user", error);
-      toast.error(error.response.data.message);
-      setLoading(false);
-    }
-  };
 
 
 
@@ -374,7 +353,7 @@ const sendCode = async (email) => {
         router.push('/verify-user')
     } catch (error) {
         console.error(error.message || "Something went wrong");
-        toast.error(error.message || "Something went wrong")
+        toast.error("Something went wrong")
     }
 };
 
@@ -400,6 +379,7 @@ const requestResetCode = async (email) => {
       router.push('/verify-password-reset')
   } catch (error) {
       console.error(error.response?.data?.message || "Something went wrong");
+      toast.error("Something went wrong")
   }
 };
 
@@ -430,7 +410,7 @@ const passwordReset = async (email, newPassword) => {
       router.push('/login')
   } catch (error) {
       console.error(error.response?.data?.message || "Something went wrong");
-      toast.success(error.message)
+      toast.success("Something went wrong")
   }
 };
     
@@ -484,7 +464,6 @@ const passwordReset = async (email, newPassword) => {
                 resetPassword,
                 changePassword,
                 updateUser,
-                deleteUser,
                 removeUserInput,
                 setUserState,
                 verifyUser,
