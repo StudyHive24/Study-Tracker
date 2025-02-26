@@ -19,7 +19,7 @@ router.post('/create', protect,createTimer);
 router.delete('/delete/all', protect, deleteAllTimers)
 
 
-router.get('/top-users', protect, topUsersByTimeSpent)
+router.get('/top-users', topUsersByTimeSpent)
 
 
 

@@ -22,7 +22,7 @@ router.patch('/update/:id', protect, updateTask)
 // to delete a task
 router.delete('/delete/:id', protect, deleteTask)
 
-router.get('/topusers', protect, topUsers)
+router.get('/topusers', topUsers)
 
 
 export default router

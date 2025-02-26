@@ -164,6 +164,9 @@ const getTask = async (taskID) => {
 
     const getTopUsersByCompletion = async () => {
         try {
+
+        
+
             const res = await axios.get(`${serverUrl}/api/tasks/topusers`);
             
             // Check if the data is structured correctly before setting it
