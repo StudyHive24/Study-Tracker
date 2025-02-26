@@ -73,7 +73,7 @@ function AddTaskModel() {
             Add A New Task
           </span>
         </DialogTrigger>
-        <DialogContent className="w-[525px] h-[95vh] p-7 bg-gray-800 border-none">
+        <DialogContent className="w-[525px] max-h-[90vh] p-7 bg-gray-800 border-none">
         <DialogHeader className="mt-5 gap-2">
           <DialogTitle className="text-gray-100">
             Create Task
@@ -122,6 +122,7 @@ function AddTaskModel() {
                   className="border-none bg-gray-200"
                   onChange={(e) => handleInput("duedate")(e)}
                   value={task?.duedate || ""}
+                  min={new Date().toISOString().split("T")[0]} // Disable past dates
                 />
               </div>
               <div className="flex flex-col gap-2 ">
@@ -158,21 +159,10 @@ function AddTaskModel() {
               </span>{" "}
               at <span className="text-green-700 border-b-2 border-gray-200">{task.endTime || "a specific time"}</span>
             </div> */}
-            <div className="flex flex-col gap-2 mt-1">
-              <Label htmlFor="completed" className="text-gray-200">Task Completed</Label>
-              <select
-                className="bg-gray-200 p-2 rounded-md border cursor-pointer"
-                onChange={(e) => handleInput("completed")(e)}
-                value={task?.completed ? "true" : "false"}
-              >
-                <option value="false">No</option>
-                <option value="true">Yes</option>
-              </select>
-            </div>
             <div className="flex justify-center">
               <Button
                 type="submit"
-                className="mt-6 bg-green-600 w-[20vw] hover:bg-green-700 text-white rounded-xl"
+                className="mt-6 bg-green-600 w-full hover:bg-green-700 text-white rounded-xl"
               >
                 Create Task
               </Button>

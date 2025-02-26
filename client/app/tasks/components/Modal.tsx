@@ -30,24 +30,21 @@ function Modal({ task }: TaskPropsModal) {
   }, [task]);
 
   const handleInput2 = (fieldName: any) => (e: any) => {
-    setLocalTask((prevTask) => ({ ...prevTask, [fieldName]: e.target.value }));
+    const value =
+      fieldName === "completed" ? e.target.value === "true" : e.target.value;
+    setLocalTask((prevTask) => ({ ...prevTask, [fieldName]: value }));
   };
-
-
-  
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const endDate = new Date(`${localTask.duedate}T${task.endTime}:00`);
 
-    
+    const updatedTask = { ...localTask, endTime: endDate };
 
-    const updatedTask = {...localTask, endTime: endDate}
+    console.log(updatedTask);
 
-    console.log(updatedTask)
-
-    task = updatedTask
+    task = updatedTask;
 
     updateTask(task);
   };
@@ -66,23 +63,23 @@ function Modal({ task }: TaskPropsModal) {
         <DialogHeader className="mt-5 gap-2">
           <DialogTitle className="text-gray-100">
             {localTask ? "Edit Task" : "Create Task"}
-            <hr className="mt-3"/>
+            <hr className="mt-3" />
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="p-3 gap-2 flex flex-col">
-              <div className="gap-2 flex flex-col w-50">
-                <Label htmlFor="title" className="text-gray-200">
-                  Task title
-                </Label>
-                <Input
-                  id="title"
-                  placeholder="Enter a task title"
-                  className="gap-2 flex flex-col mb-1"
-                  onChange={(e) => handleInput2("title")(e)}
-                  value={localTask?.title || ""}
-                />
-              </div>
+            <div className="gap-2 flex flex-col w-50">
+              <Label htmlFor="title" className="text-gray-200">
+                Task title
+              </Label>
+              <Input
+                id="title"
+                placeholder="Enter a task title"
+                className="gap-2 flex flex-col mb-1"
+                onChange={(e) => handleInput2("title")(e)}
+                value={localTask?.title || ""}
+              />
+            </div>
             <div className="flex justify-between">
               <div className="gap-2 flex flex-col">
                 <Label htmlFor="description" className="text-gray-200">
@@ -110,6 +107,7 @@ function Modal({ task }: TaskPropsModal) {
                   className="border-none bg-gray-200"
                   onChange={(e) => handleInput2("duedate")(e)}
                   value={localTask?.duedate || ""}
+                  min={new Date().toISOString().split("T")[0]} // Disable past dates
                 />
               </div>
               <div className="flex flex-col gap-2 ">
@@ -147,11 +145,13 @@ function Modal({ task }: TaskPropsModal) {
               at <span className="text-green-700 border-b-2 border-gray-200">{localTask.endTime || "a specific time"}</span>
             </div> */}
             <div className="flex flex-col gap-2 mt-1">
-              <Label htmlFor="completed" className="text-gray-200">Task Completed</Label>
+              <Label htmlFor="completed" className="text-gray-200">
+                Task Completed
+              </Label>
               <select
                 className="bg-gray-200 p-2 rounded-md border cursor-pointer"
-                onChange={(e) => handleInput2("completed")(e)}
-                value={localTask?.completed ? "true" : "false"}
+                onChange={handleInput2("completed")}
+                value={localTask.completed ? "true" : "false"}
               >
                 <option value="false">No</option>
                 <option value="true">Yes</option>
@@ -160,7 +160,7 @@ function Modal({ task }: TaskPropsModal) {
             <div className="flex justify-center">
               <Button
                 type="submit"
-                className="mt-6 bg-blue-500 w-[20vw] hover:bg-blue-600 text-white rounded-xl"
+                className="mt-6 bg-blue-500 w-full hover:bg-blue-600 text-white rounded-xl"
               >
                 Update Task
               </Button>
