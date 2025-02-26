@@ -105,8 +105,16 @@ export default function TimetablePage(): ReactElement {
       return;
     }
 
-    if (entry.startTime > entry.endTime) {
-      setError("Start time cannot be later than end time.");
+    // if (entry.startTime > entry.endTime) {
+    //   setError("Start time cannot be later than end time.");
+    //   return;
+    // }
+
+    const startIndex = timeSlots.indexOf(entry.startTime);
+    const endIndex = timeSlots.indexOf(entry.endTime);
+  
+    if (startIndex >= endIndex) {
+      setError("Start time must be before end time.");
       return;
     }
 
