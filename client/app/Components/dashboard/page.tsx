@@ -57,7 +57,7 @@ const Dashboard = () => {
 
     //progress bar
     const totalTasks = tasks.length
-    const completedTasks = tasks.filter((task: { completed: boolean; }) => task.completed === true).length;
+    const completedTasks = tasks.filter((task: { completed: string; }) => task.completed === 'yes').length;
     const taskCompletionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     
     function normalizeDate(date: Date) {
@@ -68,9 +68,9 @@ const Dashboard = () => {
     const today = normalizeDate(new Date());
     
     const upcomingTasks = tasks
-        .filter((task: { duedate: string | number | Date; completed: any; }) => {
+        .filter((task: { duedate: string | number | Date; completed: string; }) => {
             const taskDueDate = normalizeDate(new Date(task.duedate));
-            return !task.completed && taskDueDate >= today; // Compare only the dates
+            return task.completed == 'no' && taskDueDate >= today; // Compare only the dates
         })
         .sort((a: { endTime: string | number | Date; }, b: { endTime: string | number | Date; }) => 
             new Date(a.endTime).getTime() - new Date(b.endTime).getTime()
@@ -94,12 +94,12 @@ const Dashboard = () => {
     };
 
     const todayTasks = tasks.filter((task: any) => new Date(task.endTime).toDateString() === today.toDateString()); 
-    const notcompletedtodayTasks = tasks.filter((task: any) => !task.completed && new Date(task.endTime).toDateString() === today.toDateString());
+    const notcompletedtodayTasks = tasks.filter((task: any) => task.completed == 'no' && new Date(task.endTime).toDateString() === today.toDateString());
     const nextTask = tasks
-    .filter((task: any) => !task.completed && new Date(task.endTime) > today)
+    .filter((task: any) => task.completed == 'no' && new Date(task.endTime) > today)
     .sort((a: any, b: any) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime())[0];
 
-    const completedTodayTasks = tasks.filter((task: any) => task.completed && new Date(task.endTime).toDateString() === today.toDateString());
+    const completedTodayTasks = tasks.filter((task: any) => task.completed == 'yes' && new Date(task.endTime).toDateString() === today.toDateString());
     const totalTodayTasks = todayTasks.length;
     const completedPercentage = totalTodayTasks > 0 ? Math.floor((completedTodayTasks.length / totalTodayTasks) * 100) : 0;
     const remainingTasks = totalTodayTasks - completedTodayTasks.length;
