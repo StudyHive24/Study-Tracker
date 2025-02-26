@@ -5,6 +5,12 @@ import { Task } from "@/utils/types";
 import { formatTime } from "@/utils/utilities";
 import { useTasksContext } from "@/context/taskContext.js";
 import Modal from "./Modal";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import TrashTooltip from "./Tooltips/TrashTooltip";
+import CompletedTooltip from "./Tooltips/CompletedTooltip";
+import EditTaskTooltip from "./Tooltips/EditTaskTooltip";
+import DeleteTaskModal from "./Modals/DeleteTaskModal";
 
 interface TaskProps {
   task: Task;
@@ -61,28 +67,13 @@ function TaskItem({ task }: TaskProps) {
           {task.priority}
         </span>
         <div className="flex flex-row gap-1">
-          <Star
-            onClick={handleSubmit}
-            width={20}
-            height={20}
-            color="white"
-            className={`${
-              task.completed == 'yes' ? "bg-yellow-500" : "bg-slate-400"
-            } p-[3px] hover:bg-yellow-500 active:bg-yellow-500 rounded-xl cursor-pointer`}
-          />
+          
+          <CompletedTooltip task={task}/>
 
           {/* <UpdateTaskModel /> */}
 
-          <Modal task={task} />
-          <Trash2
-            onClick={() => {
-              deleteTask(task._id);
-            }}
-            width={20}
-            height={20}
-            color="white"
-            className="bg-red-500 p-[3px] hover:bg-red-600 rounded-xl cursor-pointer"
-          />
+          <Modal task={task}/>
+          <DeleteTaskModal task={task}/>
         </div>
       </div>
     </div>
