@@ -52,6 +52,8 @@ const Dashboard = () => {
     const { timers } = useTimerContext();
     const [date, setDate] = useState(() => new Date());
     const [chatbotMessages, setChatbotMessages] = useState(["Welcome to your dashboard!"]);
+    
+    
 
     //progress bar
     const totalTasks = tasks.length
@@ -70,16 +72,24 @@ const Dashboard = () => {
         return task.completed == "no" && taskDueDate >= today; // Compare only the dates
     })
     .sort((a: { endTime: string | number | Date; }, b: { endTime: string | number | Date; }) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime());
-    
+
     //chat bot
     const chatbotMessage = getStudyInstructorMessages(upcomingTasks);
     
     //timer 
-    const timerHistory = timers.slice(-3);
+    const [timerHistory, setClientTimerHistory] = useState([]);
+    useEffect(() => {
+        setClientTimerHistory(timers.slice(-3));
+    }, [timers]);
+    //const timerHistory = timers.slice(-3);
 
 
     //notification
     const [isNotificationOpen, setIsNotificationOpen] = useState(false); // State for the notification menu
+
+    useEffect(() => {
+        // Handle client-side interactions
+    }, []);
 
     const toggleNotificationMenu = () => {
         setIsNotificationOpen((prev) => !prev); // Toggle the state
@@ -129,7 +139,7 @@ const Dashboard = () => {
                                     const formattedTime = nextTaskDate.toLocaleTimeString("en-US", {
                                         hour: "2-digit",
                                         minute: "2-digit",
-                                        timeZone: "Asia/Colombo", // Specify your local timezone
+                                        timeZone: "UTC", 
                                       });
                                       
                                     const daysDifference = Math.ceil(
