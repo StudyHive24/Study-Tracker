@@ -5,7 +5,6 @@ import "./timer.css"; // Importing the CSS file for styling
 import useRiderect from "@/hooks/useUserRiderect";
 import { useTimerContext } from "@/context/timerContext"; // Import the context for handling timer data
 
-
 // Modal Component for reset confirmation
 function Modal({
   onConfirm,
@@ -18,15 +17,15 @@ function Modal({
 }) {
   return (
     <div className="timer-reset-modal">
-      <div className="w-[30vw]  p-[20px] bg-gray-700 rounded-lg flex justify-center flex-col">
+      <div className="w-[30vw] p-[20px] bg-gray-700 rounded-lg flex justify-center flex-col">
         <p className="text-lg text-center text-gray-100 mb-2">{message}</p>
         <div className="flex justify-center gap-3 mt-3">
-        <button className="bg-blue-600 p-2 w-full rounded-lg" onClick={onConfirm}>
-          Yes
-        </button>
-        <button className="bg-red-600 p-2 w-full rounded-lg" onClick={onCancel}>
-          No
-        </button>
+          <button className="bg-blue-600 p-2 w-full rounded-lg" onClick={onConfirm}>
+            Yes
+          </button>
+          <button className="bg-red-600 p-2 w-full rounded-lg" onClick={onCancel}>
+            No
+          </button>
         </div>
       </div>
     </div>
@@ -47,9 +46,10 @@ export default function TimerPage() {
   const [timerTitle, setTimerTitle] = useState("Study"); // Timer title (default)
   const [showSaveConfirm, setShowSaveConfirm] = useState(false); // Save confirmation
 
-  const { createTimer, timers } = useTimerContext();
+  const { createTimer, timers = [] } = useTimerContext(); // Ensure timers is initialized as an empty array
 
-  const timerUpAudio = new Audio ("./TimerUp.mp3"); 
+  // const timerUpAudio = new Audio("./TimerUp.mp3"); 
+  // Audio for timer completion
 
   // Timer options
   const timeOptions = [
@@ -63,9 +63,7 @@ export default function TimerPage() {
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${secs
-      .toString()
-      .padStart(2, "0")}`;
+    return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   const handleStart = () => {
@@ -139,8 +137,8 @@ export default function TimerPage() {
             clearInterval(timer!);
             setIsRunning(false);
 
-             //play the timer up sound
-             timerUpAudio.play();
+            // Play the timer up sound
+            // timerUpAudio.play();
 
             // Switch between study and break
             const nextPhase = isStudyPhase ? "Break" : "Focus";
@@ -169,17 +167,18 @@ export default function TimerPage() {
     return timers.map(
       (timer: { date: string | number | Date; title: string; duration: string }, index: Key | null | undefined) => (
         <tr key={index} className="flex justify-evenly text-gray-200 text-center mb-2">
-          <td className=" p-2 w-full bg-gray-500  rounded-tl-lg rounded-bl-lg border-r-2 border-gray-300">{new Date(timer.date).toLocaleString()}</td>
-          <td className=" p-2 w-full bg-gray-500  border-r-2 border-gray-300">{timer.title}</td>
-          <td className=" p-2 w-full bg-gray-500  rounded-se-lg rounded-ee-lg ">{timer.duration}</td>
+          <td className="p-2 w-full bg-gray-500 rounded-tl-lg rounded-bl-lg border-r-2 border-gray-300">
+            {new Date(timer.date).toLocaleString()}
+          </td>
+          <td className="p-2 w-full bg-gray-500 border-r-2 border-gray-300">{timer.title}</td>
+          <td className="p-2 w-full bg-gray-500 rounded-se-lg rounded-ee-lg">{timer.duration}</td>
         </tr>
       )
     );
   };
 
   return (
-    <div className="timer-page gap-5 ">
-      {/* <h1 className="timer-page-title">⏰ Timer</h1> */}
+    <div className="timer-page gap-5">
       <div className="timer-container bg-gray-700">
         <h1 className="timer-title">
           {isStudyPhase ? `Focus Time - ${timerTitle}` : "Break Time"}
@@ -187,18 +186,18 @@ export default function TimerPage() {
         <h2 className="timer-display">{formatTime(time)}</h2>
         <p className="timer-message">{message}</p>
         <div>
-        <select
-          className="p-3 w-full rounded-lg"
-          onChange={handleTimeChange}
-          disabled={isRunning}
-          defaultValue="25 minutes"
-        >
-          {timeOptions.map((option) => (
-            <option key={option.label} value={option.label}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          <select
+            className="p-3 w-full rounded-lg"
+            onChange={handleTimeChange}
+            disabled={isRunning}
+            defaultValue="25 Minutes" // Ensure this matches the label in timeOptions
+          >
+            {timeOptions.map((option) => (
+              <option key={option.label} value={option.label}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         {showTitleInput ? (
@@ -246,11 +245,11 @@ export default function TimerPage() {
       <div className="timer-history-container">
         <h1 className="text-gray-100 text-xl text-center p-2 mb-2 bg-gray-700 rounded-lg">Timer History</h1>
         <table className="w-full gap-2 flex flex-col justify-evenly">
-          <thead className="  ">
+          <thead>
             <tr className="flex justify-evenly text-gray-100 text-center">
-              <th className=" p-2 w-full bg-gray-600  rounded-tl-lg rounded-bl-lg border-r-2 border-gray-200">Date</th>
-              <th className=" p-2 w-full bg-gray-600 border-r-2 border-gray-200">Title</th>
-              <th className=" p-2 w-full bg-gray-600 rounded-se-lg rounded-ee-lg">Duration</th>
+              <th className="p-2 w-full bg-gray-600 rounded-tl-lg rounded-bl-lg border-r-2 border-gray-200">Date</th>
+              <th className="p-2 w-full bg-gray-600 border-r-2 border-gray-200">Title</th>
+              <th className="p-2 w-full bg-gray-600 rounded-se-lg rounded-ee-lg">Duration</th>
             </tr>
           </thead>
           <tbody>{renderTimerHistory()}</tbody>
