@@ -199,10 +199,10 @@ const getTask = async (taskID) => {
       }
 
     // to get completed tasks
-    const completedTasks = tasks.filter((task) => task.completed)
+    const completedTasks = tasks.filter((task) => task.completed == 'yes')
 
     // to get pending tasks
-    const pendingTasks = tasks.filter((task) => !task.completed)
+    const pendingTasks = tasks.filter((task) => task.completed == 'no')
 
     // to get active tasks
     const activeTasks = tasks.filter((task) => task.status == 'active')

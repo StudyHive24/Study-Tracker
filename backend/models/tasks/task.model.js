@@ -29,8 +29,8 @@ const TaskSchema = mongoose.Schema(
             default: 'active'
         },
         completed: {
-            type: Boolean,
-            default: false
+            type: String,
+            default: 'no'
         },
         priority: {
             type: String,

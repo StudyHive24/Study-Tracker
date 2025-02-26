@@ -30,8 +30,7 @@ function Modal({ task }: TaskPropsModal) {
   }, [task]);
 
   const handleInput2 = (fieldName: any) => (e: any) => {
-    const value =
-      fieldName === "completed" ? e.target.value === "true" : e.target.value;
+    const value = e.target.value;
     setLocalTask((prevTask) => ({ ...prevTask, [fieldName]: value }));
   };
 
@@ -150,11 +149,11 @@ function Modal({ task }: TaskPropsModal) {
               </Label>
               <select
                 className="bg-gray-200 p-2 rounded-md border cursor-pointer"
-                onChange={handleInput2("completed")}
-                value={localTask.completed ? "true" : "false"}
+                onChange={(e) => handleInput2("completed")(e)}
+                value={localTask?.completed || 'no'}
               >
-                <option value="false">No</option>
-                <option value="true">Yes</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
               </select>
             </div>
             <div className="flex justify-center">

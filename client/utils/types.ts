@@ -5,7 +5,7 @@ interface Task {
     title: string;
     description: string;
     status: string;
-    completed: boolean;
+    completed: string;
     dueDate: string;
     priority: string;
     createdAt: string;

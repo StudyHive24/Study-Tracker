@@ -16,9 +16,13 @@ function TaskItem({ task }: TaskProps) {
   let completed = task.completed;
 
   const handleSubmit = () => {
-    updateTask({ ...task, completed: !task.completed }); // Toggle completion
-  
-    // If the UI does not re-render properly, fetch the latest task
+    
+    if (task.completed == 'no') {
+      updateTask({...task, completed: 'yes'})
+    } else if (task.completed == 'yes') {
+      updateTask({...task, completed: 'no'})
+    }
+    
     
   };
   
@@ -63,7 +67,7 @@ function TaskItem({ task }: TaskProps) {
             height={20}
             color="white"
             className={`${
-              task.completed ? "bg-yellow-500" : "bg-slate-400"
+              task.completed == 'yes' ? "bg-yellow-500" : "bg-slate-400"
             } p-[3px] hover:bg-yellow-500 active:bg-yellow-500 rounded-xl cursor-pointer`}
           />
 
