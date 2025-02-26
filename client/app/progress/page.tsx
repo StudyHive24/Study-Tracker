@@ -123,7 +123,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
 
   
   type Task = {
-    completed: any;
+    completed: string;
     priority: 'High' | 'Medium' | 'Low';
     duedate: string;  
     endTime: string;  
@@ -134,7 +134,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
   
   const sortedTasks = tasks
     .slice()  // Clone the array to avoid mutating the original
-    .filter((task: Task) => !task.completed)
+    .filter((task: Task) => task.completed == 'no')
     .sort((a: Task, b: Task) => {
       // Priority mapping for sorting
       const priorityMap = { High: 1, Medium: 2, Low: 3 };
@@ -161,7 +161,7 @@ const formatTimeFromSeconds = (totalSeconds: number) => {
     //GET Total Completed Tasks 
     const completdtasks = tasks
     .slice() 
-    .filter((task: Task) => task.completed)
+    .filter((task: Task) => task.completed == 'yes')
 
     const totalTasks2 = completdtasks.length;
 
