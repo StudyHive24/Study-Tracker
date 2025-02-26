@@ -60,7 +60,7 @@ function AddTask() {
 
     createTask(updatedTask)
 
-     closeModal()
+
   }
   return (
     <>

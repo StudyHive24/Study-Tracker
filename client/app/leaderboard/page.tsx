@@ -2,13 +2,19 @@
 import { useTasksContext } from "@/context/taskContext";
 import { useTimerContext } from "@/context/timerContext";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import blankImg from "@/public/blank_profile.webp";
 
 function Page() {
   const { topUsers } = useTasksContext();
   const { topUsersTime } = useTimerContext();
   const [tooltip, setTooltip] = useState<string | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  // Ensure component only renders tooltips after hydration
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <div className="m-8 flex flex-row gap-5">
@@ -26,13 +32,13 @@ function Page() {
               <span>Completed Percentage</span>
             </div>
           </li>
-          {topUsers.map((user: any, index: any) => (
+          {topUsers?.map((user: any, index: number) => (
             <li key={index} className="mb-4 mt-3 relative">
               <div className="text-gray-100 bg-gray-500 text-[12px] text-center grid grid-cols-5 p-5 rounded-xl gap-3 justify-center items-center">
                 <div
                   className="flex p-2 flex-col relative"
-                  onMouseEnter={() => setTooltip(user.name)}
-                  onMouseLeave={() => setTooltip(null)}
+                  onMouseEnter={() => isClient && setTooltip(user.name)}
+                  onMouseLeave={() => isClient && setTooltip(null)}
                 >
                   <Image
                     src={user.image || blankImg}
@@ -40,28 +46,25 @@ function Page() {
                     height={60}
                     className="max-h-28 rounded-2xl"
                     alt="userImg"
+                    priority
                   />
-                  {tooltip === user.name && (
+                  {isClient && tooltip === user.name && (
                     <div className="absolute z-50 top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-700 text-white text-[12px] rounded-md p-2 shadow-md">
                       {user.name}
                     </div>
                   )}
                 </div>
                 <span className="p-6 text-center text-yellow-400 bg-gray-600 rounded-2xl">
-                  {" "}
                   {user.totalTasks}
                 </span>
                 <span className="p-6 text-green-300 bg-gray-600 rounded-2xl">
-                  {" "}
                   {user.completedTasks}
                 </span>
                 <span className="p-6 text-red-300 bg-gray-600 rounded-2xl">
-                  {" "}
                   {user.totalTasks - user.completedTasks}
                 </span>
                 <span className="p-6 text-blue-300 bg-gray-600 rounded-2xl text-center">
-                  {" "}
-                  {user.completionPercentage.toFixed(2)}%
+                  {user.completionPercentage?.toFixed(2)}%
                 </span>
               </div>
             </li>
@@ -79,13 +82,13 @@ function Page() {
               <span>Time Spent</span>
             </div>
           </li>
-          {topUsersTime.map((user: any, index: any) => (
+          {topUsersTime?.map((user: any, index: number) => (
             <li key={index} className="mb-4 mt-3">
               <div className="text-gray-100 bg-gray-500 text-center grid grid-cols-2 p-5 rounded-xl text-[11px] justify-center items-center">
                 <div
                   className="flex p-2 flex-col relative"
-                  onMouseEnter={() => setTooltip(user.name)}
-                  onMouseLeave={() => setTooltip(null)}
+                  onMouseEnter={() => isClient && setTooltip(user.name)}
+                  onMouseLeave={() => isClient && setTooltip(null)}
                 >
                   <Image
                     src={user.image || blankImg}
@@ -93,14 +96,15 @@ function Page() {
                     height={60}
                     className="max-h-28 rounded-2xl"
                     alt="userImg"
+                    priority
                   />
-                  {tooltip === user.name && (
+                  {isClient && tooltip === user.name && (
                     <div className="absolute z-50 top-full left-1/2 transform -translate-x-1/2 mt-1 bg-gray-700 text-white text-[12px] rounded-md p-2 shadow-md">
                       {user.name}
                     </div>
                   )}
                 </div>
-                <span className="p-6 text-red-300 bg-gray-600 rounded-2xl ">
+                <span className="p-6 text-red-300 bg-gray-600 rounded-2xl">
                   {user.totalTimeSpent} seconds
                 </span>
               </div>

@@ -15,6 +15,7 @@ import { FilePenLine } from "lucide-react";
 import { useTasksContext } from "@/context/taskContext";
 import { Task } from "@/utils/types";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface TaskPropsModal {
   task: Task;
@@ -34,6 +35,8 @@ function Modal({ task }: TaskPropsModal) {
     setLocalTask((prevTask) => ({ ...prevTask, [fieldName]: value }));
   };
 
+  const router = useRouter()
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -46,6 +49,8 @@ function Modal({ task }: TaskPropsModal) {
     task = updatedTask;
 
     updateTask(task);
+
+    
   };
 
   return (

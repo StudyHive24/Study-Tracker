@@ -4,6 +4,7 @@ import { BadgeCheck, Github } from 'lucide-react';
 import Link from 'next/link';
 import router from 'next/router';
 import React from 'react'
+import BioPopover from './Popovers/BioPopover';
 
 export default function UserSection() {
     const { user, updateUser, handlerUserInput, userState, changePassword, removeUserInput, setUserState, emailVerification, verifyUser } = useUserContext();
@@ -43,7 +44,8 @@ export default function UserSection() {
             <button onClick={clickHandle} className="flex items-center gap-2 border-2 border-[#323232]/10 rounded-md py-1 px-3 text-xs font-medium text-gray-300">
               <BadgeCheck color={`${color2}`}/> <span className={`${color1}`}>{verifyText}</span>
             </button> */}
-            <span className='p-2 text-white'>{bio}</span>
+            <div className='mb-3 cursor-pointer'>
+            <BioPopover /> </div>
           </div>
         </div>
         <div className="bg-gray-700 p-3 rounded-lg">
@@ -53,4 +55,3 @@ export default function UserSection() {
     </div>
   )
 }
-

@@ -64,15 +64,15 @@ function RadialChart() {
               content={<ChartTooltipContent hideLabel />}
             />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
+              <Label 
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
-                      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
+                      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" className="text-white">
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) - 16}
-                          className="fill-foreground text-2xl font-bold text-gray-50"
+                          className="fill-foreground text-2xl font-bold text-white"
                         >
                           {tasksTotal}
                         </tspan>

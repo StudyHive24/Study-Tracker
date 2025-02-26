@@ -22,6 +22,7 @@ function ImageUpload() {
     const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
     const router = useRouter()
+
   
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files[0]) {
@@ -45,7 +46,7 @@ function ImageUpload() {
         setUploadedImage(data.imageUrl); // Set the URL of the uploaded image
 
         toast.success('Photo Uploaded Successfully')
-        router.push('/')
+        window.location.reload();
       } catch (error) {
         toast.error('Upload Error')
       }

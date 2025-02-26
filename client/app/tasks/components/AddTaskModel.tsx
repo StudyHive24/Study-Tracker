@@ -60,7 +60,6 @@ function AddTaskModel() {
 
     createTask(updatedTask)
 
-     closeModal()
   }
 
   const [tags, setTags] = useState(['Coding'])
