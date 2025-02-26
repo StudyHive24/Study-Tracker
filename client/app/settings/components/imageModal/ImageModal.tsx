@@ -17,7 +17,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ImageUpload from "../ImageUpload";
-import { useRouter } from "next/navigation"; [1,2,5]
+import { useRouter } from "next/navigation";import ChangePasswordModal from "@/app/Components/Modals/ChangePasswordModal";
+ [1,2,5]
 
 export function ImageModal() {
   const { user, updateUser, handlerUserInput, userState } = useUserContext();
@@ -41,16 +42,10 @@ export function ImageModal() {
           <Image
             src={user?.image || blankImage}
             alt="profile"
-            width={80}
-            height={80}
-            className="rounded-full"
+            width={90}
+            height={90}
+            className="rounded-full max-w-16"
           />
-          <div className="absolute bottom-0 right-1 shadow-sm">
-            <span className="text-lg text-gray-400">{badge}</span>
-            <span className="absolute z-20 left-[50%] top-[50%] translate-x-[-100%] translate-y-[-110%] text-xs text-white">
-              <BadgeCheck color="lightBlue" />
-            </span>
-          </div>
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] bg-gray-900 border-none">
@@ -73,7 +68,7 @@ export function ImageModal() {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="grid gap-4 py-4 -mt-3">
+          <div className="grid gap-4 py-4 -mt-3 mb-2">
             <div className="flex justify-center items-center relative">
               <Image
                 src={user?.image}
@@ -113,6 +108,7 @@ export function ImageModal() {
             </div>
           </div>
           <DialogFooter>
+            <ChangePasswordModal />
             <Button type="submit" className="bg-green-500 hover:bg-green-600">
               Save changes
             </Button>

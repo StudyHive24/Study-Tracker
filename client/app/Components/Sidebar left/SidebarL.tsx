@@ -134,14 +134,6 @@ export function SideBarL() {
                       </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-                    <Link href="/settings" className="flex flex-row gap-5 ml-5">
-                        <Settings />
-                        <span>Settings</span>
-                      </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

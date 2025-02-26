@@ -4,6 +4,7 @@ import { useUserContext } from "@/context/userContext";
 import Image from "next/image";
 import React from "react";
 import image from '../../../public/blank_profile.webp'
+import { ImageModal } from "@/app/settings/components/imageModal/ImageModal";
 
 function Profile() {
   const { user } = useUserContext();
@@ -16,16 +17,10 @@ function Profile() {
         onClick={openProfileModal}
       >
         <div>
-          <Image
-            src={user?.image || image}
-            alt="avatar"
-            width={70}
-            height={70}
-            className="rounded-full"
-          />
+          <ImageModal />
         </div>
         <div>
-          <h1 className="flex flex-col text-xl">
+          <h1 className="flex flex-col text-[18px]">
             <span className=" font-medium">Hello,</span>
             <span className="font-bold">{user?.name}</span>
           </h1>
