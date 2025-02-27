@@ -102,7 +102,7 @@ const loginUser = async (e) => {
 
   try {
       // Make the POST request to login
-      res = await axios.post(`${serverUrl}/api/v1/login`, 
+      await axios.post(`${serverUrl}/api/v1/login`, 
       {
           email: userState.email,
           password: userState.password
@@ -111,13 +111,12 @@ const loginUser = async (e) => {
           withCredentials: true,  // this will send cookies to the server
       });
 
-      
-
       // Clear the form after successful login
       setUserState({
           email: '',
           password: ''
       });
+
 
 
       // Refresh the user details
