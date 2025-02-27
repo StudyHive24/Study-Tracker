@@ -84,13 +84,7 @@ function ChangePasswordModal() {
               type="submit"
               className="bg-green-500 hover:bg-green-600"
               onClick={() => {
-                if (newPassword.length < 8) {
-                  toast.error("New Password must contain atleast 8 Characters");
-                } else if (oldPassword == newPassword) {
-                  toast.error("Old and New passwords are same");
-                } else {
-                  changePassword(oldPassword, newPassword);
-                }
+                changePassword(oldPassword, newPassword);
               }}
             >
               Save changes

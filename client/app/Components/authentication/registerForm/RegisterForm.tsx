@@ -12,7 +12,7 @@ function RegisterForm() {
       <form
         onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission
-          registerUser();
+          registerUser(e);
         }}
       >
         <div className="flex flex-col gap-4 bg-white p-12 rounded-lg mt-3">
@@ -63,7 +63,7 @@ function RegisterForm() {
             </div>
 
             <button
-              disabled={!name || !email || !password}
+              
               type="submit"
               className="bg-blue-300 p-2 rounded-lg mt-3 hover:bg-blue-400"
             >

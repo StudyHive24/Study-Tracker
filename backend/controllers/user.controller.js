@@ -9,6 +9,7 @@ import emailSend from '../helpers/emailSend.js'
 import bcrypt from 'bcrypt'
 import nodemailer from 'nodemailer'
 import { uploadToCloudinary } from '../config/cloudinary.js'
+import { error } from 'console'
 
 
 export const test = (req, res) => {
@@ -100,8 +101,8 @@ export const loginUser = async (req, res) => {
         const user = await User.findOne({email})
 
         if(!user) {
-            return res.status(404).json({
-                message: 'No user found, sign up!'
+            return res.json({
+                error: 'No user found, sign up!'
             })
         }
 
@@ -113,7 +114,7 @@ export const loginUser = async (req, res) => {
         console.log(user.password)
 
         if (!match) {
-            return res.status(404).json({
+            return res.json({
                 error: 'Invalid Credentials'
             })
         }
@@ -370,7 +371,7 @@ export const requestPasswordReset = async (req, res) => {
         // Find the user by email
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.json({ error: "User not found" });
         }
 
         // Generate a 6-digit password reset code
@@ -410,7 +411,7 @@ export const verifyPasswordResetCode = async (req, res) => {
         // Find the user by email
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.json({ error: "User not found" });
         }
 
         // Check if the code matches and is not expired
@@ -418,7 +419,7 @@ export const verifyPasswordResetCode = async (req, res) => {
             user.verificationCode !== resetCode ||
             user.verificationCodeExpires < Date.now()
         ) {
-            return res.status(400).json({ message: "Invalid or expired reset code" });
+            return res.json({ error: "Invalid or expired reset code" });
         }
 
         res.status(200).json({ message: "Reset code verified" });
@@ -433,29 +434,47 @@ export const passwordReset = async (req, res) => {
     try {
         const { email, newPassword } = req.body;
 
+        // Check if email and newPassword are provided
+        if (!email || !newPassword) {
+            return res.json({ error: "Email and new password are required." });
+        }
+
+        // Validate password strength
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordRegex.test(newPassword)) {
+            return res.json({
+                error: "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+            });
+        }
+
         // Find the user by email
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.json({ error: "User not found." });
+        }
+
+        // Check if the new password is the same as the old one
+        const isSamePassword = await bcrypt.compare(newPassword, user.password);
+        if (isSamePassword) {
+            return res.json({ error: "New password cannot be the same as the old password." });
         }
 
         // Hash the new password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
 
-        // Update the user's password
+        // Update the user's password and clear verification details
         user.password = hashedPassword;
-        user.verificationCode = null; // Clear the code
-        user.verificationCodeExpires = null; // Clear the expiration
+        user.verificationCode = null;
+        user.verificationCodeExpires = null;
         await user.save();
 
-        res.status(200).json({ message: "Password reset successfully" });
+        res.json({ message: "Password reset successfully." });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        console.error("Error resetting password:", error);
+        res.status(500).json({ message: "Internal Server Error." });
     }
 };
-
 
 
 export const getUsers = async (req, res) => {
@@ -644,19 +663,28 @@ export const resetPassword = async (req, res) => {
 
         // Check for required fields
         if (!currentPassword || !newPassword) {
-            return res.status(400).json({ message: "All fields are required." });
+            return res.json({ error: "All fields are required." });
+        }
+
+        // Password validation rules
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (!passwordRegex.test(newPassword)) {
+            return res.json({
+                error: "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character.",
+            });
         }
 
         // Find user by ID
         const user = await User.findById(req.user._id);
         if (!user) {
-            return res.status(404).json({ message: "User not found." });
+            return res.json({ error: "User not found." });
         }
 
         // Check if current password matches
         const isMatch = await comparePasswords(currentPassword, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Current password is incorrect." });
+            return res.json({ error: "Current password is incorrect." });
         }
 
         // Hash the new password
@@ -683,9 +711,10 @@ export const resetPassword = async (req, res) => {
         });
     } catch (error) {
         console.error("Error during password change:", error);
-        return res.status(500).json({ message: "An error occurred while changing the password." });
+        return res.status(500).json({ error: "An error occurred while changing the password." });
     }
 };
+
 
 // image upload
 export const uploadProfileImage = async (req, res) => {

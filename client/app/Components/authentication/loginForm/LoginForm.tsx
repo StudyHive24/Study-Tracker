@@ -7,7 +7,7 @@ function LoginForm() {
   const { loginUser, userState, handlerUserInput } = useUserContext();
   const { email, password } = userState;
 
-  const submitHandle = (e) => {
+  const submitHandle = (e: { preventDefault: () => void; }) => {
       e.preventDefault();  // Prevent default form submission
       loginUser(e);  // Pass the event to the loginUser function
   };

@@ -102,7 +102,7 @@ const loginUser = async (e) => {
 
   try {
       // Make the POST request to login
-      await axios.post(`${serverUrl}/api/v1/login`, 
+      res = await axios.post(`${serverUrl}/api/v1/login`, 
       {
           email: userState.email,
           password: userState.password
@@ -111,11 +111,14 @@ const loginUser = async (e) => {
           withCredentials: true,  // this will send cookies to the server
       });
 
+      
+
       // Clear the form after successful login
       setUserState({
           email: '',
           password: ''
       });
+
 
       // Refresh the user details
       await getUser();
@@ -304,6 +307,11 @@ const loginUser = async (e) => {
             }
           );
     
+          if (res.data.error) {
+            toast.error(res.data.error)
+            return
+          }
+
           toast.success("Password changed successfully");
           setLoading(false);
         } catch (error) {
@@ -375,6 +383,12 @@ const requestResetCode = async (email) => {
   try {
       const response = await axios.post(`${serverUrl}/api/v1/request-password-reset`, { email });
       console.log(response.data.message);
+
+      if (response.data.error) {
+        toast.error(response.data.error)
+        return
+      }
+
       toast.success('Password Reset Code sent successfully!')
       router.push('/verify-password-reset')
   } catch (error) {
@@ -391,10 +405,16 @@ const verifyResetCode = async (email, resetCode) => {
           resetCode,
       });
       console.log(response.data.message);
+
+      if (response.data.error) {
+        toast.error(response.data.error)
+        return
+      } 
+
       toast.success('Password Reset Request is verified!')
       router.push('/reset-password')
   } catch (error) {
-      console.error(error.message || "Something went wrong");
+      console.error("Something went wrong");
   }
 };
 
@@ -406,10 +426,16 @@ const passwordReset = async (email, newPassword) => {
           newPassword,
       });
       console.log(response.data.message);
+
+      if (response.data.error) {
+        toast.error(response.data.error)
+        return
+      }
+
       toast.success('Password is changed successfully!')
       router.push('/login')
   } catch (error) {
-      console.error(error.response?.data?.message || "Something went wrong");
+      
       toast.success("Something went wrong")
   }
 };
