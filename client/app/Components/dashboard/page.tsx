@@ -71,8 +71,9 @@ const Dashboard = () => {
         const taskDueDate = normalizeDate(new Date(task.duedate));
         return task.completed == "no" && taskDueDate >= today; // Compare only the dates
     })
-    .sort((a: { endTime: string | number | Date; }, b: { endTime: string | number | Date; }) => new Date(a.endTime).getTime() - new Date(b.endTime).getTime());
-
+    .sort((a: { duedate: string | number | Date; }, b: { duedate: string | number | Date; }) => 
+        new Date(a.duedate).getTime() - new Date(b.duedate).getTime()
+    );
     //chat bot
     const chatbotMessage = getStudyInstructorMessages(upcomingTasks);
     
