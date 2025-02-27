@@ -43,14 +43,10 @@ const timeSlots = generateTimeSlots();
 export default function TimetablePage(): ReactElement {
   useRiderect("/login"); // Redirects to login page if the user is not authenticated
 
-
-  const [entries, setEntries] = useState<TimetableEntry[]>([]);  //  to store the timetable entries
-
-  const [isModalOpen, setIsModalOpen] = useState(false);  //  to manage the modal visibility
-
-  const [editingEntry, setEditingEntry] = useState<TimetableEntry | null>(null); //  to track the entry being edited
-
-  const [error, setError] = useState<string | null>(null);  //  to store error messages
+  const { entries, addEntry, updateEntry, deleteEntry } = useTimetableContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<TimetableEntry | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Default entry for new timetable slots
   const defaultEntry: TimetableEntry = {
@@ -62,27 +58,22 @@ export default function TimetablePage(): ReactElement {
     color: "#3498db",
   };
 
-  // to manage the currently selected or edited entry
   const [entry, setEntry] = useState<TimetableEntry>(defaultEntry);
 
- // handle input changes for form fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setEntry({ ...entry, [e.target.name]: e.target.value });
     setError(null); // Clear error message when user types
   };
 
-  // Check if time slot is already occupied
   const isTimeSlotAvailable = (newEntry: TimetableEntry): boolean => {
     return !entries.some((existingEntry) => {
-      if (existingEntry.day !== newEntry.day) return false; // Ensure the entries are on the same day
+      if (existingEntry.day !== newEntry.day) return false;
 
-      // Get indexes of the start and end times in the timeSlots array
       const newStartIndex = timeSlots.indexOf(newEntry.startTime);
       const newEndIndex = timeSlots.indexOf(newEntry.endTime);
       const existingStartIndex = timeSlots.indexOf(existingEntry.startTime);
       const existingEndIndex = timeSlots.indexOf(existingEntry.endTime);
 
-      // Check for overlapping time slots
       return (
         (newStartIndex >= existingStartIndex && newStartIndex < existingEndIndex) ||
         (newEndIndex > existingStartIndex && newEndIndex <= existingEndIndex) ||
@@ -91,8 +82,7 @@ export default function TimetablePage(): ReactElement {
     });
   };
 
-  // Function to save an entry (either adding a new one or updating an existing one)
-  const saveEntry = () => {
+  const saveEntry = async () => {
     setError(null);
 
     if (!entry.title.trim()) {
@@ -105,51 +95,36 @@ export default function TimetablePage(): ReactElement {
       return;
     }
 
-    // if (entry.startTime > entry.endTime) {
-    //   setError("Start time cannot be later than end time.");
-    //   return;
-    // }
-
     const startIndex = timeSlots.indexOf(entry.startTime);
     const endIndex = timeSlots.indexOf(entry.endTime);
-  
+
     if (startIndex >= endIndex) {
       setError("Start time must be before end time.");
       return;
     }
 
     if (editingEntry) {
-      // Update existing entry
-      setEntries(
-        entries.map((e) => (e.id === editingEntry.id ? { ...entry, id: e.id } : e))
-      );
-      setEditingEntry(null);
+      await updateEntry(editingEntry.id, entry);
     } else {
-      // Add a new entry
-      setEntries([...entries, { ...entry, id: Date.now() }]);
+      await addEntry(entry);
     }
 
-    // Close modal and reset entry form
     setIsModalOpen(false);
     setEntry(defaultEntry);
   };
 
-  // Function to edit an existing entry
   const editEntry = (entry: TimetableEntry) => {
     setEntry(entry);
     setEditingEntry(entry);
     setIsModalOpen(true);
   };
 
-  // Function to delete an entry
-  const deleteEntry = (id: number) => {
-    setEntries(entries.filter((entry) => entry.id !== id));
+  const handleDeleteEntry = async (id: number) => {
+    await deleteEntry(id);
   };
 
   return (
     <div className="p-3">
-
-
       <div className="flex justify-between items-center bg-gray-800 p-3 rounded-lg shadow-lg">
         <div className="text-left">
           <h1 className="text-2xl font-bold text-white">Study Timetable</h1>
@@ -167,12 +142,10 @@ export default function TimetablePage(): ReactElement {
         </div>
       </div>
 
-      
-      
       <div className="overflow-x-auto">
-        <table className="table-fixed w-full border border-gray-600  ">
+        <table className="table-fixed w-full border border-gray-600">
           <thead>
-            <tr className="bg-gray-700 text-white ">
+            <tr className="bg-gray-700 text-white">
               <th className="border border-gray-500 p-0 text-center">Time</th>
               {days.map((day) => (
                 <th key={day} className="border border-gray-500 p-2 text-center">{day}</th>
@@ -194,15 +167,15 @@ export default function TimetablePage(): ReactElement {
                     <td key={day} className="border border-gray-600 p-0 h-0 relative bg-gray-800 text-center">
                       {matchingEntry && (
                         <div
-                          className="p-1 text-white text-center  h-full flex flex-col justify-between"
+                          className="p-1 text-white text-center h-full flex flex-col justify-between"
                           style={{ backgroundColor: matchingEntry.color, height: "100%" }}
                         >
                           {matchingEntry.startTime === slot && (
                             <>
                               <p className="font-semibold">{matchingEntry.title}</p>
-                              <div className=" flex justify-center flex gap-1 mt-2">
-                                <button onClick={() => editEntry(matchingEntry)} className="text-white  w-2/3 p-1 rounded text-xs bg-gray-100/50 hover:bg-gray-600 transition">✏️</button>
-                                <button onClick={() => deleteEntry(matchingEntry.id)} className="text-white w-2/3 p-1 rounded text-xs bg-gray-100/50  hover:bg-gray-600 transition">❌</button>
+                              <div className="flex justify-center flex gap-1 mt-2">
+                                <button onClick={() => editEntry(matchingEntry)} className="text-white w-2/3 p-1 rounded text-xs bg-gray-100/50 hover:bg-gray-600 transition">✏️</button>
+                                <button onClick={() => handleDeleteEntry(matchingEntry.id)} className="text-white w-2/3 p-1 rounded text-xs bg-gray-100/50 hover:bg-gray-600 transition">❌</button>
                               </div>
                             </>
                           )}
@@ -217,8 +190,6 @@ export default function TimetablePage(): ReactElement {
         </table>
       </div>
 
-
-
       {/* Modal for adding/editing an entry */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
@@ -227,9 +198,9 @@ export default function TimetablePage(): ReactElement {
               {editingEntry ? "Edit Timetable Entry" : "Add Timetable Entry"}
             </h2>
 
-            {error && <p className="text-red-300 text-md mb-2 ">{error}</p>}
+            {error && <p className="text-red-300 text-md mb-2">{error}</p>}
 
-            <input type="text" name="title" placeholder="Title" value={entry.title} onChange={handleChange} className="w-full border p-2 rounded mb-2 " />
+            <input type="text" name="title" placeholder="Title" value={entry.title} onChange={handleChange} className="w-full border p-2 rounded mb-2" />
 
             <select name="day" value={entry.day} onChange={handleChange} className="w-full border p-2 rounded mb-2">
               {days.map((day) => <option key={day} value={day}>{day}</option>)}
@@ -245,7 +216,6 @@ export default function TimetablePage(): ReactElement {
 
             <input type="color" name="color" value={entry.color} onChange={handleChange} className="w-full border p-2 rounded mb-2" />
 
-            {/* Submit and cancel buttons */}
             <div className="flex justify-end">
               <button onClick={() => setIsModalOpen(false)} className="bg-gray-400 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Cancel</button>
               <button onClick={saveEntry} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{editingEntry ? "Update" : "Add"}</button>
