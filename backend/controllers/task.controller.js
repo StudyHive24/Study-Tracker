@@ -23,11 +23,7 @@ export const createTask = asyncHandler(async (req, res) => {
                 })
             }
 
-            if (title) {
-                return res.json({
-                    error: 'Task name is taken'
-                })
-            }
+            
             
 
            

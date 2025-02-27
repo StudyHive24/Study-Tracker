@@ -17,30 +17,36 @@ import toast from "react-hot-toast";
 function ChangePasswordModal() {
   const {
     user,
-    updateUser,
-    handlerUserInput,
-    userState,
     changePassword,
-    removeUserInput,
-    setUserState,
-    emailVerification,
-    verifyUser,
   } = useUserContext();
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handlePassword = (type: string) => (e: any) => {
     if (type === "current") {
       setOldPassword(e.target.value);
-    } else {
+    } else if (type === "new") {
       setNewPassword(e.target.value);
+    } else if (type === "confirm") {
+      setConfirmPassword(e.target.value);
     }
   };
 
-  let color1 = "text-gray-400";
-  let color2 = "lightGray";
-  let verifyText = "";
+  const handleSave = () => {
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match");
+    } else {
+      changePassword(oldPassword, newPassword);
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    }
+  };
+
+  // Disabling the submit button if fields are empty or passwords don't match
+  const isDisabled = !oldPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword;
 
   return (
     <div>
@@ -65,6 +71,7 @@ function ChangePasswordModal() {
               <Input
                 type="password"
                 id="CurrentPass"
+                value={oldPassword}
                 onChange={handlePassword("current")}
               />
             </div>
@@ -75,23 +82,28 @@ function ChangePasswordModal() {
               <Input
                 type="password"
                 id="NewPass"
+                value={newPassword}
                 onChange={handlePassword("new")}
+              />
+            </div>
+            <div className="flex flex-col gap-4">
+              <Label htmlFor="ConfirmPass" className="text-left text-gray-50">
+                Confirm New Password
+              </Label>
+              <Input
+                type="password"
+                id="ConfirmPass"
+                value={confirmPassword}
+                onChange={handlePassword("confirm")}
               />
             </div>
           </div>
           <DialogFooter>
             <Button
-              type="submit"
+              type="button"
               className="bg-green-500 hover:bg-green-600"
-              onClick={() => {
-                if (newPassword.length < 8) {
-                  toast.error("New Password must contain atleast 8 Characters");
-                } else if (oldPassword == newPassword) {
-                  toast.error("Old and New passwords are same");
-                } else {
-                  changePassword(oldPassword, newPassword);
-                }
-              }}
+              onClick={handleSave}
+              
             >
               Save changes
             </Button>

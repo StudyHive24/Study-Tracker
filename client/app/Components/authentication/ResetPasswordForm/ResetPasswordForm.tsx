@@ -1,45 +1,51 @@
 'use client'
 import { useUserContext } from '@/context/userContext'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 
 function ResetPasswordForm() {
-    const { passwordReset } = useUserContext()
-    
-    const [email, setEmail] = useState('')
-    const [newPassword, setNewPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+  const { passwordReset } = useUserContext()
 
-    const emailChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value)
+  const [email, setEmail] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isClient, setIsClient] = useState(false)
+
+  const emailChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
+
+  const newPasswordChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPassword(e.target.value)
+  }
+
+  const confirmPasswordChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.target.value)
+  }
+
+  const submitHandle = (e: any) => {
+    e.preventDefault()
+
+    if (newPassword !== confirmPassword) {
+      toast.error('Passwords don\'t match')
+    } else {
+      passwordReset(email, newPassword)
+
+      // clear the input email
+      setEmail('')
+      setNewPassword('')
+      setConfirmPassword('')
     }
+  }
 
-    const newPasswordChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewPassword(e.target.value)
-    }
+  useEffect(() => {
+    setIsClient(true) // Ensure the form only renders on the client side
+  }, [])
 
-    const confirmPasswordChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setConfirmPassword(e.target.value)
-    }
-
-
-    const submitHandle = (e: any) => {
-        e.preventDefault()
-
-        if (newPassword != confirmPassword) {
-            toast.error('Passwords don\'t match')
-        } else {
-            passwordReset(email, newPassword)
-
-            // clear the input email
-            setEmail('')
-            setNewPassword('')
-            setConfirmPassword('')
-        }
-
-    }
-
+  if (!isClient) {
+    return null // Prevent rendering on the server side
+  }
 
   return (
     <div className="flex justify-center p-3 ">
@@ -65,7 +71,7 @@ function ResetPasswordForm() {
                 placeholder="Enter email"
                 value={email}
                 onChange={emailChangeHandle}
-              ></input>
+              />
               <hr />
             </div>
             <div className="flex flex-col gap-1">
@@ -77,7 +83,7 @@ function ResetPasswordForm() {
                 placeholder="Enter new password"
                 value={newPassword}
                 onChange={newPasswordChangeHandle}
-              ></input>
+              />
               <hr />
             </div>
             <div className="flex flex-col gap-1">
@@ -89,12 +95,12 @@ function ResetPasswordForm() {
                 placeholder="Enter new password"
                 value={confirmPassword}
                 onChange={confirmPasswordChangeHandle}
-              ></input>
+              />
               <hr />
             </div>
             
             <button
-              disabled={ !email }
+              disabled={!email}
               type="submit"
               onClick={submitHandle}
               className="bg-blue-300 p-2 rounded-lg mt-3 hover:bg-blue-400 cursor-pointer"
