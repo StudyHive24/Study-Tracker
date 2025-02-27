@@ -1,11 +1,17 @@
 'use client'
 import { useUserContext } from '@/context/userContext'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 function ForgotPasswordForm() {
     const { emailVerification } = useUserContext()
     const [email, setEmail] = useState('')
+    const [isClient, setIsClient] = useState(false) // New state to ensure client-side rendering
+
+    // Effect to ensure the component runs only on the client-side
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
 
     const emailChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
@@ -15,6 +21,10 @@ function ForgotPasswordForm() {
         e.preventDefault()
         emailVerification()
         setEmail('') // Clear input field after submission
+    }
+
+    if (!isClient) {
+        return null // Prevents hydration errors by not rendering the component on the server side
     }
 
     return (

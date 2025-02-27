@@ -2,13 +2,27 @@
 import { useTasksContext } from "@/context/taskContext";
 import { useUserContext } from "@/context/userContext";
 import Image from "next/image";
-import React from "react";
-import image from '../../../public/blank_profile.webp'
+import React, { useEffect, useState } from "react";
+import image from '../../../public/blank_profile.webp';
 import { ImageModal } from "@/app/settings/components/imageModal/ImageModal";
 
 function Profile() {
   const { user } = useUserContext();
   const { tasks, activeTasks, completedTasks, openProfileModal, pendingTasks } = useTasksContext();
+  
+  // Local state to track whether component has mounted
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Set isMounted to true after first render
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Prevent rendering until client-side data is available
+  if (!isMounted) {
+    return null; // or a loading spinner
+  }
+
   return (
     <div className="m-3">
       <div
@@ -67,7 +81,7 @@ function Profile() {
           </div>
         </div>
       </div>
-      <h3 className="mt-8 font-medium text-gray-100">{user.name}'s Activity</h3>
+      <h3 className="mt-8 font-medium text-gray-100">{user?.name}'s Activity</h3>
     </div>
   );
 }

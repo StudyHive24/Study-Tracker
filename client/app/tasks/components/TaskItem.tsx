@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { FilePenLine, Star, Trash2 } from "lucide-react";
 import { edit, star, trash } from "@/utils/Icons";
 import { Task } from "@/utils/types";
@@ -18,21 +18,22 @@ interface TaskProps {
 
 function TaskItem({ task }: TaskProps) {
   const { deleteTask, getTask, updateTask, closeModal } = useTasksContext();
+  
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // This ensures that the code only runs on the client-side
+  }, []);
 
   let completed = task.completed;
 
   const handleSubmit = () => {
-    
     if (task.completed == 'no') {
-      updateTask({...task, completed: 'yes'})
+      updateTask({...task, completed: 'yes'});
     } else if (task.completed == 'yes') {
-      updateTask({...task, completed: 'no'})
+      updateTask({...task, completed: 'no'});
     }
-    
-    
   };
-  
-  
 
   const priorityColor = (priority: string) => {
     if (priority == "Low") {
@@ -67,13 +68,14 @@ function TaskItem({ task }: TaskProps) {
           {task.priority}
         </span>
         <div className="flex flex-row gap-1">
-          
-          <CompletedTooltip task={task}/>
-
-          {/* <UpdateTaskModel /> */}
-
-          <Modal task={task}/>
-          <DeleteTaskModal task={task}/>
+          {/* Only render tooltips and modals on the client-side */}
+          {isClient && (
+            <>
+              <CompletedTooltip task={task} />
+              <Modal task={task} />
+              <DeleteTaskModal task={task} />
+            </>
+          )}
         </div>
       </div>
     </div>

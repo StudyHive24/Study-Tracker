@@ -1,11 +1,21 @@
-"use client";
-import React from "react";
+'use client';
+import React, { useState, useEffect } from "react";
 import { useUserContext } from "@/context/userContext";
 import Link from "next/link";
 
 function RegisterForm() {
   const { registerUser, handlerUserInput, userState } = useUserContext();
   const { name = "", email = "", password = "" } = userState || {};
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // Ensure that component is rendered only on the client side
+  }, []);
+
+  if (!isClient) {
+    return null; // Prevent rendering on the server side to avoid hydration errors
+  }
 
   return (
     <div className="flex justify-center p-3">
@@ -63,7 +73,6 @@ function RegisterForm() {
             </div>
 
             <button
-              
               type="submit"
               className="bg-blue-300 p-2 rounded-lg mt-3 hover:bg-blue-400"
             >

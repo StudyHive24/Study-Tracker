@@ -9,21 +9,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import {} from "@radix-ui/react-dialog";
 import { Label } from "@radix-ui/react-label";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { MoveRight, Tag, Tags } from "lucide-react";
-import {TagsInput} from 'react-tag-input-component'
 import { useTasksContext } from "@/context/taskContext.js";
-import { time } from "console";
 import toast from "react-hot-toast";
 
-
 function AddTaskModel() {
-  const [selectedValue, setSelectedValue] = useState("low")
-  
-  const currentTime = new Date().toLocaleString([], {hour: '2-digit', minute: '2-digit'})
-
+  const [selectedValue, setSelectedValue] = useState("low");
+  const [currentTime, setCurrentTime] = useState("");
 
   const {
     task,
@@ -35,48 +28,40 @@ function AddTaskModel() {
     activeTask,
     updateTask,
     getTask
-  } = useTasksContext()
+  } = useTasksContext();
 
-  const ref = useRef(null)
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const time = new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit' });
+    setCurrentTime(time);
+  }, []);
 
   const handleRadioChange = (value: any) => {
-    setSelectedValue(value)
-    
+    setSelectedValue(value);
   };
 
-
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    e.preventDefault()
+    // Ensure task is correctly set
+    const endDate = new Date(`${task?.duedate}T${task?.endTime}:00`);
 
+    const updatedTask = { ...task, endTime: endDate };
 
-    // if (modalMode === 'edit') {
-    //   updateTask(task)
-    // } else if (modalMode === 'add') {
-    //   createTask(task)
-    // }
-    const endDate = new Date(`${task.duedate}T${task.endTime}:00`);
+    createTask(updatedTask);
+  };
 
-    const updatedTask = {...task, endTime: endDate}
-
-
-    createTask(updatedTask)
-
-    
-  }
-
-  const [tags, setTags] = useState(['Coding'])
+  const [tags, setTags] = useState(['Coding']);
 
   return (
-    <>
-      <Dialog>
-        <DialogTrigger >
-          <span className="bg-green-500 hover:bg-green-600 rounded-3xl mt-1 p-4 text-gray-50" >
-            Add A New Task
-          </span>
-        </DialogTrigger>
-        <DialogContent className="w-[525px]  p-7 bg-gray-800 border-none">
+    <Dialog>
+      <DialogTrigger >
+        <span className="bg-green-500 hover:bg-green-600 rounded-3xl mt-1 p-4 text-gray-50" >
+          Add A New Task
+        </span>
+      </DialogTrigger>
+      <DialogContent className="w-[525px]  p-7 bg-gray-800 border-none">
         <DialogHeader className="mt-5 gap-2">
           <DialogTitle className="text-gray-100">
             Create Task
@@ -85,19 +70,18 @@ function AddTaskModel() {
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="p-3 gap-2 flex flex-col">
-              <div className="gap-2 flex flex-col mb-1">
-                <Label htmlFor="title" className="text-gray-200">
-                  Task title
-                </Label>
-                <input
-                  id="title"
-                  placeholder="Enter a task title"
-                  className=" border-none bg-gray-200 p-2 rounded-md"
-                  onChange={(e) => handleInput("title")(e)}
-                  value={task?.title || ""}
-                  
-                />
-              </div>
+            <div className="gap-2 flex flex-col mb-1">
+              <Label htmlFor="title" className="text-gray-200">
+                Task title
+              </Label>
+              <input
+                id="title"
+                placeholder="Enter a task title"
+                className=" border-none bg-gray-200 p-2 rounded-md"
+                onChange={(e) => handleInput("title")(e)}
+                value={task?.title || ""}
+              />
+            </div>
             <div className="flex justify-between">
               <div className="gap-2 flex flex-col">
                 <Label htmlFor="description" className="text-gray-200">
@@ -155,13 +139,6 @@ function AddTaskModel() {
                 </select>
               </div>
             </div>
-            {/* <div className="text-gray-400 mt-1 text-[14px]">
-              This task will due on the{" "}
-              <span className="text-green-700 border-b-2 border-gray-200">
-                {task.duedate || "a specified date"}
-              </span>{" "}
-              at <span className="text-green-700 border-b-2 border-gray-200">{task.endTime || "a specific time"}</span>
-            </div> */}
             <div className="flex justify-center">
               <Button
                 type="submit"
@@ -173,8 +150,7 @@ function AddTaskModel() {
           </div>
         </form>
       </DialogContent>
-      </Dialog>
-    </>
+    </Dialog>
   );
 }
 

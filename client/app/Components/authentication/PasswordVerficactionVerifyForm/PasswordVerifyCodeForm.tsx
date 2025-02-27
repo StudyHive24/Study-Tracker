@@ -1,31 +1,39 @@
 'use client'
 import { useUserContext } from '@/context/userContext'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 function PasswordVerifyCodeForm() {
-    const { verifyResetCode } = useUserContext()
-    
-    const [email, setEmail] = useState('')
-    const [resetCode, setResetCode] = useState('')
+  const { verifyResetCode } = useUserContext()
+  
+  const [email, setEmail] = useState('')
+  const [resetCode, setResetCode] = useState('')
+  const [isClient, setIsClient] = useState(false)
 
-    const emailChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value)
-    }
+  useEffect(() => {
+    setIsClient(true) // Ensure the component is only rendered on the client side
+  }, [])
 
-    const verificationCodeChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setResetCode(e.target.value)
-    }
+  const emailChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
 
-    const submitHandle = (e: any) => {
-        e.preventDefault()
-        verifyResetCode(email, resetCode)
+  const verificationCodeChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setResetCode(e.target.value)
+  }
 
-        // clear the input email
-        setEmail('')
-        setResetCode('')
-    }
+  const submitHandle = (e: any) => {
+    e.preventDefault()
+    verifyResetCode(email, resetCode)
 
+    // clear the input email and reset code
+    setEmail('')
+    setResetCode('')
+  }
+
+  if (!isClient) {
+    return null; // Prevents hydration errors by not rendering the component on the server side
+  }
 
   return (
     <div className="flex justify-center p-3 ">
@@ -68,7 +76,7 @@ function PasswordVerifyCodeForm() {
             </div>
             
             <button
-              disabled={ !email }
+              disabled={ !email || !resetCode }
               type="submit"
               onClick={submitHandle}
               className="bg-blue-300 p-2 rounded-lg mt-3 hover:bg-blue-400 cursor-pointer"
