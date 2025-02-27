@@ -36,7 +36,7 @@ export const TimetableProvider = ({ children }) => {
   // Add a new timetable entry
   const addEntry = async (entry) => {
     try {
-      const response = await fetch('/api/timetable/create', {
+      const response = await fetch('http://localhost:8000/api/timetable/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
