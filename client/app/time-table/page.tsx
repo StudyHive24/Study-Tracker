@@ -66,7 +66,7 @@ export default function TimetablePage(): ReactElement {
   };
 
   const isTimeSlotAvailable = (newEntry: TimetableEntry): boolean => {
-    return !entries.some((existingEntry) => {
+    return !entries.some((existingEntry: TimetableEntry) => {
       if (existingEntry.day !== newEntry.day) return false;
 
       const newStartIndex = timeSlots.indexOf(newEntry.startTime);
@@ -157,7 +157,7 @@ export default function TimetablePage(): ReactElement {
               <tr key={index} className="border border-gray-500">
                 <td className="border border-gray-500 p-2 text-center bg-gray-700 text-white">{slot}</td>
                 {days.map((day) => {
-                  const matchingEntry = entries.find((e) => {
+                  const matchingEntry = entries.find((e: TimetableEntry) => {
                     const startIndex = timeSlots.indexOf(e.startTime);
                     const endIndex = timeSlots.indexOf(e.endTime);
                     return e.day === day && index >= startIndex && index < endIndex;
