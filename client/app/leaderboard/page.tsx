@@ -44,7 +44,7 @@ function Page() {
                     src={user.image || blankImg}
                     width={60}
                     height={60}
-                    className="max-h-[60px] max-w-[60px] rounded-2xl"
+                    className="max-h-[60px] max-w-[60px] rounded-2xl object-cover"
                     alt="userImg"
                     priority
                   />
@@ -94,7 +94,7 @@ function Page() {
                     src={user.image || blankImg}
                     width={60}
                     height={60}
-                    className="max-h-[60px] max-w-[60px] rounded-2xl"
+                    className="max-h-[60px] max-w-[60px] rounded-2xl object-cover"
                     alt="userImg"
                     priority
                   />
