@@ -16,7 +16,7 @@ export const TimetableProvider = ({ children }) => {
   // Fetch timetable entries from the backend
   const fetchEntries = async () => {
     try {
-      const response = await fetch('/api/timetable', {
+      const response = await fetch('http://localhost:8000/api/timetable', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Include the token for protected routes
         },
