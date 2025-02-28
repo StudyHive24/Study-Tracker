@@ -57,9 +57,10 @@ function TaskItem({ task }: TaskProps) {
           name=""
           disabled
           id=""
-          className="text-sm p-2 text-gray-200 bg-gray-500 rounded-lg mt-1 overflow-x-scroll resize-none"
+          className="text-sm p-2 text-gray-200 bg-gray-500 rounded-lg mt-1 overflow-y-scroll resize-none"
           value={task.description}
           rows={4}
+          
         ></textarea>
       </div>
       <div className="flex flex-row gap-3 text-sm justify-between">

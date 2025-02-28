@@ -110,14 +110,14 @@ export function SideBarL() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-gray-800 p-2">
+      {/* <SidebarFooter className="bg-gray-800 p-2">
         <SidebarMenu className="bg-gray-900 hover:bg-gray-800 rounded-xl p-2">
           <SidebarMenuItem className="flex ml-7 cursor-pointer" onClick={handleClick}>
             <FileX width={30} height={30} color="red" />
             <span className="mt-1 ml-2 mb-2 text-red-500">Delete All</span>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>
+      </SidebarFooter> */}
     </Sidebar>
   );
 }
