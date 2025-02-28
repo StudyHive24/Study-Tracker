@@ -42,9 +42,9 @@ function Page() {
                 >
                   <Image
                     src={user.image || blankImg}
-                    width={65}
+                    width={60}
                     height={60}
-                    className="max-h-28 rounded-2xl"
+                    className="max-h-[60px] max-w-[60px] rounded-2xl"
                     alt="userImg"
                     priority
                   />
@@ -92,9 +92,9 @@ function Page() {
                 >
                   <Image
                     src={user.image || blankImg}
-                    width={65}
+                    width={60}
                     height={60}
-                    className="max-h-28 rounded-2xl"
+                    className="max-h-[60px] max-w-[60px] rounded-2xl"
                     alt="userImg"
                     priority
                   />
