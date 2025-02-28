@@ -173,7 +173,7 @@ const getTask = async (taskID) => {
         }
     }
 
-    const getTopUsersByCompletion = async () => {
+    const getTopUsersByCompletion = async (req, res) => {
         try {
 
         
