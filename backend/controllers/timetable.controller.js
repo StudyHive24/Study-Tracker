@@ -1,144 +1,131 @@
-// api/controllers/timetableController.js
-import Timetable from '../models/timetable/timetable.model.js';
+import TimetableEntry from '../models/timetable.model.js'; // Import the TimetableEntry model
 
-
-// Get all timetable 
+// Get all timetable entries for the logged-in user
 export const getTimetableEntries = async (req, res) => {
-    try{
-        const userID = req.user._id
+    try {
+        const userID = req.user._id;
 
         if (!userID) {
-            res.status(400).json({
-                message: 'User not found'
-            })
+            return res.status(400).json({
+                message: 'User not found',
+            });
         }
 
-        const timetable = await Timetable.find({user: userID})
-
+        const timetableEntries = await TimetableEntry.find({ user: userID });
         res.status(200).json({
-            length: timetable.length,
-            timetable
-        })
-
-    }catch (error) {
-        console.log('Error in getting timetable info: ', error)
-        res.status(400).json({message: error.message});
+            length: timetableEntries.length,
+            timetableEntries,
+        });
+    } catch (error) {
+        console.log('Error fetching timetable entries: ', error);
+        res.status(500).json({ message: error.message });
     }
 };
 
 // Create a new timetable entry
 export const createTimetableEntry = async (req, res) => {
     try {
-        const {title, day, startTime, endTime, color} = req.body;
+        const { day, startTime, endTime, title, color } = req.body;
 
-        //validate input
-        if (!title || !day || !startTime || !endTime || !color ) {
-            return res.status(400).json ({message: 'Title, day, startTime and endTime are required'});
+        // Validate input
+        if (!day || !startTime || !endTime || !title || !color) {
+            return res.status(400).json({
+                message: 'Day, start time, end time, title, and color are required',
+            });
         }
-        // const timetable = await Timetable.create ({title, day, startTime,endTime,color, user: req.user._id});
-        const timetable = new Timetable({ 
-            title, 
-            day, 
-            startTime, 
-            endTime, 
-            color, 
-            user: req.user._id 
+
+        // Create a new entry in the database
+        const timetableEntry = await TimetableEntry.create({
+            day,
+            startTime,
+            endTime,
+            title,
+            color,
+            user: req.user._id, // Associate the entry with the logged-in user
         });
-        await timetable.save()
-        return res.status(201).json({ message: 'Timetable entry created successfully', timetable })
 
+        res.status(201).json(timetableEntry);
     } catch (error) {
-        // res.status(400).json({ message: error.message });
-        console.error('Error in creating timetable entry:', error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
+        console.log('Error creating timetable entry: ', error);
+        res.status(500).json({ message: error.message });
     }
 };
 
-// Delete a timetable entry
-export const deleteTimetableEntry = async (req, res) => {
-    try {
-        const userID = req.user._id
-        const { id } = req.params;
-
-        const entry = await Timetable.findOne({ _id: id, user: userID });
-
-        if (!entry) {
-            return res.status(404).json({ message: 'Timetable entry not found' });
-        }
-
-        await Timetable.findByIdAndDelete(id);
-        res.status(200).json({ message: 'Timetable entry deleted successfully' });
-    } catch (error) {
-        console.error('Error in deleting timetable entry:', error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
-    }
-};
-
-// Update a timetable entry
+// Update a specific timetable entry by ID
 export const updateTimetableEntry = async (req, res) => {
     try {
-        const userID = req.user._id
         const { id } = req.params;
-        const { title, day, startTime, endTime, color } = req.body
-        
-        const updatedEntry = await Timetable.findOneAndUpdate(
-            { _id: id, user: userID }, 
-            { title, day, startTime, endTime, color },
-            { new: true }
-        );
-        
-        if (!updatedEntry) {
-            return res.status(404).json({ message: 'Timetable entry not found' });
+        const { day, startTime, endTime, title, color } = req.body;
+
+        // Validate input
+        if (!day || !startTime || !endTime || !title || !color) {
+            return res.status(400).json({
+                message: 'Day, start time, end time, title, and color are required',
+            });
         }
 
-        res.status(200).json({ message: 'Timetable entry updated successfully', updatedEntry });
+        const updatedEntry = await TimetableEntry.findByIdAndUpdate(
+            id,
+            { day, startTime, endTime, title, color },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedEntry) {
+            return res.status(404).json({
+                message: 'Timetable entry not found',
+            });
+        }
+
+        res.status(200).json(updatedEntry);
     } catch (error) {
-        console.error('Error in updating timetable entry:', error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
+        console.log('Error updating timetable entry: ', error);
+        res.status(500).json({ message: error.message });
     }
 };
 
+// Delete a specific timetable entry by ID
+export const deleteTimetableEntry = async (req, res) => {
+    try {
+        const { id } = req.params;
 
+        const deletedEntry = await TimetableEntry.findByIdAndDelete(id);
 
-// // Create a new timetable entry
-// export const createTimetableEntry = async (req, res) => {
-//     try {
-//         const newEntry = new Timetable(req.body);
-//         await newEntry.save();
-//         res.status(201).json(newEntry);
-//     } catch (error) {
-//         res.status(400).json({ message: error.message });
-//     }
-// };
+        if (!deletedEntry) {
+            return res.status(404).json({
+                message: 'Timetable entry not found',
+            });
+        }
 
-// // Get all timetable entries
-// export const getTimetableEntries = async (req, res) => {
-//     try {
-//         const entries = await Timetable.find();
-//         res.status(200).json(entries);
-//     } catch (error) {
-//         res.status(400).json({ message: error.message });
-//     }
-// };
+        res.status(200).json({
+            message: 'Timetable entry deleted successfully',
+        });
+    } catch (error) {
+        console.log('Error deleting timetable entry: ', error);
+        res.status(500).json({ message: error.message });
+    }
+};
 
-// // Update a timetable entry
-// export const updateTimetableEntry = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         const updatedEntry = await Timetable.findByIdAndUpdate(id, req.body, { new: true });
-//         res.status(200).json(updatedEntry);
-//     } catch (error) {
-//         res.status(400).json({ message: error.message });
-//     }
-// };
+// Delete all timetable entries for the logged-in user
+export const deleteAllTimetableEntries = async (req, res) => {
+    try {
+        const userID = req.user._id;
 
-// // Delete a timetable entry
-// export const deleteTimetableEntry = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         await Timetable.findByIdAndDelete(id);
-//         res.status(204).send();
-//     } catch (error) {
-//         res.status(400).json({ message: error.message });
-//     }
-// };
+        const timetableEntries = await TimetableEntry.find({ user: userID });
+
+        if (!timetableEntries || timetableEntries.length === 0) {
+            return res.status(404).json({
+                message: 'No timetable entries found',
+            });
+        }
+
+        // Delete all timetable entries for the user
+        await TimetableEntry.deleteMany({ user: userID });
+
+        res.status(200).json({
+            message: 'All timetable entries have been deleted successfully',
+        });
+    } catch (error) {
+        console.log('Error deleting all timetable entries: ', error);
+        res.status(500).json({ message: error.message });
+    }
+};

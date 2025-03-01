@@ -6,7 +6,7 @@ import useRiderect from "@/hooks/useUserRiderect";
 
 // Interface for a timetable entry
 interface TimetableEntry {
-  id: number;
+  id: string; // <-- Changed to string
   day: string;
   startTime: string;
   endTime: string;
@@ -45,12 +45,14 @@ export default function TimetablePage(): ReactElement {
 
   const { entries, addEntry, updateEntry, deleteEntry } = useTimetableContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
+  const [selectedEntry, setSelectedEntry] = useState<TimetableEntry | null>(null);
   const [editingEntry, setEditingEntry] = useState<TimetableEntry | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Default entry for new timetable slots
   const defaultEntry: TimetableEntry = {
-    id: Date.now(),
+    id: "", // <-- Leave this empty
     title: "",
     day: "Monday",
     startTime: "4:00 AM",
@@ -106,21 +108,34 @@ export default function TimetablePage(): ReactElement {
     if (editingEntry) {
       await updateEntry(editingEntry.id, entry);
     } else {
-      await addEntry(entry);
+      
+      const { id, ...newEntry } = entry;
+      await addEntry(newEntry);
     }
 
     setIsModalOpen(false);
     setEntry(defaultEntry);
   };
 
-  const editEntry = (entry: TimetableEntry) => {
-    setEntry(entry);
-    setEditingEntry(entry);
-    setIsModalOpen(true);
+  const handleEntryClick = (entry: TimetableEntry) => {
+    setSelectedEntry(entry);
+    setIsEntryModalOpen(true);
   };
 
-  const handleDeleteEntry = async (id: number) => {
-    await deleteEntry(id);
+  const handleEditEntry = () => {
+    if (selectedEntry) {
+      setEntry(selectedEntry);
+      setEditingEntry(selectedEntry);
+      setIsEntryModalOpen(false);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleDeleteEntry = async () => {
+    if (selectedEntry) {
+      await deleteEntry(selectedEntry.id);
+      setIsEntryModalOpen(false);
+    }
   };
 
   return (
@@ -164,7 +179,11 @@ export default function TimetablePage(): ReactElement {
                   });
 
                   return (
-                    <td key={day} className="border border-gray-600 p-0 h-0 relative bg-gray-800 text-center">
+                    <td
+                      key={day}
+                      className="border border-gray-600 p-0 h-0 relative bg-gray-800 text-center cursor-pointer"
+                      onClick={() => matchingEntry && handleEntryClick(matchingEntry)}
+                    >
                       {matchingEntry && (
                         <div
                           className="p-1 text-white text-center h-full flex flex-col justify-between"
@@ -173,10 +192,6 @@ export default function TimetablePage(): ReactElement {
                           {matchingEntry.startTime === slot && (
                             <>
                               <p className="font-semibold">{matchingEntry.title}</p>
-                              <div className="flex justify-center flex gap-1 mt-2">
-                                <button onClick={() => editEntry(matchingEntry)} className="text-white w-2/3 p-1 rounded text-xs bg-gray-100/50 hover:bg-gray-600 transition">✏️</button>
-                                <button onClick={() => handleDeleteEntry(matchingEntry.id)} className="text-white w-2/3 p-1 rounded text-xs bg-gray-100/50 hover:bg-gray-600 transition">❌</button>
-                              </div>
                             </>
                           )}
                         </div>
@@ -219,6 +234,64 @@ export default function TimetablePage(): ReactElement {
             <div className="flex justify-end">
               <button onClick={() => setIsModalOpen(false)} className="bg-gray-400 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Cancel</button>
               <button onClick={saveEntry} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{editingEntry ? "Update" : "Add"}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for displaying entry details */}
+      {isEntryModalOpen && selectedEntry && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-gray-500 p-6 rounded shadow-lg w-96">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Entry Details</h2>
+              <button
+                onClick={() => setIsEntryModalOpen(false)}
+                className="text-white text-lg hover:text-gray-300"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <p className="text-white font-semibold">Title:</p>
+                <p className="text-white">{selectedEntry.title}</p>
+              </div>
+              <div>
+                <p className="text-white font-semibold">Day:</p>
+                <p className="text-white">{selectedEntry.day}</p>
+              </div>
+              <div>
+                <p className="text-white font-semibold">Start Time:</p>
+                <p className="text-white">{selectedEntry.startTime}</p>
+              </div>
+              <div>
+                <p className="text-white font-semibold">End Time:</p>
+                <p className="text-white">{selectedEntry.endTime}</p>
+              </div>
+              <div>
+                <p className="text-white font-semibold">Color:</p>
+                <div
+                  className="w-8 h-8 rounded-full"
+                  style={{ backgroundColor: selectedEntry.color }}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-6 space-x-4">
+              <button
+                onClick={handleEditEntry}
+                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleDeleteEntry}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
             </div>
           </div>
         </div>

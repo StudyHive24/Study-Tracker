@@ -57,7 +57,7 @@ export const TimetableProvider = ({ children }) => {
   // Update an existing timetable entry
   const updateEntry = async (id, updatedEntry) => {
     try {
-      const response = await fetch(`/api/timetable/${id}`, {
+      const response = await fetch(`http://localhost:8000/api/timetable/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export const TimetableProvider = ({ children }) => {
   // Delete a timetable entry
   const deleteEntry = async (id) => {
     try {
-      const response = await fetch(`/api/timetable/${id}`, {
+      const response = await fetch(`http://localhost:8000/api/timetable/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`, // Include the token for protected routes
