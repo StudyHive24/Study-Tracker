@@ -1,4 +1,4 @@
-import TimetableEntry from '../models/timetable.model.js'; // Import the TimetableEntry model
+import TimetableEntry from '../models/timetable/timetable.model.js'; // Import the TimetableEntry model
 
 // Get all timetable entries for the logged-in user
 export const getTimetableEntries = async (req, res) => {

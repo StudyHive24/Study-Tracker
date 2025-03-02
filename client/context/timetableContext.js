@@ -1,117 +1,144 @@
-"use client";
-import { createContext, useContext, useState, useEffect } from 'react';
+'use client';
+import axios from 'axios';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useUserContext } from '../context/userContext.js';
+import toast from 'react-hot-toast';
 
-// Create a context for the timetable
 const TimetableContext = createContext();
+const serverUrl = 'http://localhost:8000';
 
-// Custom hook to use the TimetableContext
-export const useTimetableContext = () => useContext(TimetableContext);
-
-// TimetableProvider component to wrap around your application
 export const TimetableProvider = ({ children }) => {
-  const [entries, setEntries] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const userID = useUserContext().user._id;
 
-  // Fetch timetable entries from the backend
-  const fetchEntries = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/api/timetable', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Include the token for protected routes
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to fetch timetable entries');
-      }
-      const data = await response.json();
-      setEntries(data);
-      setLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-    }
-  };
+    const [entries, setEntries] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-  // Add a new timetable entry
-  const addEntry = async (entry) => {
-    try {
-      const response = await fetch('http://localhost:8000/api/timetable/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Include the token for protected routes
-        },
-        body: JSON.stringify(entry),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to add timetable entry');
-      }
-      const newEntry = await response.json();
-      setEntries((prevEntries) => [...prevEntries, newEntry]);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+    // Fetch timetable entries
+    const fetchEntries = async () => {
+        setLoading(true);
 
-  // Update an existing timetable entry
-  const updateEntry = async (id, updatedEntry) => {
-    try {
-      const response = await fetch(`http://localhost:8000/api/timetable/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Include the token for protected routes
-        },
-        body: JSON.stringify(updatedEntry),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to update timetable entry');
-      }
-      const updatedData = await response.json();
-      setEntries((prevEntries) =>
-        prevEntries.map((entry) => (entry.id === id ? updatedData : entry))
-      );
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+        try {
+            const res = await axios.get(`${serverUrl}/api/timetable`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            setEntries(res.data.timetableEntries);
+        } catch (error) {
+            console.error('Error fetching timetable entries:', error);
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  // Delete a timetable entry
-  const deleteEntry = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:8000/api/timetable/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // Include the token for protected routes
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete timetable entry');
-      }
-      setEntries((prevEntries) => prevEntries.filter((entry) => entry.id !== id));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+    // Add a new timetable entry
+    const addEntry = async (entry) => {
+        setLoading(true);
 
-  // Fetch entries when the component mounts
-  useEffect(() => {
-    fetchEntries();
-  }, []);
+        try {
+            const res = await axios.post(`${serverUrl}/api/timetable/create`, entry, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            setEntries((prevEntries) => [...prevEntries, res.data]);
+            toast.success('Entry added successfully');
+        } catch (error) {
+            console.error('Error adding timetable entry:', error);
+            toast.error('Failed to add timetable entry.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  return (
-    <TimetableContext.Provider
-      value={{
-        entries,
-        loading,
-        error,
-        addEntry,
-        updateEntry,
-        deleteEntry,
-      }}
-    >
-      {children}
-    </TimetableContext.Provider>
-  );
+    // Update a timetable entry
+    const updateEntry = async (id, updatedEntry) => {
+        setLoading(true);
+
+        try {
+            const res = await axios.put(`${serverUrl}/api/timetable/${id}`, updatedEntry, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            setEntries((prevEntries) =>
+                prevEntries.map((entry) => (entry._id === id ? res.data : entry))
+            );
+            toast.success('Entry updated successfully');
+        } catch (error) {
+            console.error('Error updating timetable entry:', error);
+            toast.error('Failed to update timetable entry.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Delete a timetable entry
+    const deleteEntry = async (id) => {
+        setLoading(true);
+
+        try {
+            await axios.delete(`${serverUrl}/api/timetable/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            setEntries((prevEntries) => prevEntries.filter((entry) => entry._id !== id));
+            toast.success('Entry deleted successfully');
+        } catch (error) {
+            console.error('Error deleting timetable entry:', error);
+            toast.error('Failed to delete timetable entry.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Delete all timetable entries
+    const deleteAllEntries = async () => {
+        setLoading(true);
+
+        try {
+            await axios.delete(`${serverUrl}/api/timetable/delete/all`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            setEntries([]);
+            toast.success('All entries deleted successfully');
+        } catch (error) {
+            console.error('Error deleting all entries:', error);
+            toast.error('Failed to delete all entries.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Fetch entries when the component mounts or userID changes
+    useEffect(() => {
+        if (userID) {
+            fetchEntries();
+        }
+    }, [userID]);
+
+    return (
+        <TimetableContext.Provider
+            value={{
+                entries,
+                loading,
+                error,
+                addEntry,
+                updateEntry,
+                deleteEntry,
+                deleteAllEntries,
+            }}
+        >
+            {children}
+        </TimetableContext.Provider>
+    );
+};
+
+export const useTimetableContext = () => {
+    return useContext(TimetableContext);
 };

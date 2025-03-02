@@ -7,7 +7,7 @@ import {
     deleteTimetableEntry,
     deleteAllTimetableEntries,
 } from '../controllers/timetable.controller.js';
-import { protect } from '../middleware/authenticationMiddleware.js';
+import { protect } from '../middleware/authentcationMiddleware.js';
 
 // Route to get all timetable entries
 router.get('/', protect, getTimetableEntries);
