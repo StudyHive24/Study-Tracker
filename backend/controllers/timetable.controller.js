@@ -1,4 +1,4 @@
-import TimetableEntry from '../models/timetable/timetable.model.js'; // Import the TimetableEntry model
+import TimetableEntry from '../models/timetable/timetable.model.js';
 
 // Get all timetable entries for the logged-in user
 export const getTimetableEntries = async (req, res) => {
@@ -64,17 +64,21 @@ export const updateTimetableEntry = async (req, res) => {
             });
         }
 
+        // Find the entry and ensure it belongs to the logged-in user
+        const entry = await TimetableEntry.findOne({ _id: id, user: req.user._id });
+
+        if (!entry) {
+            return res.status(404).json({
+                message: 'Timetable entry not found or unauthorized',
+            });
+        }
+
+        // Update the entry
         const updatedEntry = await TimetableEntry.findByIdAndUpdate(
             id,
             { day, startTime, endTime, title, color },
             { new: true } // Return the updated document
         );
-
-        if (!updatedEntry) {
-            return res.status(404).json({
-                message: 'Timetable entry not found',
-            });
-        }
 
         res.status(200).json(updatedEntry);
     } catch (error) {
@@ -88,13 +92,17 @@ export const deleteTimetableEntry = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const deletedEntry = await TimetableEntry.findByIdAndDelete(id);
+        // Find the entry and ensure it belongs to the logged-in user
+        const entry = await TimetableEntry.findOne({ _id: id, user: req.user._id });
 
-        if (!deletedEntry) {
+        if (!entry) {
             return res.status(404).json({
-                message: 'Timetable entry not found',
+                message: 'Timetable entry not found or unauthorized',
             });
         }
+
+        // Delete the entry
+        await TimetableEntry.findByIdAndDelete(id);
 
         res.status(200).json({
             message: 'Timetable entry deleted successfully',

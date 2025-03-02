@@ -63,9 +63,12 @@ export const TimetableProvider = ({ children }) => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+
+            // Update the state with the updated entry
             setEntries((prevEntries) =>
                 prevEntries.map((entry) => (entry._id === id ? res.data : entry))
             );
+
             toast.success('Entry updated successfully');
         } catch (error) {
             console.error('Error updating timetable entry:', error);
@@ -85,7 +88,10 @@ export const TimetableProvider = ({ children }) => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+
+            // Remove the deleted entry from the state
             setEntries((prevEntries) => prevEntries.filter((entry) => entry._id !== id));
+
             toast.success('Entry deleted successfully');
         } catch (error) {
             console.error('Error deleting timetable entry:', error);

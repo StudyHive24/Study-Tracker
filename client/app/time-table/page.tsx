@@ -6,7 +6,7 @@ import useRiderect from "@/hooks/useUserRiderect";
 
 // Interface for a timetable entry
 interface TimetableEntry {
-  id: string; // <-- Changed to string
+  _id: string; // Use _id instead of id
   day: string;
   startTime: string;
   endTime: string;
@@ -52,7 +52,7 @@ export default function TimetablePage(): ReactElement {
 
   // Default entry for new timetable slots
   const defaultEntry: TimetableEntry = {
-    id: "", // <-- Leave this empty
+    _id: "", // Use _id instead of id
     title: "",
     day: "Monday",
     startTime: "4:00 AM",
@@ -106,10 +106,11 @@ export default function TimetablePage(): ReactElement {
     }
 
     if (editingEntry) {
-      await updateEntry(editingEntry.id, entry);
+      // Update the existing entry
+      await updateEntry(editingEntry._id, entry); // Use _id instead of id
     } else {
-      
-      const { id, ...newEntry } = entry;
+      // Add a new entry
+      const { _id, ...newEntry } = entry;
       await addEntry(newEntry);
     }
 
@@ -124,17 +125,17 @@ export default function TimetablePage(): ReactElement {
 
   const handleEditEntry = () => {
     if (selectedEntry) {
-      setEntry(selectedEntry);
-      setEditingEntry(selectedEntry);
-      setIsEntryModalOpen(false);
-      setIsModalOpen(true);
+      setEntry(selectedEntry); // Populate the form with the selected entry
+      setEditingEntry(selectedEntry); // Set the editing entry
+      setIsEntryModalOpen(false); // Close the details modal
+      setIsModalOpen(true); // Open the edit modal
     }
   };
 
   const handleDeleteEntry = async () => {
     if (selectedEntry) {
-      await deleteEntry(selectedEntry.id);
-      setIsEntryModalOpen(false);
+      await deleteEntry(selectedEntry._id); // Use _id instead of id
+      setIsEntryModalOpen(false); // Close the details modal
     }
   };
 
