@@ -11,7 +11,7 @@ const UserContext = React.createContext()
 axios.defaults.withCredentials = true
 
 export const UserContextProvider = ({children}) => {
-    const serverUrl = 'https://study-hive-server-f6.vercel.app/'
+    const serverUrl = 'https://study-hive-server-f6.vercel.app'
 
     const router = useRouter()
 

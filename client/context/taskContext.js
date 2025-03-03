@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 
 const TaskContext = createContext()
 
-const serverUrl = 'https://study-hive-server-f6.vercel.app/'
+const serverUrl = 'https://study-hive-server-f6.vercel.app'
 
 export const TasksProvider = ({children}) => {
 

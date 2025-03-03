@@ -5,7 +5,7 @@ import { useUserContext } from '../context/userContext.js';
 import toast from 'react-hot-toast';
 
 const TimetableContext = createContext();
-const serverUrl = 'https://study-hive-server-f6.vercel.app/';
+const serverUrl = 'https://study-hive-server-f6.vercel.app';
 
 export const TimetableProvider = ({ children }) => {
     const userID = useUserContext().user._id;
