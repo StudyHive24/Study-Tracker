@@ -726,23 +726,43 @@ export const resetPassword = async (req, res) => {
 };
 
 
-// image upload
 export const uploadProfileImage = async (req, res) => {
-    try {
-        const { imageUrl } = req.body;
-        const userId = req.user.id; // Extracted from token middleware
+  try {
+    // Extract the image URL and user ID
+    const { imageUrl } = req.body;
+    const userId = req.user.id; // Assuming this is coming from the token middleware
     
-        if (!imageUrl) return res.json({ message: "No image URL provided" });
+    // Ensure imageUrl is provided
+    if (!imageUrl) return res.json({ message: "No image URL provided" });
     
-        // Update user's profile picture
-        const updatedUser = await User.findByIdAndUpdate(userId, { profilePicture: imageUrl }, { new: true });
-    
-        res.json({ message: "Profile picture updated", profilePicture: updatedUser.profilePicture });
-      } catch (error) {
-        console.error("Error updating profile picture:", error);
-        res.status(500).json({ message: "Server error" });
-      }
-}
+    // Validate the image URL (simple check, can be more complex if needed)
+    const urlRegex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|tiff|webp))/i;
+    if (!urlRegex.test(imageUrl)) {
+      return res.json({ message: "Invalid image URL" });
+    }
+
+    // Find the user and update their profile picture
+    const updatedUser = await User.findByIdAndUpdate(userId, 
+      { image: imageUrl }, 
+      { new: true } // Return the updated user object
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Respond with success
+    res.json({
+      message: "Profile picture updated",
+      image: updatedUser.image,
+    });
+
+  } catch (error) {
+    console.error("Error updating profile picture:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 
