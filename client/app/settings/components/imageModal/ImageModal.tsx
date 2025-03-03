@@ -55,7 +55,7 @@ export function ImageModal() {
             e.preventDefault();
 
             updateUser(e, {
-              name: userState.name,
+              email: userState.email,
             });
 
             router.push('/')
@@ -84,13 +84,13 @@ export function ImageModal() {
 
             <div className="grid grid-cols-4 items-center gap-4 mt-2">
               <Label htmlFor="name" className="text-right text-white">
-                Name
+                Username
               </Label>
               <Input
                 id="name"
                 name="name"
                 defaultValue={user.name}
-                onChange={(e) => handlerUserInput("name")(e)}
+                disabled
                 className="col-span-3 bg-gray-800 text-white"
               />
             </div>
@@ -100,10 +100,9 @@ export function ImageModal() {
               </Label>
               <Input
                 id="username"
-                value={user.email}
-                onChange={handleChange}
+                defaultValue={user.email}
+                onChange={(e) => handlerUserInput("email")(e)}
                 className="col-span-3 bg-gray-800 text-white"
-                disabled
               />
             </div>
           </div>

@@ -72,6 +72,8 @@ export const UserContextProvider = ({children}) => {
             if (res.data.error == 'email is taken already') {
                 toast.error(res.data.error)
                 return
+            } else if (res.data.error == 'username is taken already') {
+                toast.error(res.data.error)
             } else {
                 toast.success('user registered succcessfully')
                 console.log('user registered succcessfully', res.data)
@@ -104,6 +106,7 @@ const loginUser = async (e) => {
       // Make the POST request to login
       await axios.post(`${serverUrl}/api/v1/login`, 
       {
+          name: userState.name,
           email: userState.email,
           password: userState.password
       },
@@ -113,7 +116,7 @@ const loginUser = async (e) => {
 
       // Clear the form after successful login
       setUserState({
-          email: '',
+          name: '',
           password: ''
       });
 

@@ -21,9 +21,9 @@ const TimeBox: React.FC<TimeBoxProps> = ({ label, time, className }) => (
 );
 
 interface ProgressPageProps {
-  // dailyTime?: string;
-  // weeklyTime?: string;
-  // monthlyTime?: string;
+  dailyTime?: string;
+  weeklyTime?: string;
+  monthlyTime?: string;
 }
 
 
