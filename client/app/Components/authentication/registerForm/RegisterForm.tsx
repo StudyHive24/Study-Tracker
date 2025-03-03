@@ -37,7 +37,7 @@ function RegisterForm() {
           </span>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <label className="text-gray-600">Name</label>
+              <label className="text-gray-600">Userame</label>
               <input
                 type="text"
                 className="p-1 w-[30vw] outline-none focus:border-2 border-blue-300 rounded-md"
