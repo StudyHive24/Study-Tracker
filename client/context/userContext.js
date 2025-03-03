@@ -74,6 +74,9 @@ export const UserContextProvider = ({children}) => {
                 return
             } else if (res.data.error == 'username is taken already') {
                 toast.error(res.data.error)
+
+            } else if (res.data.error) {
+                toast.error(res.data.error)
             } else {
                 toast.success('user registered succcessfully')
                 console.log('user registered succcessfully', res.data)
