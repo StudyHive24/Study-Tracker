@@ -46,7 +46,7 @@ function ImageUpload() {
         });
         const imageUrl = res.data.secure_url;
 
-        const serverURL = process.env.SERVER_URL
+        const serverURL = 'https://study-hive-server-f6.vercel.app'
     
         // Step 2: Send image URL to backend and link with user
         await axios.put(`${serverURL}/api/v1/users/update-profile-picture`, 
