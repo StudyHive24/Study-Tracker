@@ -34,21 +34,28 @@ function ImageUpload() {
   
     const handleUpload = async () => {
       if (!image) return toast.error("Please select an image");
-  
+    
       const formData = new FormData();
-      formData.append("image", image);
-  
+      formData.append("file", image);
+      formData.append("upload_preset", "your_upload_preset"); // Cloudinary preset
+    
       try {
-        const { data } = await axios.post("https://study-hive-server-f6.vercel.app/api/v1/upload-profile", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-  
-        setUploadedImage(data.imageUrl); // Set the URL of the uploaded image
-
-        toast.success('Photo Uploaded Successfully')
+        // Step 1: Upload to Cloudinary
+        const res = await axios.post("https://api.cloudinary.com/v1_1/dyyitqydc/image/upload", formData);
+        const imageUrl = res.data.secure_url;
+    
+        // Step 2: Send image URL to backend and link with user
+        await axios.put("https://study-hive-server-f6.vercel.app/api/v1/users/update-profile-picture", 
+          { imageUrl },
+          
+        );
+    
+        setUploadedImage(imageUrl); // Store in state
+        toast.success("Profile photo updated");
         window.location.reload();
       } catch (error) {
-        toast.error('Upload Error')
+        console.error("Upload Error:", error);
+        toast.error("Upload Failed");
       }
     };
 

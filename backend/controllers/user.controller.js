@@ -729,19 +729,17 @@ export const resetPassword = async (req, res) => {
 // image upload
 export const uploadProfileImage = async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+        const { imageUrl } = req.body;
+        const userId = req.user.id; // Extracted from token middleware
     
-        // Upload file to Cloudinary
-        const imageUrl = await uploadToCloudinary(req.file.path);
+        if (!imageUrl) return res.json({ message: "No image URL provided" });
     
-        // Assuming you have a user in your session or database (e.g., req.user)
-        const user = await User.findById(req.user.id);  // Modify this depending on your authentication logic
-        user.image = imageUrl;  // Save Cloudinary URL in the user's document
-        await user.save();
+        // Update user's profile picture
+        const updatedUser = await User.findByIdAndUpdate(userId, { profilePicture: imageUrl }, { new: true });
     
-        res.json({ imageUrl }); // Send Cloudinary URL to frontend
+        res.json({ message: "Profile picture updated", profilePicture: updatedUser.profilePicture });
       } catch (error) {
-        console.error(error);
+        console.error("Error updating profile picture:", error);
         res.status(500).json({ message: "Server error" });
       }
 }
