@@ -37,7 +37,7 @@ function ImageUpload() {
     
       const formData = new FormData();
       formData.append("file", image);
-      formData.append("upload_preset", "your_upload_preset"); // Cloudinary preset
+      formData.append("upload_preset", "studyhive"); // Cloudinary preset
     
       try {
         // Step 1: Upload to Cloudinary
