@@ -20,14 +20,14 @@ const TimeBox: React.FC<TimeBoxProps> = ({ label, time, className }) => (
   </div>
 );
 
-interface ProgressPageProps {
-  dailyTime: any;
-  weeklyTime: any;
-  monthlyTime: any;
-}
+// interface ProgressPageProps {
+//   dailyTime?: string;
+//   weeklyTime?: string;
+//   monthlyTime?: string;
+// }
 
 
-const ProgressPage: React.FC<ProgressPageProps> = (props) => {
+const ProgressPage = () => {
   useRiderect('/login');
   const { tasks } = useTasksContext();
   const [weeklyTaskGoal, setWeeklyTaskGoal] = useState(0);
