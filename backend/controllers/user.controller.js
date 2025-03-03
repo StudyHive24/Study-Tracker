@@ -19,68 +19,69 @@ export const test = (req, res) => {
 // register user
 export const registerUser = async (req, res) => {
     try {
-        const {name, email, password} = req.body
-        // check if name was entered
+        const { name, email, password } = req.body;
+
+        // Check if name was entered
         if (!name) {
-            return res.json({
-                error: 'name is required'
-            })
-        }
-        // check if password is good
-        if(!password || password.length < 8) {
-            return res.json({
-                error: 'Password is required and should be at least 8 characters long'
-            })
+            return res.json({ error: "Name is required" });
         }
 
-        // check email is okay
-        if(!email.includes('@')) {
+        // Password validation regex
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        // Check if password is valid
+        if (!password) {
+            return res.json({ error: "Password is required" });
+        }
+        if (!passwordRegex.test(password)) {
             return res.json({
-                error: 'Enter a valid email'
-            })
+                error: "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.",
+            });
         }
 
-        // check email
-        const exist = await User.findOne({email})
-        if(exist) {
-            return res.json({
-                error: 'email is taken already'
-            })
+        // Check email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.json({ error: "Enter a valid email" });
         }
 
-        // check name
-        const exist2 = await User.findOne({name})
-        if(exist2) {
-            return res.json({
-                error: 'username is taken already'
-            })
+        // Check if email exists
+        const exist = await User.findOne({ email });
+        if (exist) {
+            return res.json({ error: "Email is already taken" });
         }
 
-        const hashedPassword = await hashPassword(password)
+        // Check if username exists
+        const exist2 = await User.findOne({ name });
+        if (exist2) {
+            return res.json({ error: "Username is already taken" });
+        }
 
-        // create the user
+        const hashedPassword = await hashPassword(password);
+
+        // Create the user
         const user = await User.create({
-            name, 
-            email, 
+            name,
+            email,
             password: hashedPassword,
-        })
+        });
 
-        // generate token with user id
-        const token = generateToken(user._id)
+        // Generate token with user ID
+        const token = generateToken(user._id);
 
-        // send back the user and token in the response to the client
-        res.cookie('token', token, {
-            path: '/',
+        // Send back the user and token in the response to the client
+        res.cookie("token", token, {
+            path: "/",
             httpOnly: true,
-            maxAge: 30 * 24 * 60 * 60 * 1000,   // 30 days
-            sameSite: 'none',
-            secure: false
-        })
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            sameSite: "none",
+            secure: false,
+        });
 
         if (user) {
-            const {_id, name, email, role, photo, bio, isVerifed} = user
+            const { _id, name, email, role, photo, bio, isVerified } = user;
 
-            // 201 created
+            // 201 Created
             res.status(201).json({
                 _id,
                 name,
@@ -88,17 +89,15 @@ export const registerUser = async (req, res) => {
                 role,
                 photo,
                 bio,
-                isVerifed,
-                token
-            })
+                isVerified,
+                token,
+            });
         }
-
-        
-
     } catch (error) {
-        return res.status(500).json({message: error.message})
+        return res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 // login endpoint
 export const loginUser = async (req, res) => {

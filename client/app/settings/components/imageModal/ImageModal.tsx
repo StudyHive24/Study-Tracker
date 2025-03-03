@@ -103,6 +103,7 @@ export function ImageModal() {
                 defaultValue={user.email}
                 onChange={(e) => handlerUserInput("email")(e)}
                 className="col-span-3 bg-gray-800 text-white"
+                disabled
               />
             </div>
           </div>
