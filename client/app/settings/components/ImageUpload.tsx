@@ -41,7 +41,9 @@ function ImageUpload() {
     
       try {
         // Step 1: Upload to Cloudinary
-        const res = await axios.post("https://api.cloudinary.com/v1_1/dyyitqydc/image/upload", formData);
+        const res = await axios.post("https://api.cloudinary.com/v1_1/dyyitqydc/image/upload", formData, {
+          withCredentials: false
+        });
         const imageUrl = res.data.secure_url;
     
         // Step 2: Send image URL to backend and link with user
