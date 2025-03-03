@@ -39,7 +39,7 @@ function ImageUpload() {
       formData.append("image", image);
   
       try {
-        const { data } = await axios.post("http://localhost:8000/api/v1/upload-profile", formData, {
+        const { data } = await axios.post("https://study-hive-server-f6.vercel.app/api/v1/upload-profile", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
   
