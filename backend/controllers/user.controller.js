@@ -48,6 +48,14 @@ export const registerUser = async (req, res) => {
             })
         }
 
+        // check name
+        const exist2 = await User.findOne({name})
+        if(exist2) {
+            return res.json({
+                error: 'username is taken already'
+            })
+        }
+
         const hashedPassword = await hashPassword(password)
 
         // create the user
@@ -95,10 +103,12 @@ export const registerUser = async (req, res) => {
 // login endpoint
 export const loginUser = async (req, res) => {
     try {
-        const {email, password} = req.body
+        const {name, email, password} = req.body
 
         // check if user exists
-        const user = await User.findOne({email})
+        const user = await User.findOne({name} || {email})
+
+        console.log(user)
 
         if(!user) {
             return res.json({
@@ -121,7 +131,7 @@ export const loginUser = async (req, res) => {
 
         const token =  generateToken(user._id)
 
-        const { _id, name,  photo, bio, isVerifed } = user
+        const { _id, photo, bio, isVerifed } = user
 
 
         // set the token in the cookie
@@ -177,6 +187,7 @@ export const updateUser = async (req, res) => {
             user.name = req.body.name || user.name
             user.bio = req.body.bio || user.bio
             user.photo = req.body.photo || user.photo
+            user.email = req.body.email || user.email
 
 
             // to save the updated data

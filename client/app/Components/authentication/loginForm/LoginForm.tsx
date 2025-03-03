@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 
 function LoginForm() {
   const { loginUser, userState, handlerUserInput } = useUserContext();
-  const { email, password } = userState;
+  const { name, password } = userState;
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -36,14 +36,14 @@ function LoginForm() {
           </span>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <label>Email</label>
+              <label>Username</label>
               <hr />
               <input
-                type="email"
+                type="text"
                 className="p-1 w-[30vw] outline-none focus:border-2 border-blue-300 rounded-md"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => handlerUserInput("email")(e)}
+                placeholder="Enter username"
+                value={name}
+                onChange={(e) => handlerUserInput("name")(e)}
               />
               <hr />
             </div>
@@ -62,12 +62,12 @@ function LoginForm() {
             <div className='flex justify-end'>
               <Link href={'/forgot-password'}>
                 <span className='text-blue-500 text-[15px] hover:text-blue-600 cursor-pointer'>
-                  Forgot Password?
+                  Forgot Password or Username?
                 </span>
               </Link>
             </div>
             <button
-              disabled={!email || !password}
+              disabled={!name || !password}
               type="submit"
               className="bg-blue-300 p-2 rounded-lg mt-3 hover:bg-blue-400 cursor-pointer"
             >
