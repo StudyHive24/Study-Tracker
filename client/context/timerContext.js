@@ -6,7 +6,7 @@ import { useUserContext } from '../context/userContext.js';
 import toast from 'react-hot-toast';
 
 const TimerContext = createContext();
-const serverUrl = 'https://study-hive-server-f6.vercel.app';
+const serverUrl = process.env.SERVER_URL
 
 export const TimersProvider = ({ children }) => {
     const userID = useUserContext().user._id;
