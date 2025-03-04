@@ -18,14 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: `${process.env.CLIENT_URL}`, credentials: true }));
 app.use(cookieParser())
 
-app.use(
-  cors({
-    origin: "https://studyhiveouslf6.vercel.app", 
-    credentials: true,  // Allow cookies to be sent
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: "Content-Type,Authorization",
-  })
-);
 
 const port = process.env.PORT;
 const Mongo_URI = process.env.Mongo_URI;

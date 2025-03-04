@@ -101,107 +101,119 @@ export const registerUser = async (req, res) => {
 
 // login endpoint
 export const loginUser = async (req, res) => {
-    try {
-      const { name, email, password } = req.body;
-  
-      // Check if user exists
-      const user = await User.findOne({ name } || { email });
-  
-      if (!user) {
-        return res.json({
-          error: "No user found, sign up!",
-        });
-      }
-  
-      // Check if passwords match
-      const match = await comparePasswords(password, user.password);
-  
-      if (!match) {
-        return res.json({
-          error: "Invalid Credentials",
-        });
-      }
-  
-      const token = generateToken(user._id);
-  
-      const { _id, photo, bio, isVerified } = user;
-  
-      // Send the token and user data back in the response
-      res.status(200).json({
-        _id,
-        name,
-        email,
-        photo,
-        bio,
-        isVerified,
-        token, // Send token directly in the response
+  try {
+    const { name, email, password } = req.body;
+
+    // check if user exists
+    const user = await User.findOne({ name } || { email });
+
+    console.log(user);
+
+    if (!user) {
+      return res.json({
+        error: "No user found, sign up!",
       });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
     }
-  };
-  
+
+    // check if passwords match
+    const match = await comparePasswords(password, user.password);
+
+    console.log(match);
+
+    console.log(user.password);
+
+    if (!match) {
+      return res.json({
+        error: "Invalid Credentials",
+      });
+    }
+
+    const token = generateToken(user._id);
+
+    const { _id, photo, bio, isVerifed } = user;
+
+    // set the token in the cookie
+    res.cookie("token", token, {
+      path: "/",
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      sameSite: "none",
+      secure: true,
+    });
+
+    // send back tot the user and token in the response to the client
+    res.status(200).json({
+      _id,
+      name,
+      email,
+      photo,
+      bio,
+      isVerifed,
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // logout user
 export const logoutUser = async (req, res) => {
-    res.cookie("token", "", {
-      path: "/",
-      httpOnly: true,
-      expires: new Date(0), // Expire immediately
-      sameSite: "none",
-      secure: true,
-      domain: ".studyhiveouslf6.vercel.app",
-    });
-  
-    res.status(200).json({
-      message: "User Logged out successfully",
-    });
-  };
-  
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+    path: "/",
+  });
+
+  res.status(200).json({
+    message: "User Logged out successfully",
+  });
+};
 
 // update user details
 export const updateUser = async (req, res) => {
-    try {
-      // Get the user details from the token using protect middleware
-      const user = await User.findById(req.user._id);
-  
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
+  try {
+    // get the user details from the token using protect middleware
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      // properties to update
+
+      const email = req.body.email;
+      const name = req.body.name;
+
+      const exist = await User.findOne({ email });
+
+      if (exist) {
+        return res.json({
+          error: "email is already taken",
+        });
       }
-  
-      const { name, bio, photo, email } = req.body;
-  
-      // Check if email is being updated and ensure it's valid
-      if (email && email !== user.email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          return res.status(400).json({ error: "Enter a valid email" });
-        }
-  
-        const exist = await User.findOne({ email });
-        if (exist) {
-          return res.status(400).json({ error: "Email is already taken" });
-        }
+
+      const existName = await User.findOne({ name });
+      if (existName) {
+        return res.json({
+          error: "username is already taken",
+        });
       }
-  
-      // Check if name is being updated and ensure uniqueness
-      if (name && name !== user.name) {
-        const existName = await User.findOne({ name });
-        if (existName) {
-          return res.status(400).json({ error: "Username is already taken" });
-        }
+
+      // Check email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.json({ error: "Enter a valid email" });
       }
-  
-      // Update only the provided fields
-      if (name) user.name = name;
-      if (bio) user.bio = bio;
-      if (photo) user.photo = photo;
-      if (email && email !== user.email) user.email = email;
-  
-      // Save updated user
+
+      // to update properties
+      user.name = req.body.name || user.name;
+      user.bio = req.body.bio || user.bio;
+      user.photo = req.body.photo || user.photo;
+      user.email = req.body.email || user.email;
+
+      // to save the updated data
       const updated = await user.save();
-  
-      res.status(200).json({
+
+      res.status(200);
+      res.json({
         _id: updated._id,
         name: updated.name,
         email: updated.email,
@@ -209,11 +221,13 @@ export const updateUser = async (req, res) => {
         bio: updated.bio,
         isVerified: updated.isVerified,
       });
-    } catch (error) {
-      res.status(500).json({ error: "Server error" });
     }
-  };
-  
+  } catch (error) {
+    res.json({
+      message: "User not found",
+    });
+  }
+};
 
 // login status
 export const userLoginStatus = async (req, res) => {
