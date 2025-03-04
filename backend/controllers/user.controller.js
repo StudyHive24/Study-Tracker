@@ -78,6 +78,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: 'None',
       secure: false,
+      domain: 'study-hive-server-f6.vercel.app'
     });
 
     if (user) {
@@ -140,6 +141,7 @@ export const loginUser = asyncHandler(async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: 'None',
       secure: true,
+      domain: 'study-hive-server-f6.vercel.app'
     });
 
     // send back tot the user and token in the response to the client
