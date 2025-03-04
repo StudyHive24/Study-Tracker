@@ -48,22 +48,30 @@ export default function TimerPage() {
 
   const { createTimer, timers = [] } = useTimerContext(); // Ensure timers is initialized as an empty array
 
-  // const timerUpAudio = new Audio("/TimerUp.mp3"); 
-  // Audio for timer completion
-  const playBeep = () => {
+  const playAlarm = () => {
     const audioContext = new (window.AudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
   
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
+    const playBeep = (timeOffset: number) => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
   
-    oscillator.frequency.value = 440; // Frequency in Hz (A4 note)
-    gainNode.gain.value = 0.5; // Volume
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
   
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.5); // Duration in seconds
+      oscillator.frequency.value = 880; // Higher pitch for alarm sound
+      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime + timeOffset); // Start volume
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + timeOffset + 0.2); // Fade out
+  
+      oscillator.start(audioContext.currentTime + timeOffset);
+      oscillator.stop(audioContext.currentTime + timeOffset + 0.3);
+    };
+  
+    // Repeat the beep multiple times to simulate an alarm
+    for (let i = 0; i < 4; i++) {
+      playBeep(i * 0.4); // Play every 400ms
+    }
   };
+  
 
   // Timer options
   const timeOptions = [
@@ -152,7 +160,7 @@ export default function TimerPage() {
             setIsRunning(false);
 
             // Play the timer up sound
-            playBeep()
+            playAlarm()
 
             // Switch between study and break
             const nextPhase = isStudyPhase ? "Break" : "Focus";
