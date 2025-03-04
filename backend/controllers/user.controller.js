@@ -179,8 +179,8 @@ export const updateUser = async (req, res) => {
     if (user) {
       // properties to update
 
-      const email = req.body.email;
-      const name = req.body.name;
+      const email = req.body.email || user.email;
+      const name = req.body.name || user.name;
 
       const exist = await User.findOne({ email });
 
