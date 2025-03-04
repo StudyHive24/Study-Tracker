@@ -48,8 +48,22 @@ export default function TimerPage() {
 
   const { createTimer, timers = [] } = useTimerContext(); // Ensure timers is initialized as an empty array
 
-  const timerUpAudio = new Audio("/TimerUp.mp3"); 
+  // const timerUpAudio = new Audio("/TimerUp.mp3"); 
   // Audio for timer completion
+  const playBeep = () => {
+    const audioContext = new (window.AudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+  
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+  
+    oscillator.frequency.value = 440; // Frequency in Hz (A4 note)
+    gainNode.gain.value = 0.5; // Volume
+  
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.5); // Duration in seconds
+  };
 
   // Timer options
   const timeOptions = [
@@ -138,7 +152,7 @@ export default function TimerPage() {
             setIsRunning(false);
 
             // Play the timer up sound
-            timerUpAudio.play();
+            playBeep()
 
             // Switch between study and break
             const nextPhase = isStudyPhase ? "Break" : "Focus";
