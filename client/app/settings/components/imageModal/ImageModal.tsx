@@ -90,7 +90,6 @@ export function ImageModal() {
                 id="name"
                 name="name"
                 defaultValue={user.name}
-                disabled
                 className="col-span-3 bg-gray-800 text-white"
               />
             </div>

@@ -180,15 +180,22 @@ export const updateUser = async (req, res) => {
 
         if (user) {
             // properties to update
-            const { name, bio, photo } = req.body
 
             const email = req.body.email
+            const name = req.body.name
             
             const exist = await User.findOne({ email });
 
             if(exist){
                 return res.json({
                     error: 'email is already taken'
+                })
+            }
+
+            const existName = await User.findOne({ name })
+            if (existName) {
+                return res.json({
+                    error: 'username is already taken'
                 })
             }
 
