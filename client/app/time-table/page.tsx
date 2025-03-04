@@ -43,16 +43,17 @@ const timeSlots = generateTimeSlots();
 export default function TimetablePage(): ReactElement {
   useRiderect("/login"); // Redirects to login page if the user is not authenticated
 
-  const { entries, addEntry, updateEntry, deleteEntry } = useTimetableContext();
+  const { entries, addEntry, updateEntry, deleteEntry, deleteAllEntries } = useTimetableContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
+  const [isClearModalOpen, setIsClearModalOpen] = useState(false); // State for clear timetable modal
   const [selectedEntry, setSelectedEntry] = useState<TimetableEntry | null>(null);
   const [editingEntry, setEditingEntry] = useState<TimetableEntry | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Default entry for new timetable slots
   const defaultEntry: TimetableEntry = {
-    _id: "", // Use _id instead of id
+    _id: "",
     title: "",
     day: "Monday",
     startTime: "4:00 AM",
@@ -139,38 +140,52 @@ export default function TimetablePage(): ReactElement {
     }
   };
 
+  const handleClearTimetable = async () => {
+    await deleteAllEntries(); // Call the deleteAllEntries function from context
+    setIsClearModalOpen(false); // Close the confirmation modal
+  };
+
   return (
-    <div className="p-3">
-      <div className="flex justify-between items-center bg-gray-800 p-3 rounded-lg shadow-lg">
+    <div className="p-3 bg-gray-800 min-h-screen">
+      <div className="flex justify-between items-center bg-gray-700 p-4 rounded-lg shadow-lg">
         <div className="text-left">
           <h1 className="text-2xl font-bold text-white">Study Timetable</h1>
         </div>
-        <div className="text-right">
+        <div className="text-right flex space-x-4">
           <button
             onClick={() => {
               setEditingEntry(null);
               setEntry(defaultEntry);
               setIsModalOpen(true);
             }}
-            className="bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-700 transition-all">
+            className="bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600 transition-all"
+          >
             Add Entry
+          </button>
+          <button
+            onClick={() => setIsClearModalOpen(true)}
+            className="bg-red-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all"
+          >
+            Clear Timetable
           </button>
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto mt-6">
         <table className="table-fixed w-full border border-gray-600">
           <thead>
             <tr className="bg-gray-700 text-white">
               <th className="border border-gray-500 p-0 text-center">Time</th>
               {days.map((day) => (
-                <th key={day} className="border border-gray-500 p-2 text-center">{day}</th>
+                <th key={day} className="border border-gray-500 p-2 text-center">
+                  {day}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {timeSlots.map((slot, index) => (
-              <tr key={index} className="border border-gray-500">
+              <tr key={index} className="border border-gray-500 hover:bg-gray-750 transition-all">
                 <td className="border border-gray-500 p-2 text-center bg-gray-700 text-white">{slot}</td>
                 {days.map((day) => {
                   const matchingEntry = entries.find((e: TimetableEntry) => {
@@ -182,7 +197,7 @@ export default function TimetablePage(): ReactElement {
                   return (
                     <td
                       key={day}
-                      className="border border-gray-600 p-0 h-0 relative bg-gray-800 text-center cursor-pointer"
+                      className="border border-gray-600 p-0 h-0 relative bg-gray-800 text-center cursor-pointer hover:bg-gray-750 transition-all"
                       onClick={() => matchingEntry && handleEntryClick(matchingEntry)}
                     >
                       {matchingEntry && (
@@ -209,32 +224,99 @@ export default function TimetablePage(): ReactElement {
       {/* Modal for adding/editing an entry */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-gray-500 p-6 rounded shadow-lg w-96">
-            <h2 className="text-xl font-bold text-white mb-3">
+          <div className="bg-gray-700 p-6 rounded shadow-lg w-96">
+            <h2 className="text-xl font-bold text-white mb-4">
               {editingEntry ? "Edit Timetable Entry" : "Add Timetable Entry"}
             </h2>
 
             {error && <p className="text-red-300 text-md mb-2">{error}</p>}
 
-            <input type="text" name="title" placeholder="Title" value={entry.title} onChange={handleChange} className="w-full border p-2 rounded mb-2" />
+            <div className="space-y-4">
+              <div>
+                <label className="block text-white font-semibold mb-1">Title</label>
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="Enter title"
+                  value={entry.title}
+                  onChange={handleChange}
+                  className="w-full bg-gray-600 border border-gray-500 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-            <select name="day" value={entry.day} onChange={handleChange} className="w-full border p-2 rounded mb-2">
-              {days.map((day) => <option key={day} value={day}>{day}</option>)}
-            </select>
+              <div>
+                <label className="block text-white font-semibold mb-1">Day</label>
+                <select
+                  name="day"
+                  value={entry.day}
+                  onChange={handleChange}
+                  className="w-full bg-gray-600 border border-gray-500 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {days.map((day) => (
+                    <option key={day} value={day}>
+                      {day}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <select name="startTime" value={entry.startTime} onChange={handleChange} className="w-full border p-2 rounded mb-2">
-              {timeSlots.map((time) => <option key={time} value={time}>{time}</option>)}
-            </select>
+              <div>
+                <label className="block text-white font-semibold mb-1">Start Time</label>
+                <select
+                  name="startTime"
+                  value={entry.startTime}
+                  onChange={handleChange}
+                  className="w-full bg-gray-600 border border-gray-500 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {timeSlots.map((time) => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <select name="endTime" value={entry.endTime} onChange={handleChange} className="w-full border p-2 rounded mb-2">
-              {timeSlots.map((time) => <option key={time} value={time}>{time}</option>)}
-            </select>
+              <div>
+                <label className="block text-white font-semibold mb-1">End Time</label>
+                <select
+                  name="endTime"
+                  value={entry.endTime}
+                  onChange={handleChange}
+                  className="w-full bg-gray-600 border border-gray-500 p-2 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {timeSlots.map((time) => (
+                    <option key={time} value={time}>
+                      {time}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            <input type="color" name="color" value={entry.color} onChange={handleChange} className="w-full border p-2 rounded mb-2" />
+              <div>
+                <label className="block text-white font-semibold mb-1">Color</label>
+                <input
+                  type="color"
+                  name="color"
+                  value={entry.color}
+                  onChange={handleChange}
+                  className="w-full bg-gray-600 border border-gray-500 p-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
 
-            <div className="flex justify-end">
-              <button onClick={() => setIsModalOpen(false)} className="bg-gray-400 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600">Cancel</button>
-              <button onClick={saveEntry} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">{editingEntry ? "Update" : "Add"}</button>
+            <div className="flex justify-end mt-6 space-x-4">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveEntry}
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-all"
+              >
+                {editingEntry ? "Update" : "Add"}
+              </button>
             </div>
           </div>
         </div>
@@ -243,12 +325,12 @@ export default function TimetablePage(): ReactElement {
       {/* Modal for displaying entry details */}
       {isEntryModalOpen && selectedEntry && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-gray-500 p-6 rounded shadow-lg w-96">
+          <div className="bg-gray-700 p-6 rounded shadow-lg w-96">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Entry Details</h2>
               <button
                 onClick={() => setIsEntryModalOpen(false)}
-                className="text-white text-lg hover:text-gray-300"
+                className="text-white text-lg hover:text-gray-300 transition-all"
               >
                 ×
               </button>
@@ -283,15 +365,39 @@ export default function TimetablePage(): ReactElement {
             <div className="flex justify-end mt-6 space-x-4">
               <button
                 onClick={handleEditEntry}
-                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
+                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition-all"
               >
                 Edit
               </button>
               <button
                 onClick={handleDeleteEntry}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-all"
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for clearing the timetable */}
+      {isClearModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-gray-700 p-6 rounded shadow-lg w-96">
+            <h2 className="text-xl font-bold text-white mb-4">Clear Timetable</h2>
+            <p className="text-white mb-6">Are you sure you want to clear the entire timetable? This action cannot be undone.</p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setIsClearModalOpen(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleClearTimetable}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-all"
+              >
+                Clear
               </button>
             </div>
           </div>
