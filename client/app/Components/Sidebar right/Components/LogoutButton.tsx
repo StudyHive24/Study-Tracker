@@ -40,9 +40,7 @@ function LogoutButton() {
               </span>
             </DialogPrimitive.Close>
             <DialogPrimitive.Close>
-              <span onClick={logoutUser} className="bg-red-600 hover:bg-red-700 pl-10 pr-10 mb-2 rounded-[10px] p-3">
-                <span onClick={logoutUser} className='text-white'>Logout</span>
-              </span>
+                <button onClick={logoutUser} className='text-white bg-red-600 hover:bg-red-700 pl-10 pr-10 mb-2 rounded-[10px] p-3'>Logout</button>
             </DialogPrimitive.Close>
           </div>
         </DialogHeader>
