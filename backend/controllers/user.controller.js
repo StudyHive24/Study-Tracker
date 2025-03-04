@@ -182,6 +182,16 @@ export const updateUser = async (req, res) => {
             // properties to update
             const { name, bio, photo } = req.body
 
+            const email = req.body.email
+            
+            const exist = await User.findOne({ email });
+
+            if(exist){
+                return res.json({
+                    error: 'email is already taken'
+                })
+            }
+
             // to update properties
             user.name = req.body.name || user.name
             user.bio = req.body.bio || user.bio

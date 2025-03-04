@@ -198,7 +198,13 @@ const loginUser = async (e) => {
         };
       });
 
-      toast.success("User updated successfully");
+      if(res.data.error) {
+        toast(res.data.error)
+      } else {
+        toast.success("User updated successfully");
+      }
+
+    
 
       setLoading(false);
     } catch (error) {
