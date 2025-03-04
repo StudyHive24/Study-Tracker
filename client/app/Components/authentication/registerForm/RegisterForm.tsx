@@ -41,7 +41,7 @@ function RegisterForm() {
               <input
                 type="text"
                 className="p-1 w-[30vw] outline-none focus:border-2 border-blue-300 rounded-md"
-                placeholder="Enter name"
+                placeholder="Enter username"
                 value={name}
                 onChange={(e) => handlerUserInput("name")(e)}
                 required
