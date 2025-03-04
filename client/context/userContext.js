@@ -136,48 +136,53 @@ const loginUser = async (e) => {
 
 
     // logout user
-    const logoutUser = async (req, res) => {
+    const logoutUser = async () => {
         try {
-            const res = axios.get(`${serverUrl}/api/v1/logout`, {
+            await axios.get(`${serverUrl}/api/v1/logout`, {
                 withCredentials: true
-            })
-
-            toast.success('User logged out successfully')
-
-            setUser({})
-
-            // to riderect to the login page
-            router.push('/login')
-
+            });
+    
+            toast.success('User logged out successfully');
+    
+            setUser({}); // Clear the user state
+    
+            router.push('/login');
+    
         } catch (error) {
-            console.log('Error on loggin out the user')
-            toast.error('Error on loggin out the user')
+            console.log('Error on logging out the user', error);
+            toast.error('Error on logging out the user');
         }
-    }
+    };
+    
 
     // get user details 
     const getUser = async () => {
-        setLoading(true)
-
+        setLoading(true);
+    
         try {
             const res = await axios.get(`${serverUrl}/api/v1/user`, {
                 withCredentials: true
-            })
-            
-            setUser((prevState) => {
-                return {
-                    ...prevState,
-                    ...res.data
-                }
-            })
-           
-            setLoading(false)
+            });
+    
+            if (!res.data) {
+                setUser({}); // Ensure state is cleared if no user data
+                return;
+            }
+    
+            setUser((prevState) => ({
+                ...prevState,
+                ...res.data
+            }));
+    
         } catch (error) {
-            console.log('Error getting user details', error)
-            setLoading(false)
-            toast.error('Error getting user details')
+            console.log('Error getting user details', error);
+            setUser({}); // Clear user state on error
+            toast.error('Error getting user details');
+        } finally {
+            setLoading(false);
         }
-    }
+    };
+    
 
       // update user details
   const updateUser = async (e, data) => {

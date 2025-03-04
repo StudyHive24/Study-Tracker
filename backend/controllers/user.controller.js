@@ -159,18 +159,20 @@ export const loginUser = async (req, res) => {
 
 // logout user
 export const logoutUser = async (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
-    domain: "https://studyhiveouslf6.vercel.app",
-    path: "/",
-  });
-
-  res.status(200).json({
-    message: "User Logged out successfully",
-  });
-};
+    res.cookie("token", "", {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(0), // Expire immediately
+      sameSite: "none",
+      secure: true,
+      domain: ".studyhiveouslf6.vercel.app",
+    });
+  
+    res.status(200).json({
+      message: "User Logged out successfully",
+    });
+  };
+  
 
 // update user details
 export const updateUser = async (req, res) => {
