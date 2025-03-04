@@ -199,7 +199,7 @@ const loginUser = async (e) => {
       });
 
       if(res.data.error) {
-        toast(res.data.error)
+        toast.error(res.data.error)
       } else {
         toast.success("User updated successfully");
       }
