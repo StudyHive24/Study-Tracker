@@ -10,13 +10,14 @@ import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import { uploadToCloudinary } from "../config/cloudinary.js";
 import { error } from "console";
+import asyncHandler from "express-async-handler";
 
 export const test = (req, res) => {
   res.json("test is working");
 };
 
 // register user
-export const registerUser = async (req, res) => {
+export const registerUser = asyncHandler(async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -97,10 +98,10 @@ export const registerUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-};
+});
 
 // login endpoint
-export const loginUser = async (req, res) => {
+export const loginUser = asyncHandler(async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -154,10 +155,10 @@ export const loginUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
 
 // logout user
-export const logoutUser = async (req, res) => {
+export const logoutUser = asyncHandler(async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
     sameSite: 'None',
@@ -168,10 +169,10 @@ export const logoutUser = async (req, res) => {
   res.status(200).json({
     message: "User Logged out successfully",
   });
-};
+});
 
 // update user details
-export const updateUser = async (req, res) => {
+export const updateUser = asyncHandler(async (req, res) => {
   try {
     // get the user details from the token using protect middleware
     const user = await User.findById(req.user._id);
@@ -227,10 +228,10 @@ export const updateUser = async (req, res) => {
       message: "User not found",
     });
   }
-};
+});
 
 // login status
-export const userLoginStatus = async (req, res) => {
+export const userLoginStatus = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
 
   if (!token) {
@@ -254,10 +255,10 @@ export const userLoginStatus = async (req, res) => {
       message: "Invalid Token",
     });
   }
-};
+});
 
 // email verification
-export const emailVerify = async (req, res) => {
+export const emailVerify = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   // if user exists
@@ -310,9 +311,9 @@ export const emailVerify = async (req, res) => {
     console.log("Error sending email: ", error);
     return res.status(500).json({ message: "Email could not be sent" });
   }
-};
+});
 
-export const emailVerificationCode = async (req, res) => {
+export const emailVerificationCode = asyncHandler(async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -361,9 +362,9 @@ export const emailVerificationCode = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-};
+});
 
-export const verifyCode = async (req, res) => {
+export const verifyCode = asyncHandler(async (req, res) => {
   try {
     const { email, verificationCode } = req.body;
 
@@ -398,10 +399,10 @@ export const verifyCode = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-};
+});
 
 // reset password request
-export const requestPasswordReset = async (req, res) => {
+export const requestPasswordReset = asyncHandler(async (req, res) => {
   try {
     const { email } = req.body;
 
@@ -446,10 +447,10 @@ export const requestPasswordReset = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-};
+});
 
 // verify password reset code
-export const verifyPasswordResetCode = async (req, res) => {
+export const verifyPasswordResetCode = asyncHandler(async (req, res) => {
   try {
     const { email, resetCode } = req.body;
 
@@ -472,10 +473,10 @@ export const verifyPasswordResetCode = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
-};
+});
 
 // password reset
-export const passwordReset = async (req, res) => {
+export const passwordReset = asyncHandler(async (req, res) => {
   try {
     const { email, newPassword } = req.body;
 
@@ -523,19 +524,19 @@ export const passwordReset = async (req, res) => {
     console.error("Error resetting password:", error);
     res.status(500).json({ message: "Internal Server Error." });
   }
-};
+});
 
-export const getUsers = async (req, res) => {
+export const getUsers = asyncHandler(async (req, res) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
     res.json({ message: error.message });
   }
-};
+});
 
 // get user
-export const getUser = async (req, res) => {
+export const getUser = asyncHandler(async (req, res) => {
   // get user details from the token ---> excluding the password
   const user = await User.findById(req.user._id).select("-password");
 
@@ -547,9 +548,9 @@ export const getUser = async (req, res) => {
       message: "User not found",
     });
   }
-};
+});
 
-export const verifyUser = async (req, res) => {
+export const verifyUser = asyncHandler(async (req, res) => {
   const { verificationToken } = req.params;
 
   if (!verificationToken) {
@@ -583,10 +584,10 @@ export const verifyUser = async (req, res) => {
   user.isVerified = true;
   await user.save();
   res.status(200).json({ message: "User verified" });
-};
+});
 
 // forgot password
-export const forgotPassowrd = async (req, res) => {
+export const forgotPassowrd = asyncHandler(async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
@@ -651,10 +652,10 @@ export const forgotPassowrd = async (req, res) => {
       message: "Email couldn't be sent",
     });
   }
-};
+});
 
 // reset password
-export const resetPassword = async (req, res) => {
+export const resetPassword = asyncHandler(async (req, res) => {
   const { resetPasswordToken } = req.params;
   const { password } = req.body;
 
@@ -698,10 +699,10 @@ export const resetPassword = async (req, res) => {
     console.error("Error resetting password:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-};
+});
 
 // change password
-export const changePassword = async (req, res) => {
+export const changePassword = asyncHandler(async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
 
@@ -761,9 +762,9 @@ export const changePassword = async (req, res) => {
       .status(500)
       .json({ error: "An error occurred while changing the password." });
   }
-};
+});
 
-export const uploadProfileImage = async (req, res) => {
+export const uploadProfileImage = asyncHandler(async (req, res) => {
   try {
     // Extract the image URL and user ID
     const { imageUrl } = req.body;
@@ -798,7 +799,7 @@ export const uploadProfileImage = async (req, res) => {
     console.error("Error updating profile picture:", error);
     res.status(500).json({ message: "Server error" });
   }
-};
+});
 
 export const getProfile = (req, res) => {
   const { token } = req.cookies;
