@@ -1,6 +1,6 @@
 "use client"; // Enables client-side rendering
 
-import { useState, useEffect, ReactElement, Key, ReactNode } from "react"; // Importing React hooks
+import { useState, useEffect, ReactElement, Key, ReactNode, useRef } from "react"; // Importing React hooks
 import "./timer.css"; // Importing the CSS file for styling
 import useRiderect from "@/hooks/useUserRiderect";
 import { useTimerContext } from "@/context/timerContext"; // Import the context for handling timer data
@@ -35,30 +35,26 @@ function Modal({
 export default function TimerPage() {
   useRiderect("/login");
 
-  const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)
-  const [breakTime, setBreakTime] = useState(5 * 60); // Default break time (5 mins)
-  const [time, setTime] = useState(studyTime); // Current time in seconds
+  const [studyTime, setStudyTime] = useState(25 * 60);
+  const [breakTime, setBreakTime] = useState(5 * 60);
+  const [time, setTime] = useState(studyTime);
   const [isRunning, setIsRunning] = useState(false);
-  const [isStudyPhase, setIsStudyPhase] = useState(true); // Toggle between study and break
-  const [message, setMessage] = useState(""); // Display message
-  const [showResetConfirm, setShowResetConfirm] = useState(false); // Reset confirmation
-  const [showTitleInput, setShowTitleInput] = useState(false); // Toggle title input visibility
-  const [timerTitle, setTimerTitle] = useState("Study"); // Timer title (default)
-  const [showSaveConfirm, setShowSaveConfirm] = useState(false); // Save confirmation
+  const [isStudyPhase, setIsStudyPhase] = useState(true);
+  const [message, setMessage] = useState("");
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showTitleInput, setShowTitleInput] = useState(false);
+  const [timerTitle, setTimerTitle] = useState("Study");
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
 
-  const { createTimer, timers = [] } = useTimerContext(); // Ensure timers is initialized as an empty array
+  const { createTimer, timers = [] } = useTimerContext();
 
-  const timerUpAudio = new Audio("./TimerUp.mp3"); 
-  // Audio for timer completion
+  // Store audio reference
+  const timerUpAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Timer options
-  const timeOptions = [
-    { label: "25 Minutes", study: 25 * 60, break: 5 * 60 },
-    { label: "50 Minutes", study: 50 * 60, break: 10 * 60 },
-    { label: "1 Hour", study: 60 * 60, break: 15 * 60 },
-    { label: "2 Hours", study: 2 * 60 * 60, break: 20 * 60 },
-    { label: "15 Seconds (Test)", study: 15, break: 5 }, // For testing
-  ];
+  useEffect(() => {
+    // Load audio only once
+    timerUpAudioRef.current = new Audio("/TimerUp.mp3");
+  }, []);
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
@@ -71,65 +67,26 @@ export default function TimerPage() {
   };
 
   const handleReset = () => {
-    setShowResetConfirm(true); // Show confirmation
+    setShowResetConfirm(true);
   };
 
   const confirmReset = () => {
     setIsRunning(false);
     setIsStudyPhase(true);
     setTime(studyTime);
-    setMessage(""); // Clear any messages
-    setShowResetConfirm(false); // Hide confirmation modal
-    setTimerTitle("Study"); // Reset title
-    setShowTitleInput(false); // Hide title input
+    setMessage("");
+    setShowResetConfirm(false);
+    setTimerTitle("Study");
+    setShowTitleInput(false);
   };
 
   const cancelReset = () => {
-    setShowResetConfirm(false); // Close confirmation modal
+    setShowResetConfirm(false);
   };
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOption = timeOptions.find(
-      (option) => option.label === e.target.value
-    );
-    if (selectedOption) {
-      setStudyTime(selectedOption.study);
-      setBreakTime(selectedOption.break);
-      setTime(selectedOption.study);
-      setIsStudyPhase(true);
-      setIsRunning(false);
-    }
-  };
-
-  const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTimerTitle(e.target.value); // Update title
-  };
-
-  const handleEnterTitle = () => {
-    setShowTitleInput(false); // Hide title input
-  };
-
-  const handleToggleTitleInput = () => {
-    setShowTitleInput(!showTitleInput); // Toggle input visibility
-  };
-
-  const handleSaveTimer = () => {
-    const timerRecord = {
-      title: timerTitle,
-      duration: formatTime(studyTime),
-      date: new Date(),
-    };
-    createTimer(timerRecord); // Call to create timer in the backend
-    setShowSaveConfirm(false); // Close save confirmation modal
-  };
-
-  const cancelSaveTimer = () => {
-    setShowSaveConfirm(false); // Close save confirmation modal
-  };
-
-  // Timer logic
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
+
     if (isRunning) {
       timer = setInterval(() => {
         setTime((prevTime) => {
@@ -137,16 +94,16 @@ export default function TimerPage() {
             clearInterval(timer!);
             setIsRunning(false);
 
-            // Play the timer up sound
-            timerUpAudio.play();
+            // Play the timer sound
+            if (timerUpAudioRef.current) {
+              timerUpAudioRef.current.play().catch((error) => console.error("Audio playback error:", error));
+            }
 
-            // Switch between study and break
             const nextPhase = isStudyPhase ? "Break" : "Focus";
             setMessage(`Time's up! Switching to ${nextPhase} Time.`);
-            setTimeout(() => setMessage(""), 1000); // Clear message after 1 second
+            setTimeout(() => setMessage(""), 1000);
 
             if (isStudyPhase) {
-              // Show confirmation to save timer info
               setShowSaveConfirm(true);
             }
 
@@ -157,122 +114,29 @@ export default function TimerPage() {
         });
       }, 1000);
     }
+
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isRunning, isStudyPhase, studyTime, breakTime, timerTitle]);
-
-  // Render Timer History
-  const renderTimerHistory = () => {
-    return timers.map(
-      (timer: { date: string | number | Date; title: string; duration: string }, index: Key | null | undefined) => (
-        <tr key={index} className="flex justify-evenly text-gray-200 text-center mb-2">
-          <td className="p-2 w-full bg-gray-500 rounded-tl-lg rounded-bl-lg border-r-2 border-gray-300">
-            {new Date(timer.date).toLocaleString()}
-          </td>
-          <td className="p-2 w-full bg-gray-500 border-r-2 border-gray-300">{timer.title}</td>
-          <td className="p-2 w-full bg-gray-500 rounded-se-lg rounded-ee-lg">{timer.duration}</td>
-        </tr>
-      )
-    );
-  };
+  }, [isRunning, isStudyPhase, studyTime, breakTime]);
 
   return (
     <div className="timer-page gap-5">
       <div className="timer-container bg-gray-700">
-        <h1 className="timer-title">
-          {isStudyPhase ? `Focus Time - ${timerTitle}` : "Break Time"}
-        </h1>
+        <h1 className="timer-title">{isStudyPhase ? `Focus Time - ${timerTitle}` : "Break Time"}</h1>
         <h2 className="timer-display">{formatTime(time)}</h2>
         <p className="timer-message">{message}</p>
-        <div>
-          <select
-            className="p-3 w-full rounded-lg"
-            onChange={handleTimeChange}
-            disabled={isRunning}
-            defaultValue="25 Minutes" // Ensure this matches the label in timeOptions
-          >
-            {timeOptions.map((option) => (
-              <option key={option.label} value={option.label}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
 
-        {showTitleInput ? (
-          <div className="timer-title-input-container">
-            <input
-              type="text"
-              className="p-2 rounded-lg w-full"
-              placeholder="Enter title"
-              value={timerTitle}
-              onChange={handleTitleInputChange}
-            />
-            <button className="bg-blue-600 hover:bg-blue-700 p-2 rounded-lg text-gray-100" onClick={handleEnterTitle}>
-              Enter
-            </button>
-          </div>
-        ) : (
-          <button
-            className="p-2 bg-blue-600 rounded-lg w-full mt-5 text-gray-100 hover:bg-blue-700"
-            onClick={handleToggleTitleInput}
-            disabled={isRunning}
-          >
-            {timerTitle === "Study" ? "Add Title" : "Change Title"}
-          </button>
-        )}
-
-        <div className="timer-controls flex flex-row gap-3">
-          <button
-            className="p-2 bg-green-600 hover:bg-green-700 text-gray-100 w-full rounded-lg"
-            onClick={handleStart}
-            disabled={isRunning}
-          >
-            Start
-          </button>
-          <button
-            className="p-2 bg-red-600 hover:bg-red-700 w-full rounded-lg text-gray-100"
-            onClick={handleReset}
-            disabled={!isRunning}
-          >
-            Reset
-          </button>
-        </div>
+        <button className="p-2 bg-green-600 hover:bg-green-700 text-gray-100 w-full rounded-lg" onClick={handleStart} disabled={isRunning}>
+          Start
+        </button>
+        <button className="p-2 bg-red-600 hover:bg-red-700 w-full rounded-lg text-gray-100" onClick={handleReset} disabled={!isRunning}>
+          Reset
+        </button>
       </div>
 
-      {/* Timer History */}
-      <div className="timer-history-container">
-        <h1 className="text-gray-100 text-xl text-center p-2 mb-2 bg-gray-700 rounded-lg">Timer History</h1>
-        <table className="w-full gap-2 flex flex-col justify-evenly">
-          <thead>
-            <tr className="flex justify-evenly text-gray-100 text-center">
-              <th className="p-2 w-full bg-gray-600 rounded-tl-lg rounded-bl-lg border-r-2 border-gray-200">Date</th>
-              <th className="p-2 w-full bg-gray-600 border-r-2 border-gray-200">Title</th>
-              <th className="p-2 w-full bg-gray-600 rounded-se-lg rounded-ee-lg">Duration</th>
-            </tr>
-          </thead>
-          <tbody>{renderTimerHistory()}</tbody>
-        </table>
-      </div>
-
-      {/* Save Confirmation Modal */}
-      {showSaveConfirm && (
-        <Modal
-          message="Do you want to save this timer information?"
-          onConfirm={handleSaveTimer}
-          onCancel={cancelSaveTimer}
-        />
-      )}
-
-      {/* Reset Confirmation Modal */}
-      {showResetConfirm && (
-        <Modal
-          message="Are you sure you want to reset?"
-          onConfirm={confirmReset}
-          onCancel={cancelReset}
-        />
-      )}
+      {showResetConfirm && <Modal message="Are you sure you want to reset?" onConfirm={confirmReset} onCancel={cancelReset} />}
+      {showSaveConfirm && <Modal message="Do you want to save this timer information?" onConfirm={() => setShowSaveConfirm(false)} onCancel={() => setShowSaveConfirm(false)} />}
     </div>
   );
 }
