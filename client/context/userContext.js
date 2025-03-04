@@ -144,7 +144,7 @@ const loginUser = async (e) => {
 
             toast.success('User logged out successfully')
 
-            setUser({null})
+            setUser(null)
 
             // to riderect to the login page
             router.push('/login')
