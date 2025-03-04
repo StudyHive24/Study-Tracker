@@ -56,6 +56,7 @@ export function ImageModal() {
 
             updateUser(e, {
               email: userState.email,
+              name: userState.name
             });
 
             router.push('/')
@@ -90,6 +91,7 @@ export function ImageModal() {
                 id="name"
                 name="name"
                 defaultValue={user.name}
+                onChange={(e) => handlerUserInput("name")(e)}
                 className="col-span-3 bg-gray-800 text-white"
               />
             </div>
