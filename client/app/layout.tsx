@@ -19,7 +19,6 @@ import MainLayoutContent from "@/providers/MainLayoutContent";
 import TwoSidebarProvider from "@/providers/TwoBarProvider";
 
 import { Roboto } from 'next/font/google';
-import GTMInitialiser from "@/providers/GTMInitialiser";
 
 // Configure the Roboto font
 const roboto = Roboto({
@@ -52,9 +51,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <GTMInitialiser />
-      </head>
       <body
         className={roboto.className}
       >
