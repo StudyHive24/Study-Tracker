@@ -75,7 +75,7 @@ export const registerUser = async (req, res) => {
       path: "/",
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      sameSite: "none",
+      sameSite: 'None',
       secure: false,
     });
 
@@ -137,7 +137,7 @@ export const loginUser = async (req, res) => {
       path: "/",
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      sameSite: "none",
+      sameSite: 'None',
       secure: true,
     });
 
@@ -160,7 +160,7 @@ export const loginUser = async (req, res) => {
 export const logoutUser = async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "none",
+    sameSite: 'None',
     secure: true,
     path: "/",
   });
