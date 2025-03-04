@@ -102,58 +102,60 @@ export const UserContextProvider = ({children}) => {
 
 // login user
 const loginUser = async (e) => {
-  e.preventDefault(); // Prevent the default form submission
-
-  try {
+    e.preventDefault(); // Prevent the default form submission
+  
+    try {
       // Make the POST request to login
-      await axios.post(`${serverUrl}/api/v1/login`, 
+      const response = await axios.post(`${serverUrl}/api/v1/login`, 
       {
           name: userState.name,
           email: userState.email,
           password: userState.password
-      },
-      {
-          withCredentials: true,  // this will send cookies to the server
       });
-
+  
+      // Store the token in localStorage after successful login
+      const { token, _id, name, email, photo, bio, isVerified } = response.data;
+      localStorage.setItem('token', token); // Store the token
+      localStorage.setItem('user', JSON.stringify({ _id, name, email, photo, bio, isVerified })); // Optionally store user data
+  
       // Clear the form after successful login
       setUserState({
           name: '',
+          email: '',
           password: ''
       });
-
-
-
-      // Refresh the user details
+  
+      // Refresh the user details (if needed)
       await getUser();
-
-  } catch (error) {
+  
+    } catch (error) {
       console.log('Error logging in user', error);
       toast.error('Error logging in user');
-  }
-};
-
-
-
-    // logout user
-    const logoutUser = async () => {
-        try {
-            await axios.get(`${serverUrl}/api/v1/logout`, {
-                withCredentials: true
-            });
-    
-            toast.success('User logged out successfully');
-    
-            setUser({}); // Clear the user state
-    
-            router.push('/login');
-    
-        } catch (error) {
-            console.log('Error on logging out the user', error);
-            toast.error('Error on logging out the user');
-        }
-    };
-    
+    }
+  };
+  
+  // Logout user
+  const logoutUser = async () => {
+    try {
+      // Remove the token and user info from localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+  
+      // Display success toast
+      toast.success('User logged out successfully');
+  
+      // Clear the user state
+      setUser({});
+  
+      // Redirect to the login page
+      router.push('/login');
+  
+    } catch (error) {
+      console.log('Error on logging out the user', error);
+      toast.error('Error on logging out the user');
+    }
+  };
+  
 
     // get user details 
     const getUser = async () => {

@@ -101,61 +101,46 @@ export const registerUser = async (req, res) => {
 
 // login endpoint
 export const loginUser = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-
-    // check if user exists
-    const user = await User.findOne({ name } || { email });
-
-    console.log(user);
-
-    if (!user) {
-      return res.json({
-        error: "No user found, sign up!",
+    try {
+      const { name, email, password } = req.body;
+  
+      // Check if user exists
+      const user = await User.findOne({ name } || { email });
+  
+      if (!user) {
+        return res.json({
+          error: "No user found, sign up!",
+        });
+      }
+  
+      // Check if passwords match
+      const match = await comparePasswords(password, user.password);
+  
+      if (!match) {
+        return res.json({
+          error: "Invalid Credentials",
+        });
+      }
+  
+      const token = generateToken(user._id);
+  
+      const { _id, photo, bio, isVerified } = user;
+  
+      // Send the token and user data back in the response
+      res.status(200).json({
+        _id,
+        name,
+        email,
+        photo,
+        bio,
+        isVerified,
+        token, // Send token directly in the response
       });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-
-    // check if passwords match
-    const match = await comparePasswords(password, user.password);
-
-    console.log(match);
-
-    console.log(user.password);
-
-    if (!match) {
-      return res.json({
-        error: "Invalid Credentials",
-      });
-    }
-
-    const token = generateToken(user._id);
-
-    const { _id, photo, bio, isVerifed } = user;
-
-    // set the token in the cookie
-    res.cookie("token", token, {
-      path: "/",
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      sameSite: "none",
-      secure: true,
-      domain: "https://studyhiveouslf6.vercel.app",
-    });
-
-    // send back tot the user and token in the response to the client
-    res.status(200).json({
-      _id,
-      name,
-      email,
-      photo,
-      bio,
-      isVerifed,
-      token,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  };
+  
 
 // logout user
 export const logoutUser = async (req, res) => {
