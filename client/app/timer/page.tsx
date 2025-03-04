@@ -45,6 +45,7 @@ export default function TimerPage() {
   const [showTitleInput, setShowTitleInput] = useState(false); // Toggle title input visibility
   const [timerTitle, setTimerTitle] = useState("Study"); // Timer title (default)
   const [showSaveConfirm, setShowSaveConfirm] = useState(false); // Save confirmation
+  const [showWarning, setShowWarning] = useState(true); // Warning message visibility
 
   const { createTimer, timers = [] } = useTimerContext(); // Ensure timers is initialized as an empty array
 
@@ -201,6 +202,20 @@ export default function TimerPage() {
 
   return (
     <div className="timer-page gap-5">
+     {/* Warning Message */}
+{showWarning && (
+  <div className="fixed bottom-50 left-100 w-full flex justify-center p-4 z-50">
+    <div className="bg-gray-900  rounded-lg text-white font-semibold text-lg tracking-wide text-center max-w-md p-4">
+      <p>Warning: Navigating away from this page while timer is running reset the timer.</p>
+      <button
+        className="mt-2 px-3 py-1 bg-gray-700 rounded-lg text-gray-100 hover:bg-gray-700 block mx-auto"
+        onClick={() => setShowWarning(false)}
+      >
+        Got it!
+      </button>
+    </div>
+  </div>
+)}
       <div className="timer-container bg-gray-700">
         <h1 className="timer-title">
           {isStudyPhase ? `Focus Time - ${timerTitle}` : "Break Time"}
