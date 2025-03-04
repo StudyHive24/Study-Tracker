@@ -161,9 +161,10 @@ export const loginUser = asyncHandler(async (req, res) => {
 export const logoutUser = asyncHandler(async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: 'None',
+    sameSite: 'Strict',
     secure: true,
     path: "/",
+    expires: new Date(0),
   });
 
   res.status(200).json({
