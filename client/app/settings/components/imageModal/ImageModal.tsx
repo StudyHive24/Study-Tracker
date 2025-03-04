@@ -56,7 +56,6 @@ export function ImageModal() {
 
             updateUser(e, {
               email: userState.email,
-              name: userState.name
             });
 
             router.push('/')
@@ -93,6 +92,7 @@ export function ImageModal() {
                 defaultValue={user.name}
                 onChange={(e) => handlerUserInput("name")(e)}
                 className="col-span-3 bg-gray-800 text-white"
+                disabled
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
