@@ -48,7 +48,7 @@ export default function TimerPage() {
 
   const { createTimer, timers = [] } = useTimerContext(); // Ensure timers is initialized as an empty array
 
-  const timerUpAudio = new Audio("./TimerUp.mp3"); 
+  const timerUpAudio = new Audio("/TimerUp.mp3"); 
   // Audio for timer completion
 
   // Timer options
