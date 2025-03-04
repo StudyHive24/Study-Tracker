@@ -139,6 +139,7 @@ export const loginUser = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: "none",
       secure: true,
+      domain: "https://studyhiveouslf6.vercel.app",
     });
 
     // send back tot the user and token in the response to the client
@@ -162,6 +163,7 @@ export const logoutUser = async (req, res) => {
     httpOnly: true,
     sameSite: "none",
     secure: true,
+    domain: "https://studyhiveouslf6.vercel.app",
     path: "/",
   });
 
