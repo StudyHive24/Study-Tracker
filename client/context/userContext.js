@@ -125,30 +125,23 @@ export const UserContextProvider = ({ children }) => {
   };
 
   // logout user
-  const logoutUser = async () => {
+  const logoutUser = async (req, res) => {
     try {
-      // Send logout request to backend
-      await axios.get(`${serverUrl}/api/v1/logout`, {
-        withCredentials: true, // Important for cookies
+      const res = await axios.get(`${serverUrl}/api/v1/logout`, {
+        withCredentials: true,
       });
-  
-      // Manually clear cookies in the browser (for Chrome/Edge)
-      document.cookie =
-        "token=; Path=/; Domain=.studyhiveouslf6.vercel.app; Expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure; SameSite=None";
-  
+
       toast.success("User logged out successfully");
-  
-      // Clear user state
+
       setUser({});
-  
-      // Redirect to login page
+
+      // to riderect to the login page
       router.push("/login");
     } catch (error) {
-      console.log("Error logging out the user", error);
-      toast.error("Error logging out the user");
+      console.log("Error on loggin out the user");
+      toast.error("Error on loggin out the user");
     }
   };
-  
 
   // get user details
   const getUser = async () => {
