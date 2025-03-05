@@ -40,7 +40,7 @@ const ProgressPage = () => {
 
   // Fetch timers from the backend
   useEffect(() => {
-    axios.get('http://localhost:8000/api/timer/') 
+    axios.get('https://study-hive-server-f6.vercel.app ') //https://study-hive-server-f6.vercel.app http://localhost:8000/api/timer/
       .then(response => {
         setTimers(response.data.timers);
       })
