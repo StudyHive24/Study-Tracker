@@ -26,23 +26,23 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser())
 
-// app.use(
-//   session({
-//     store: new RedisStore({
-//       client: redis,
-//     }),
-//     secret: SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//       httpOnly: true,
-//       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-//       domain: ".studyhiveouslf6.vercel.app", // REMOVE THE TRAILING '/'
-//       sameSite: "lax", // Important for CORS
-//       secure: true, // Ensure HTTPS is being used
-//     },
-//   })
-// );
+app.use(
+  session({
+    store: new RedisStore({
+      client: redis,
+    }),
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      domain: ".studyhiveouslf6.vercel.app", // REMOVE THE TRAILING '/'
+      sameSite: "lax", // Important for CORS
+      secure: true, // Ensure HTTPS is being used
+    },
+  })
+);
 
   
 
@@ -74,4 +74,3 @@ mongoose
   .catch(() => {
     console.log("Connection failed");
   });
-
