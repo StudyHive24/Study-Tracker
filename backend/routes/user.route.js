@@ -18,7 +18,7 @@ router.post('/login', loginUser)
 router.patch('/user', protect, updateUser)
 
 // to logout a user
-router.get('/logout', logoutUser)
+router.post('/logout', logoutUser)
 
 // email verification
 router.post('/verify-email', protect, emailVerify)

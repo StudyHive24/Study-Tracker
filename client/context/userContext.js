@@ -127,7 +127,7 @@ export const UserContextProvider = ({ children }) => {
   // logout user
   const logoutUser = async (req, res) => {
     try {
-      const res = axios.get(`${serverUrl}/api/v1/logout`, {
+      const res = axios.post(`${serverUrl}/api/v1/logout`, {
         withCredentials: true,
       });
 
