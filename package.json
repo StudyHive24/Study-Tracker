@@ -11,6 +11,7 @@
     "next": "^15.0.3",
     "react-big-calendar": "^1.17.1",
     "react-calendar": "^5.1.0",
+    "react-gtm-module": "^2.0.11",
     "react-hot-toast": "^2.4.1",
     "react-tag-input-component": "^2.0.2",
     "recharts": "^2.15.0"

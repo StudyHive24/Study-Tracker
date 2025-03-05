@@ -139,7 +139,6 @@ export const loginUser = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: "none",
       secure: true,
-      domain: "https://studyhiveouslf6.vercel.app",
     });
 
     // send back tot the user and token in the response to the client
@@ -163,7 +162,6 @@ export const logoutUser = async (req, res) => {
     httpOnly: true,
     sameSite: "none",
     secure: true,
-    domain: "https://studyhiveouslf6.vercel.app",
     path: "/",
   });
 
@@ -174,47 +172,48 @@ export const logoutUser = async (req, res) => {
 
 // update user details
 export const updateUser = async (req, res) => {
-    try {
-      // Get the user details from the token using protect middleware
-      const user = await User.findById(req.user._id);
-  
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
+  try {
+    // get the user details from the token using protect middleware
+    const user = await User.findById(req.user._id);
+
+    if (user) {
+      // properties to update
+
+      const email = req.body.email;
+      const name = req.body.name;
+
+      const exist = await User.findOne({ email });
+
+      if (exist) {
+        return res.json({
+          error: "email is already taken",
+        });
       }
-  
-      const { name, bio, photo, email } = req.body;
-  
-      // Check if email is being updated and ensure it's valid
-      if (email && email !== user.email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          return res.status(400).json({ error: "Enter a valid email" });
-        }
-  
-        const exist = await User.findOne({ email });
-        if (exist) {
-          return res.status(400).json({ error: "Email is already taken" });
-        }
+
+      const existName = await User.findOne({ name });
+      if (existName) {
+        return res.json({
+          error: "username is already taken",
+        });
       }
-  
-      // Check if name is being updated and ensure uniqueness
-      if (name && name !== user.name) {
-        const existName = await User.findOne({ name });
-        if (existName) {
-          return res.status(400).json({ error: "Username is already taken" });
-        }
+
+      // Check email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.json({ error: "Enter a valid email" });
       }
-  
-      // Update only the provided fields
-      if (name) user.name = name;
-      if (bio) user.bio = bio;
-      if (photo) user.photo = photo;
-      if (email && email !== user.email) user.email = email;
-  
-      // Save updated user
+
+      // to update properties
+      user.name = req.body.name || user.name;
+      user.bio = req.body.bio || user.bio;
+      user.photo = req.body.photo || user.photo;
+      user.email = req.body.email || user.email;
+
+      // to save the updated data
       const updated = await user.save();
-  
-      res.status(200).json({
+
+      res.status(200);
+      res.json({
         _id: updated._id,
         name: updated.name,
         email: updated.email,
@@ -222,11 +221,13 @@ export const updateUser = async (req, res) => {
         bio: updated.bio,
         isVerified: updated.isVerified,
       });
-    } catch (error) {
-      res.status(500).json({ error: "Server error" });
     }
-  };
-  
+  } catch (error) {
+    res.json({
+      message: "User not found",
+    });
+  }
+};
 
 // login status
 export const userLoginStatus = async (req, res) => {
