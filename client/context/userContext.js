@@ -125,24 +125,22 @@ export const UserContextProvider = ({ children }) => {
   };
 
   // logout user
-  const logoutUser = async (req, res) => {
+  const logoutUser = async () => {
     try {
-      const res = axios.post(`${serverUrl}/api/v1/logout`, {
-        withCredentials: true,
-      });
-
-      toast.success("User logged out successfully");
-
+      await axios.post(`${serverUrl}/api/v1/logout`, {}, { withCredentials: true });
+  
+      toast.success('User logged out successfully');
+      localStorage.removeItem("token"); // If using localStorage for auth
+  
       setUser({});
-
-      // to riderect to the login page
-      router.push("/login");
+      router.push('/login'); // Redirect to login page
+  
     } catch (error) {
-      console.log("Error on loggin out the user");
-      toast.error("Error on loggin out the user");
+      console.log('Error logging out the user', error);
+      toast.error('Error logging out the user');
     }
   };
-
+  
   // get user details
   const getUser = async () => {
     setLoading(true);
