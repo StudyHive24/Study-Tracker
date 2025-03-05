@@ -78,7 +78,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: 'None',
       secure: false,
-      domain: '.study-hive-server-f6.vercel.app'
+      domain: '.studyhiveouslf6.vercel.app'
     });
 
     if (user) {
@@ -141,7 +141,7 @@ export const loginUser = asyncHandler(async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: 'None',
       secure: true,
-      domain: '.study-hive-server-f6.vercel.app'
+      domain: '.studyhiveouslf6.vercel.app'
     });
 
     // send back tot the user and token in the response to the client
@@ -161,13 +161,24 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 // logout user
 export const logoutUser = asyncHandler(async (req, res) => {
+  // Destroy session if using session-based authentication
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Logout error:", err);
+        return res.status(500).json({ message: "Logout failed" });
+      }
+    });
+  }
+
+  // Correct the domain to match frontend
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: 'None',
+    sameSite: "None",
     secure: true,
     path: "/",
     expires: new Date(0),
-    domain: '.study-hive-server-f6.vercel.app'
+    domain: ".studyhiveouslf6.vercel.app", // Change this to frontend domain
   });
 
   res.status(200).json({
