@@ -77,7 +77,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       sameSite: 'None',
-      secure: false,
+      secure: true,
       domain: '.studyhiveouslf6.vercel.app'
     });
 
@@ -161,24 +161,13 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 // logout user
 export const logoutUser = asyncHandler(async (req, res) => {
-  // Destroy session if using session-based authentication
-  if (req.session) {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error("Logout error:", err);
-        return res.status(500).json({ message: "Logout failed" });
-      }
-    });
-  }
-
-  // Correct the domain to match frontend
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "None",
+    sameSite: 'None',
     secure: true,
     path: "/",
     expires: new Date(0),
-    domain: ".studyhiveouslf6.vercel.app", // Change this to frontend domain
+    domain: '.studyhiveouslf6.vercel.app'
   });
 
   res.status(200).json({
