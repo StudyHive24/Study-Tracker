@@ -12,39 +12,28 @@ dotenv.config();
 
 const app = express();
 
-const corsOptions = {
-  origin: "https://studyhiveouslf6.vercel.app", // Allow frontend
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true, // Enable sending cookies
-};
-app.use(cors(corsOptions));
-
-
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors({ origin: `${process.env.CLIENT_URL}`, credentials: true}));
 app.use(cookieParser())
 
 // app.use(
 //   session({
 //     store: new RedisStore({
-//       client: redis,
+//       client: redis
 //     }),
 //     secret: SESSION_SECRET,
 //     resave: false,
 //     saveUninitialized: false,
 //     cookie: {
 //       httpOnly: true,
-//       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-//       domain: ".studyhiveouslf6.vercel.app", // REMOVE THE TRAILING '/'
-//       sameSite: "lax", // Important for CORS
-//       secure: true, // Ensure HTTPS is being used
-//     },
-//   })
-// );
-
+//       maxAge: 1000 * 60 * 60 * 24 * 365 * 7, // 7 days
+//       domain: '.studyhiveouslf6.vercel.app/'
+//     }
+//   }),
   
+
 
 
 const port = process.env.PORT;
