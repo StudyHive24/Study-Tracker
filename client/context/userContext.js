@@ -135,25 +135,21 @@ const loginUser = async (e) => {
 
 
 
-    // logout user
-    const logoutUser = async (req, res) => {
-        try {
-            const res = axios.get(`${serverUrl}/api/v1/logout`, {
-                withCredentials: true
-            })
+const logoutUser = async () => {
+  try {
+    await axios.post(`${serverUrl}/api/v1/logout`, {}, { withCredentials: true });
 
-            toast.success('User logged out successfully')
+    toast.success("User logged out successfully");
+    localStorage.removeItem("token"); // Remove token if used
+    setUser({});
+    router.push("/login");
 
-            setUser({})
+  } catch (error) {
+    console.log("Error logging out the user", error);
+    toast.error("Error logging out the user");
+  }
+};
 
-            // to riderect to the login page
-            router.push('/login')
-
-        } catch (error) {
-            console.log('Error on loggin out the user')
-            toast.error('Error on loggin out the user')
-        }
-    }
 
     // get user details 
     const getUser = async () => {
