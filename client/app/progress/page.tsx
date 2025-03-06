@@ -29,7 +29,7 @@ const TimeBox: React.FC<TimeBoxProps> = ({ label, time, className }) => (
 // }
 
 
-
+const serverURL = 'https://study-hive-server-f6.vercel.app'
 
 const ProgressPage = () => {
   useRiderect('/login');
@@ -40,7 +40,7 @@ const ProgressPage = () => {
 
   // Fetch timers from the backend
   useEffect(() => {
-    axios.get('http://localhost:8000/api/timer/') 
+    axios.get(`${serverURL}/api/timer/`) 
       .then(response => {
         setTimers(response.data.timers);
       })
