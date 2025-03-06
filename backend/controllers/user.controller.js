@@ -179,8 +179,9 @@ export const updateUser = async (req, res) => {
     if (user) {
       // properties to update
 
-      const email = req.body.email || user.email;
-      const name = req.body.name || user.name;
+      const email = req.body.email;
+      const name = req.body.name;
+      const bio = req.body.bio;
 
       const exist = await User.findOne({ email });
 
@@ -198,9 +199,15 @@ export const updateUser = async (req, res) => {
       }
 
       // Check email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.json({ error: "Enter a valid email" });
+      if (bio) {
+        if (bio.length > 50) {
+          return res.json({ error: "Bio cannot be more than 50 characters" });
+        }
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          return res.json({ error: "Enter a valid email" });
+        }
       }
 
       // to update properties
