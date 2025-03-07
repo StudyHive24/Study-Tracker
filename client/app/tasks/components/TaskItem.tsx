@@ -6,7 +6,12 @@ import { formatTime } from "@/utils/utilities";
 import { useTasksContext } from "@/context/taskContext.js";
 import Modal from "./Modal";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
 import TrashTooltip from "./Tooltips/TrashTooltip";
 import CompletedTooltip from "./Tooltips/CompletedTooltip";
 import EditTaskTooltip from "./Tooltips/EditTaskTooltip";
@@ -18,7 +23,7 @@ interface TaskProps {
 
 function TaskItem({ task }: TaskProps) {
   const { deleteTask, getTask, updateTask, closeModal } = useTasksContext();
-  
+
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -28,10 +33,10 @@ function TaskItem({ task }: TaskProps) {
   let completed = task.completed;
 
   const handleSubmit = () => {
-    if (task.completed == 'no') {
-      updateTask({...task, completed: 'yes'});
-    } else if (task.completed == 'yes') {
-      updateTask({...task, completed: 'no'});
+    if (task.completed == "no") {
+      updateTask({ ...task, completed: "yes" });
+    } else if (task.completed == "yes") {
+      updateTask({ ...task, completed: "no" });
     }
   };
 
@@ -60,7 +65,6 @@ function TaskItem({ task }: TaskProps) {
           className="text-sm p-2 text-gray-200 bg-gray-500 rounded-lg mt-1 overflow-y-scroll resize-none"
           value={task.description}
           rows={4}
-          
         ></textarea>
       </div>
       <div className="flex flex-row gap-3 text-sm justify-between">

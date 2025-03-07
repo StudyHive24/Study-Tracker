@@ -1,50 +1,53 @@
-'use client'
-import { useUserContext } from '@/context/userContext'
-import Link from 'next/link'
-import React, { useState, useEffect } from 'react'
-import toast from 'react-hot-toast'
+"use client";
+import { useUserContext } from "@/context/userContext";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 function ResetPasswordForm() {
-  const { passwordReset } = useUserContext()
+  const { passwordReset } = useUserContext();
 
-  const [email, setEmail] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [isClient, setIsClient] = useState(false)
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isClient, setIsClient] = useState(false);
 
   const emailChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
-  }
+    setEmail(e.target.value);
+  };
 
   const newPasswordChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value)
-  }
+    setNewPassword(e.target.value);
+  };
 
-  const confirmPasswordChangeHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmPassword(e.target.value)
-  }
+  const confirmPasswordChangeHandle = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setConfirmPassword(e.target.value);
+  };
 
   const submitHandle = (e: any) => {
-    e.preventDefault()
+    e.preventDefault();
 
+    // check if the new password and confirm password match or not
     if (newPassword !== confirmPassword) {
-      toast.error('Passwords don\'t match')
+      toast.error("Passwords don't match");
     } else {
-      passwordReset(email, newPassword)
+      passwordReset(email, newPassword);
 
       // clear the input email
-      setEmail('')
-      setNewPassword('')
-      setConfirmPassword('')
+      setEmail("");
+      setNewPassword("");
+      setConfirmPassword("");
     }
-  }
+  };
 
   useEffect(() => {
-    setIsClient(true) // Ensure the form only renders on the client side
-  }, [])
+    setIsClient(true); // ensure the form only renders on the client side
+  }, []);
 
   if (!isClient) {
-    return null // Prevent rendering on the server side
+    return null; // prevent rendering on the server side
   }
 
   return (
@@ -55,7 +58,7 @@ function ResetPasswordForm() {
             <span className="text-xl">Change your StudyHive Password</span>
           </div>
           <span className="text-sm text-gray-400 text-center mb-5">
-            Don't have an account? 
+            Don't have an account?
             <Link href={"/register"} className="text-green-500">
               {"  "}
               Register Here
@@ -98,7 +101,7 @@ function ResetPasswordForm() {
               />
               <hr />
             </div>
-            
+
             <button
               disabled={!email}
               type="submit"
@@ -111,7 +114,7 @@ function ResetPasswordForm() {
         </div>
       </form>
     </div>
-  )
+  );
 }
 
-export default ResetPasswordForm
+export default ResetPasswordForm;

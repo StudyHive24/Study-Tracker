@@ -1,7 +1,7 @@
-'use client'
-import { useUserContext } from '@/context/userContext'
-import Link from 'next/link'
-import React, { useState, useEffect } from 'react'
+"use client";
+import { useUserContext } from "@/context/userContext";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
 
 function LoginForm() {
   const { loginUser, userState, handlerUserInput } = useUserContext();
@@ -9,16 +9,16 @@ function LoginForm() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // Ensure the component is only rendered on the client side
+    setIsClient(true); // to ensure the component is only rendered on the client side
   }, []);
 
   const submitHandle = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();  // Prevent default form submission
-    loginUser(e);  // Pass the event to the loginUser function
+    e.preventDefault(); // to prevent default form submission
+    loginUser(e); // to pass the event to the loginUser function
   };
 
   if (!isClient) {
-    return null; // Prevents hydration errors by not rendering the component on the server side
+    return null; // to prevent hydration errors by not rendering the component on the server side
   }
 
   return (
@@ -29,7 +29,7 @@ function LoginForm() {
             <span className="text-xl">Login to your StudyHive Account</span>
           </div>
           <span className="text-sm text-gray-400 text-center mb-5">
-            Login now, Don't have an account? 
+            Login now, Don't have an account?
             <Link href={"/register"} className="text-green-500">
               Register Here
             </Link>
@@ -59,9 +59,9 @@ function LoginForm() {
               />
               <hr />
             </div>
-            <div className='flex justify-end'>
-              <Link href={'/forgot-password'}>
-                <span className='text-blue-500 text-[15px] hover:text-blue-600 cursor-pointer'>
+            <div className="flex justify-end">
+              <Link href={"/forgot-password"}>
+                <span className="text-blue-500 text-[15px] hover:text-blue-600 cursor-pointer">
                   Forgot Password or Username?
                 </span>
               </Link>

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -6,16 +6,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import User from "../Sidebar right/Components/User"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import User from "../Sidebar right/Components/User";
 
 export function UserProfileTab() {
   return (
@@ -24,17 +19,14 @@ export function UserProfileTab() {
         <TabsTrigger value="account">Account Info</TabsTrigger>
         <TabsTrigger value="password">Password</TabsTrigger>
         <TabsTrigger value="account-settings">Account Settings</TabsTrigger>
-
       </TabsList>
       <TabsContent value="account">
         <Card>
           <CardHeader>
             <CardTitle>
-              <User width={150} height={60}/>
+              <User width={150} height={60} />
             </CardTitle>
-            <CardDescription>
-              
-            </CardDescription>
+            <CardDescription></CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-1">
@@ -83,12 +75,11 @@ export function UserProfileTab() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2 justify-center flex flex-col items-center">
-              <Button className="w-[20vw]">Deactivate Account</Button>
-              <Button className="w-[20vw]">Delete Account</Button>
+            <Button className="w-[20vw]">Deactivate Account</Button>
+            <Button className="w-[20vw]">Delete Account</Button>
           </CardContent>
-
         </Card>
       </TabsContent>
     </Tabs>
-  )
+  );
 }

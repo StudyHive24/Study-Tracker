@@ -27,13 +27,16 @@ function AddTaskModel() {
     modalMode,
     activeTask,
     updateTask,
-    getTask
+    getTask,
   } = useTasksContext();
 
   const ref = useRef(null);
 
   useEffect(() => {
-    const time = new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit' });
+    const time = new Date().toLocaleString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     setCurrentTime(time);
   }, []);
 
@@ -52,12 +55,12 @@ function AddTaskModel() {
     createTask(updatedTask);
   };
 
-  const [tags, setTags] = useState(['Coding']);
+  const [tags, setTags] = useState(["Coding"]);
 
   return (
     <Dialog>
-      <DialogTrigger >
-        <span className="bg-green-500 hover:bg-green-600 rounded-3xl mt-1 p-4 text-gray-50" >
+      <DialogTrigger>
+        <span className="bg-green-500 hover:bg-green-600 rounded-3xl mt-1 p-4 text-gray-50">
           Add A New Task
         </span>
       </DialogTrigger>
@@ -65,7 +68,7 @@ function AddTaskModel() {
         <DialogHeader className="mt-5 gap-2">
           <DialogTitle className="text-gray-100">
             Create Task
-            <hr className="mt-3"/>
+            <hr className="mt-3" />
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit}>

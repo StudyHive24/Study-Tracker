@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { MoveRight, Tag, Tags } from "lucide-react";
-import { TagsInput } from 'react-tag-input-component';
+import { TagsInput } from "react-tag-input-component";
 import { useTasksContext } from "@/context/taskContext.js";
 import toast from "react-hot-toast";
 
@@ -29,14 +29,17 @@ function AddTask() {
     modalMode,
     activeTask,
     updateTask,
-    getTask
+    getTask,
   } = useTasksContext();
 
   const ref = useRef(null);
 
   useEffect(() => {
     // Set the current time only on the client side to avoid hydration issues
-    const time = new Date().toLocaleString([], { hour: '2-digit', minute: '2-digit' });
+    const time = new Date().toLocaleString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
     setCurrentTime(time);
   }, []);
 
@@ -61,10 +64,8 @@ function AddTask() {
   return (
     <Dialog>
       <DialogTrigger asChild className="">
-        <div className='flex flex-col justify-center text-center border-2 border-dashed border-gray-600 bg-none  transition duration-200 ease-in-out hover:bg-gray-700 hover:border-white p-2 rounded-lg h-60 m-[5px] mt-2 cursor-pointer'>
-          <span className="bg-none text-gray-200">
-            Add A New Task
-          </span>
+        <div className="flex flex-col justify-center text-center border-2 border-dashed border-gray-600 bg-none  transition duration-200 ease-in-out hover:bg-gray-700 hover:border-white p-2 rounded-lg h-60 m-[5px] mt-2 cursor-pointer">
+          <span className="bg-none text-gray-200">Add A New Task</span>
         </div>
       </DialogTrigger>
       <DialogContent className="w-[525px] p-7 bg-gray-800 border-none">

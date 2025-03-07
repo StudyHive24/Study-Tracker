@@ -1,18 +1,16 @@
-import React from 'react'
-import {useTasksContext} from '@/context/taskContext.js'
+import React from "react";
+import { useTasksContext } from "@/context/taskContext.js";
 
 interface UserProps {
-    title: String
+  title: String;
 }
 
-function TasksSubHeader({title} : UserProps) {
+function TasksSubHeader({ title }: UserProps) {
+  const { priority, setPriority } = useTasksContext();
 
-  const { priority, setPriority } = useTasksContext()
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
-  const [activeIndex, setActiveIndex] = React.useState(0)
-
-  const priorities = ['All', 'Low', 'Medium', 'High']
-
+  const priorities = ["All", "Low", "Medium", "High"];
 
   return (
     <div className="relative py-2 px-2 grid grid-cols-4 items-center gap-3 bg-gray-500 rounded-md mt-4">
@@ -37,14 +35,14 @@ function TasksSubHeader({title} : UserProps) {
           onClick={() => {
             setActiveIndex(index);
             setPriority(priority);
-            console.log(priority)
+            console.log(priority);
           }}
         >
           {priority}
         </button>
       ))}
     </div>
-  )
+  );
 }
 
-export default TasksSubHeader
+export default TasksSubHeader;

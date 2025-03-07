@@ -6,8 +6,8 @@ import { BadgeCheck, Github } from "lucide-react";
 import Link from "next/link";
 import router from "next/router";
 import React from "react";
-import { ImageModal } from "@/app/settings/components/imageModal/ImageModal";
 import BioPopover from "./BioPopover";
+import { ImageModal } from "./ImageModal";
 
 export default function UserSection() {
   const { user } = useUserContext();

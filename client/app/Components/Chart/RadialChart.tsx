@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { TrendingUp } from "lucide-react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
@@ -32,7 +32,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 function RadialChart() {
-  const { tasks, completedTasks, activeTasks, pendingTasks } = useTasksContext();
+  const { tasks, completedTasks, activeTasks, pendingTasks } =
+    useTasksContext();
   const tasksTotal = tasks.length;
 
   const [isClient, setIsClient] = useState(false);
@@ -45,18 +46,22 @@ function RadialChart() {
   ];
 
   useEffect(() => {
-    setIsClient(true); // Ensures component only renders on the client side
+    setIsClient(true); // ensures component only renders on the client side
   }, []);
 
   if (!isClient) {
-    return null; // Prevents rendering on the server side
+    return null; // prevents rendering on the server side
   }
 
   return (
     <Card className="flex flex-col border-none m-1 bg-gray-700 ">
       <CardHeader className="items-center pb-0">
-        <CardTitle className="text-gray-100 text-[22px] text-center">Completed vs Pending Tasks</CardTitle>
-        <CardDescription className="text-gray-200 text-[12px]">Task completion status.</CardDescription>
+        <CardTitle className="text-gray-100 text-[22px] text-center">
+          Completed vs Pending Tasks
+        </CardTitle>
+        <CardDescription className="text-gray-200 text-[12px]">
+          Task completion status.
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 items-center pb-0 text-gray-100">
         <ChartContainer
@@ -74,11 +79,16 @@ function RadialChart() {
               content={<ChartTooltipContent hideLabel />}
             />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label 
+              <Label
                 content={({ viewBox }) => {
                   if (viewBox && "cx" in viewBox && "cy" in viewBox) {
                     return (
-                      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" className="text-white">
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        className="text-white"
+                      >
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) - 16}

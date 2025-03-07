@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -18,14 +17,14 @@ import useRiderect from "@/hooks/useUserRiderect";
 import MainLayoutContent from "@/providers/MainLayoutContent";
 import TwoSidebarProvider from "@/providers/TwoBarProvider";
 
-import { Roboto } from 'next/font/google';
+import { Roboto } from "next/font/google";
 
 // Configure the Roboto font
 const roboto = Roboto({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'], // Add weights as needed
-  style: ['normal', 'italic'], // Optional styles
-  variable: '--font-roboto', // Custom CSS variable for easier use
+  subsets: ["latin"],
+  weight: ["400", "500", "700"], // Add weights as needed
+  style: ["normal", "italic"], // Optional styles
+  variable: "--font-roboto", // Custom CSS variable for easier use
 });
 
 const geistSans = localFont({
@@ -51,9 +50,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={roboto.className}
-      >
+      <body className={roboto.className}>
         <UserProvider>
           <Toaster position="top-center" />
           <div className="">

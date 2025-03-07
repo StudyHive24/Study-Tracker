@@ -16,9 +16,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import ImageUpload from "../ImageUpload";
-import { useRouter } from "next/navigation";import ChangePasswordModal from "@/app/Components/Modals/ChangePasswordModal";
- [1,2,5]
+
+import { useRouter } from "next/navigation";
+import ChangePasswordModal from "@/app/Components/Modals/ChangePasswordModal";
+import ImageUpload from "./ImageUpload";
+[1, 2, 5];
 
 export function ImageModal() {
   const { user, updateUser, handlerUserInput, userState } = useUserContext();
@@ -33,7 +35,7 @@ export function ImageModal() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <Dialog>
@@ -56,10 +58,10 @@ export function ImageModal() {
 
             updateUser(e, {
               email: userState.email,
-              name: userState.name
+              name: userState.name,
             });
 
-            router.push('/')
+            router.push("/");
           }}
         >
           <DialogHeader>
@@ -93,7 +95,6 @@ export function ImageModal() {
                 defaultValue={user.name}
                 onChange={(e) => handlerUserInput("name")(e)}
                 className="col-span-3 bg-gray-800 text-white"
-                
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">

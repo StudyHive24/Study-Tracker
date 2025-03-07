@@ -1,7 +1,7 @@
-import cloudinary from 'cloudinary'
-import multer from 'multer'
-import path from 'path';
-import fs from 'fs'
+import cloudinary from "cloudinary";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 // Configure Cloudinary
 cloudinary.config({
@@ -13,7 +13,7 @@ cloudinary.config({
 // Multer Storage (Saves file temporarily)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Temporary folder
+    cb(null, "uploads/"); // Temporary folder for save photos
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`);
@@ -25,13 +25,12 @@ export const upload = multer({ storage });
 export const uploadToCloudinary = async (filePath) => {
   try {
     const result = await cloudinary.uploader.upload(filePath, {
-      folder: "uploads", // Change folder name as needed
+      folder: "uploads",
     });
-    fs.unlinkSync(filePath); // Delete file from server after upload
+    fs.unlinkSync(filePath); // to delete file from server after upload
     return result.secure_url;
   } catch (error) {
     console.error("Cloudinary upload error:", error);
     throw error;
   }
 };
-

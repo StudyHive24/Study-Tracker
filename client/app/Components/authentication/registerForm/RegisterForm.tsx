@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "@/context/userContext";
 import Link from "next/link";
@@ -10,18 +10,18 @@ function RegisterForm() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // Ensure that component is rendered only on the client side
+    setIsClient(true); // to ensure that component is rendered only on the client side
   }, []);
 
   if (!isClient) {
-    return null; // Prevent rendering on the server side to avoid hydration errors
+    return null; // to prevent rendering on the server side to avoid hydration errors
   }
 
   return (
     <div className="flex justify-center p-3">
       <form
         onSubmit={(e) => {
-          e.preventDefault(); // Prevent default form submission
+          e.preventDefault(); // to prevent default form submission
           registerUser(e);
         }}
       >

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Button } from "@/components/ui/button";
 import { DialogFooter, DialogHeader } from "@/components/ui/dialog";
 import { useTasksContext } from "@/context/taskContext";
@@ -44,7 +44,9 @@ function DeleteTaskModal({ task }: TaskProps) {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] bg-gray-900 border-none">
           <DialogHeader>
-            <DialogTitle className="text-white">Are you absolutely sure?</DialogTitle>
+            <DialogTitle className="text-white">
+              Are you absolutely sure?
+            </DialogTitle>
             <DialogDescription className="text-gray-400">
               This Action cannot be undone.
             </DialogDescription>

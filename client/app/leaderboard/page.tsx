@@ -11,7 +11,7 @@ function Page() {
   const [tooltip, setTooltip] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
 
-  // Ensure component only renders tooltips after hydration
+  // ensure component only renders tooltips after hydration
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -32,6 +32,7 @@ function Page() {
               <span>Completed Percentage</span>
             </div>
           </li>
+          {/* get the top 10 users by task completion */}
           {topUsers?.map((user: any, index: number) => (
             <li key={index} className="mb-4 mt-3 relative">
               <div className="text-gray-100 bg-gray-500 text-[12px] text-center grid grid-cols-5 p-5 rounded-xl gap-3 justify-center items-center">
@@ -40,6 +41,7 @@ function Page() {
                   onMouseEnter={() => isClient && setTooltip(user.name)}
                   onMouseLeave={() => isClient && setTooltip(null)}
                 >
+                  {/* user image */}
                   <Image
                     src={user.image || blankImg}
                     width={60}
@@ -82,6 +84,7 @@ function Page() {
               <span>Time Spent</span>
             </div>
           </li>
+          {/* get the top 10 users by time spent */}
           {topUsersTime?.map((user: any, index: number) => (
             <li key={index} className="mb-4 mt-3">
               <div className="text-gray-100 bg-gray-500 text-center grid grid-cols-2 p-5 rounded-xl text-[11px] justify-center items-center">

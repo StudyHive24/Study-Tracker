@@ -16,54 +16,51 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 function ImageUpload() {
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
-    const [image, setImage] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
-    const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const router = useRouter();
 
-    const router = useRouter()
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); // Show preview before upload
+    }
+  };
 
-  
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files && e.target.files[0]) {
-        const file = e.target.files[0];
-        setImage(file);
-        setPreview(URL.createObjectURL(file)); // Show preview before upload
-      }
-    };
-  
-    const handleUpload = async () => {
-      if (!image) return toast.error("Please select an image");
-    
-      const formData = new FormData();
-      formData.append("file", image);
-      formData.append("upload_preset", "studyhive"); // Cloudinary preset
-    
-      try {
-        // Step 1: Upload to Cloudinary
-        const res = await axios.post("https://api.cloudinary.com/v1_1/dyyitqydc/image/upload", formData, {
-          withCredentials: false
-        });
-        const imageUrl = res.data.secure_url;
+  const handleUpload = async () => {
+    if (!image) return toast.error("Please select an image");
 
-        const serverURL =  'https://study-hive-server-f6.vercel.app'
-    
-        // Step 2: Send image URL to backend and link with user
-        await axios.post(`${serverURL}/api/v1/upload-profile`, 
-          { imageUrl },
-          
-        );
-    
-        setUploadedImage(imageUrl); // Store in state
-        toast.success("Profile photo updated");
-        window.location.reload();
-      } catch (error) {
-        console.error("Upload Error:", error);
-        toast.error("Upload Failed");
-      }
-    };
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append("upload_preset", "studyhive"); // Cloudinary preset
 
-    
+    try {
+      // Step 1: Upload to Cloudinary
+      const res = await axios.post(
+        "https://api.cloudinary.com/v1_1/dyyitqydc/image/upload",
+        formData,
+        {
+          withCredentials: false,
+        }
+      );
+      const imageUrl = res.data.secure_url;
+
+      const serverURL = "https://study-hive-server-f6.vercel.app";
+
+      // Step 2: Send image URL to backend and link with user
+      await axios.post(`${serverURL}/api/v1/upload-profile`, { imageUrl });
+
+      setUploadedImage(imageUrl); // Store in state
+      toast.success("Profile photo updated");
+      window.location.reload();
+    } catch (error) {
+      console.error("Upload Error:", error);
+      toast.error("Upload Failed");
+    }
+  };
 
   return (
     <Dialog>
@@ -117,15 +114,32 @@ function ImageUpload() {
                   </p>
                 </div>
                 <div className="flex relative">
-                <input id="ImgUpld" type="file" className="sr-only" accept="image/*" onChange={handleFileChange}/>
-                {preview && <img className=" z-100 right-0 top-0" src={preview} alt="Preview" width={200} />}
+                  <input
+                    id="ImgUpld"
+                    type="file"
+                    className="sr-only"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                  {preview && (
+                    <img
+                      className=" z-100 right-0 top-0"
+                      src={preview}
+                      alt="Preview"
+                      width={200}
+                    />
+                  )}
                 </div>
               </label>
             </div>
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleUpload} className="bg-green-500 hover:bg-green-600">
+          <Button
+            type="submit"
+            onClick={handleUpload}
+            className="bg-green-500 hover:bg-green-600"
+          >
             Save changes
           </Button>
         </DialogFooter>

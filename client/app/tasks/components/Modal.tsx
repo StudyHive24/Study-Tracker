@@ -28,21 +28,39 @@ function Modal({ task }: TaskPropsModal) {
   useEffect(() => {
     setLocalTask({
       ...task,
-      duedate: task.duedate ? new Date(task.duedate).toISOString().split("T")[0] : "",
-      endTime: task.endTime ? new Date(task.endTime).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }) : "",
+      duedate: task.duedate
+        ? new Date(task.duedate).toISOString().split("T")[0]
+        : "",
+      endTime: task.endTime
+        ? new Date(task.endTime).toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "",
     });
   }, [task]);
 
-  const handleInputChange = (fieldName: keyof Task) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setLocalTask((prevTask) => ({ ...prevTask, [fieldName]: e.target.value }));
-  };
+  const handleInputChange =
+    (fieldName: keyof Task) =>
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >
+    ) => {
+      setLocalTask((prevTask) => ({
+        ...prevTask,
+        [fieldName]: e.target.value,
+      }));
+    };
 
   const router = useRouter();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const updatedEndTime = new Date(`${localTask.duedate}T${localTask.endTime}:00`);
+    const updatedEndTime = new Date(
+      `${localTask.duedate}T${localTask.endTime}:00`
+    );
 
     const updatedTask = { ...localTask, endTime: updatedEndTime };
 
@@ -71,7 +89,9 @@ function Modal({ task }: TaskPropsModal) {
           <div className="p-3 gap-2 flex flex-col">
             {/* Task Title */}
             <div className="gap-2 flex flex-col w-50">
-              <Label htmlFor="title" className="text-gray-200">Task title</Label>
+              <Label htmlFor="title" className="text-gray-200">
+                Task title
+              </Label>
               <Input
                 id="title"
                 placeholder="Enter a task title"
@@ -84,7 +104,9 @@ function Modal({ task }: TaskPropsModal) {
             {/* Task Description */}
             <div className="flex justify-between">
               <div className="gap-2 flex flex-col">
-                <Label htmlFor="description" className="text-gray-200">Task description</Label>
+                <Label htmlFor="description" className="text-gray-200">
+                  Task description
+                </Label>
                 <textarea
                   id="description"
                   placeholder="Enter a task description"
@@ -100,7 +122,9 @@ function Modal({ task }: TaskPropsModal) {
             {/* Due Date, End Time, and Priority */}
             <div className="mt-2 flex justify-between">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="duedate" className="text-gray-200">Date</Label>
+                <Label htmlFor="duedate" className="text-gray-200">
+                  Date
+                </Label>
                 <Input
                   id="duedate"
                   type="date"
@@ -111,7 +135,9 @@ function Modal({ task }: TaskPropsModal) {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="endTime" className="text-gray-200">End time</Label>
+                <Label htmlFor="endTime" className="text-gray-200">
+                  End time
+                </Label>
                 <Input
                   id="endTime"
                   type="time"
@@ -121,7 +147,9 @@ function Modal({ task }: TaskPropsModal) {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="priority" className="text-gray-200">Priority</Label>
+                <Label htmlFor="priority" className="text-gray-200">
+                  Priority
+                </Label>
                 <select
                   className="p-2 rounded-md border cursor-pointer bg-gray-200"
                   onChange={handleInputChange("priority")}
@@ -136,7 +164,9 @@ function Modal({ task }: TaskPropsModal) {
 
             {/* Task Completion Status */}
             <div className="flex flex-col gap-2 mt-1">
-              <Label htmlFor="completed" className="text-gray-200">Task Completed</Label>
+              <Label htmlFor="completed" className="text-gray-200">
+                Task Completed
+              </Label>
               <select
                 className="bg-gray-200 p-2 rounded-md border cursor-pointer"
                 onChange={handleInputChange("completed")}
@@ -149,7 +179,10 @@ function Modal({ task }: TaskPropsModal) {
 
             {/* Submit Button */}
             <div className="flex justify-center">
-              <Button type="submit" className="mt-6 bg-blue-500 w-full hover:bg-blue-600 text-white rounded-xl">
+              <Button
+                type="submit"
+                className="mt-6 bg-blue-500 w-full hover:bg-blue-600 text-white rounded-xl"
+              >
                 Update Task
               </Button>
             </div>

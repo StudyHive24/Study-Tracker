@@ -15,10 +15,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 function ChangePasswordModal() {
-  const {
-    user,
-    changePassword,
-  } = useUserContext();
+  const { user, changePassword } = useUserContext();
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -34,6 +31,7 @@ function ChangePasswordModal() {
     }
   };
 
+  // password save handle
   const handleSave = () => {
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -45,8 +43,8 @@ function ChangePasswordModal() {
     }
   };
 
-  // Disabling the submit button if fields are empty or passwords don't match
-  const isDisabled = !oldPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword;
+  // // Disabling the submit button if fields are empty or passwords don't match
+  // const isDisabled = !oldPassword || !newPassword || !confirmPassword || newPassword !== confirmPassword;
 
   return (
     <div>
@@ -103,7 +101,6 @@ function ChangePasswordModal() {
               type="button"
               className="bg-green-500 hover:bg-green-600"
               onClick={handleSave}
-              
             >
               Save changes
             </Button>

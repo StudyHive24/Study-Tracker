@@ -24,15 +24,15 @@ import {
 import Link from "next/link";
 
 export function TaskAccordion() {
-  // Local state to track whether the component has mounted
+  // local state to track whether the component has mounted
   const [isMounted, setIsMounted] = useState(false);
 
-  // Set isMounted to true after the component mounts
+  // set isMounted to true after the component mounts
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Prevent rendering until the component has mounted on the client side
+  // prevent rendering until the component has mounted on the client side
   if (!isMounted) {
     return null; // or a loading spinner
   }
@@ -54,19 +54,28 @@ export function TaskAccordion() {
             </Link>
           </SidebarMenuButton>
           <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-            <Link href="/tasks/completed-tasks" className="flex flex-row gap-5 ml-8">
+            <Link
+              href="/tasks/completed-tasks"
+              className="flex flex-row gap-5 ml-8"
+            >
               <ClipboardCheck width={20} height={20} />
               <span className="text-[13px]">Completed Tasks</span>
             </Link>
           </SidebarMenuButton>
           <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-            <Link href="/tasks/pending-tasks" className="flex flex-row gap-5 ml-8">
+            <Link
+              href="/tasks/pending-tasks"
+              className="flex flex-row gap-5 ml-8"
+            >
               <Clock9 width={20} height={20} />
               <span className="text-[13px]">Pending Tasks</span>
             </Link>
           </SidebarMenuButton>
           <SidebarMenuButton className="h-[50px] rounded-xl border-b-2 ">
-            <Link href="/tasks/overdue-tasks" className="flex flex-row gap-5 ml-8">
+            <Link
+              href="/tasks/overdue-tasks"
+              className="flex flex-row gap-5 ml-8"
+            >
               <ClockAlert width={20} height={20} />
               <span className="text-[13px]">Overdue Tasks</span>
             </Link>

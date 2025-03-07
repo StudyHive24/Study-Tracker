@@ -15,7 +15,7 @@ export const test = (req, res) => {
   res.json("test is working");
 };
 
-// register user
+// to register user
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -99,9 +99,10 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// login endpoint
+// to login user
 export const loginUser = async (req, res) => {
   try {
+    // request body
     const { name, email, password } = req.body;
 
     // check if user exists
@@ -122,12 +123,14 @@ export const loginUser = async (req, res) => {
 
     console.log(user.password);
 
+    // password match check
     if (!match) {
       return res.json({
         error: "Invalid Credentials",
       });
     }
 
+    // to generate the login token
     const token = generateToken(user._id);
 
     const { _id, photo, bio, isVerifed } = user;
@@ -156,7 +159,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// logout user
+// to logout user
 export const logoutUser = async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
@@ -185,12 +188,14 @@ export const updateUser = async (req, res) => {
 
       const exist = await User.findOne({ email });
 
+      // to check if the email is taken or not
       if (exist) {
         return res.json({
           error: "email is already taken",
         });
       }
 
+      // to check if the name is taken or not
       const existName = await User.findOne({ name });
       if (existName) {
         return res.json({
@@ -198,12 +203,13 @@ export const updateUser = async (req, res) => {
         });
       }
 
-      // Check email format
+      // Check if there is a bio change in the request body or not
       if (bio) {
         if (bio.length > 50) {
           return res.json({ error: "Bio cannot be more than 50 characters" });
         }
       } else {
+        // check the email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
           return res.json({ error: "Enter a valid email" });
@@ -236,8 +242,9 @@ export const updateUser = async (req, res) => {
   }
 };
 
-// login status
+// to get login status
 export const userLoginStatus = async (req, res) => {
+  // get the token from the cookies
   const token = req.cookies.token;
 
   if (!token) {
@@ -263,165 +270,165 @@ export const userLoginStatus = async (req, res) => {
   }
 };
 
-// email verification
-export const emailVerify = async (req, res) => {
-  const user = await User.findById(req.user._id);
+// // to email verification
+// export const emailVerify = async (req, res) => {
+//   const user = await User.findById(req.user._id);
 
-  // if user exists
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
+//   // if user exists
+//   if (!user) {
+//     return res.status(404).json({ message: "User not found" });
+//   }
 
-  // check if user is already verified
-  if (user.isVerified) {
-    return res.status(400).json({ message: "User is already verified" });
-  }
+//   // check if user is already verified
+//   if (user.isVerified) {
+//     return res.status(400).json({ message: "User is already verified" });
+//   }
 
-  let token = await Token.findOne({ userId: user._id });
+//   let token = await Token.findOne({ userId: user._id });
 
-  // if token exists --> delete the token
-  if (token) {
-    await token.deleteOne();
-  }
+//   // if token exists --> delete the token
+//   if (token) {
+//     await token.deleteOne();
+//   }
 
-  // create a verification token using the user id --->
-  const verificationToken = crypto.randomBytes(64).toString("hex") + user._id;
+//   // create a verification token using the user id --->
+//   const verificationToken = crypto.randomBytes(64).toString("hex") + user._id;
 
-  // hast the verification token
-  const hashedToken = hashToken(verificationToken);
+//   // hast the verification token
+//   const hashedToken = hashToken(verificationToken);
 
-  await new Token({
-    userId: user._id,
-    verificationToken: hashedToken,
-    createdAt: Date.now(),
-    expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
-  }).save();
+//   await new Token({
+//     userId: user._id,
+//     verificationToken: hashedToken,
+//     createdAt: Date.now(),
+//     expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+//   }).save();
 
-  // verification link
-  const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+//   // verification link
+//   const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
 
-  // send email
-  const subject = "Email Verification - AuthKit";
-  const send_to = user.email;
-  const reply_to = "noreply@gmail.com";
-  const template = "emailVerification";
-  const send_from = process.env.USER_EMAIL;
-  const name = user.name;
-  const url = verificationLink;
+//   // send email
+//   const subject = "Email Verification - AuthKit";
+//   const send_to = user.email;
+//   const reply_to = "noreply@gmail.com";
+//   const template = "emailVerification";
+//   const send_from = process.env.USER_EMAIL;
+//   const name = user.name;
+//   const url = verificationLink;
 
-  try {
-    // order matters ---> subject, send_to, send_from, reply_to, template, name, url
-    await sendEmail(subject, send_to, send_from, reply_to, template, name, url);
-    return res.json({ message: "Email sent" });
-  } catch (error) {
-    console.log("Error sending email: ", error);
-    return res.status(500).json({ message: "Email could not be sent" });
-  }
-};
+//   try {
+//     // order matters ---> subject, send_to, send_from, reply_to, template, name, url
+//     await sendEmail(subject, send_to, send_from, reply_to, template, name, url);
+//     return res.json({ message: "Email sent" });
+//   } catch (error) {
+//     console.log("Error sending email: ", error);
+//     return res.status(500).json({ message: "Email could not be sent" });
+//   }
+// };
 
-export const emailVerificationCode = async (req, res) => {
-  try {
-    const { email } = req.body;
+// export const emailVerificationCode = async (req, res) => {
+//   try {
+//     const { email } = req.body;
 
-    // Find the user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+//     // Find the user by email
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
 
-    if (user.isVerified == "yes") {
-      return res.status(400).json({ message: "User is already verified" });
-    }
+//     if (user.isVerified == "yes") {
+//       return res.status(400).json({ message: "User is already verified" });
+//     }
 
-    // Generate a 6-digit verification code
-    const verificationCode = crypto.randomInt(100000, 999999).toString();
+//     // Generate a 6-digit verification code
+//     const verificationCode = crypto.randomInt(100000, 999999).toString();
 
-    // Set expiration time (e.g., 15 minutes from now)
-    const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
+//     // Set expiration time (e.g., 15 minutes from now)
+//     const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
 
-    // Save code and expiration to the user document
-    user.verificationCode = verificationCode;
-    user.verificationCodeExpires = expirationTime;
-    await user.save();
+//     // Save code and expiration to the user document
+//     user.verificationCode = verificationCode;
+//     user.verificationCodeExpires = expirationTime;
+//     await user.save();
 
-    // send email
-    const subject = "Email Verification - StudyHive";
-    const send_to = user.email;
-    const reply_to = "noreply@gmail.com";
-    const template = "emailVerification";
-    const send_from = process.env.USER_EMAIL;
-    const name = user.name;
-    const code = verificationCode;
+//     // send email
+//     const subject = "Email Verification - StudyHive";
+//     const send_to = user.email;
+//     const reply_to = "noreply@gmail.com";
+//     const template = "emailVerification";
+//     const send_from = process.env.USER_EMAIL;
+//     const name = user.name;
+//     const code = verificationCode;
 
-    await emailSend(
-      subject,
-      send_to,
-      send_from,
-      reply_to,
-      template,
-      name,
-      code
-    );
+//     await emailSend(
+//       subject,
+//       send_to,
+//       send_from,
+//       reply_to,
+//       template,
+//       name,
+//       code
+//     );
 
-    res.status(200).json({ message: "Verification code sent to your email" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+//     res.status(200).json({ message: "Verification code sent to your email" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 
-export const verifyCode = async (req, res) => {
-  try {
-    const { email, verificationCode } = req.body;
+// export const verifyCode = async (req, res) => {
+//   try {
+//     const { email, verificationCode } = req.body;
 
-    // Find the user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+//     // Find the user by email
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
 
-    if (user.isVerified == "yes") {
-      return res.status(400).json({ message: "User is already verified" });
-    }
+//     if (user.isVerified == "yes") {
+//       return res.status(400).json({ message: "User is already verified" });
+//     }
 
-    // Check if the code matches and is not expired
-    if (
-      user.verificationCode !== verificationCode ||
-      user.verificationCodeExpires < Date.now()
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Invalid or expired verification code" });
-    }
+//     // Check if the code matches and is not expired
+//     if (
+//       user.verificationCode !== verificationCode ||
+//       user.verificationCodeExpires < Date.now()
+//     ) {
+//       return res
+//         .status(400)
+//         .json({ message: "Invalid or expired verification code" });
+//     }
 
-    // Mark the user as verified
-    user.isVerified = "yes";
-    user.verificationCode = null; // Clear the code
-    user.verificationCodeExpires = null; // Clear the expiration
-    await user.save();
+//     // Mark the user as verified
+//     user.isVerified = "yes";
+//     user.verificationCode = null; // Clear the code
+//     user.verificationCodeExpires = null; // Clear the expiration
+//     await user.save();
 
-    res.status(200).json({ message: "User verified successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+//     res.status(200).json({ message: "User verified successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// };
 
-// reset password request
+// to reset password request
 export const requestPasswordReset = async (req, res) => {
   try {
     const { email } = req.body;
 
-    // Find the user by email
+    // to find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.json({ error: "User not found" });
     }
 
-    // Generate a 6-digit password reset code
+    // to generate a 6-digit password reset code
     const resetCode = crypto.randomInt(100000, 999999).toString();
 
-    // Set expiration time (e.g., 15 minutes from now)
+    // to set expiration time for the code
     const expirationTime = new Date(Date.now() + 15 * 60 * 1000);
 
     // Save the code and expiration to the user document
@@ -429,7 +436,7 @@ export const requestPasswordReset = async (req, res) => {
     user.verificationCodeExpires = expirationTime;
     await user.save();
 
-    // send email
+    // to send password reset email
     const subject = "Password Reset - StudyHive";
     const send_to = user.email;
     const reply_to = "noreply@gmail.com";
@@ -455,12 +462,12 @@ export const requestPasswordReset = async (req, res) => {
   }
 };
 
-// verify password reset code
+// to verify password reset code
 export const verifyPasswordResetCode = async (req, res) => {
   try {
     const { email, resetCode } = req.body;
 
-    // Find the user by email
+    // to find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.json({ error: "User not found" });
@@ -532,6 +539,7 @@ export const passwordReset = async (req, res) => {
   }
 };
 
+// to get all users
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -541,7 +549,7 @@ export const getUsers = async (req, res) => {
   }
 };
 
-// get user
+// get a user
 export const getUser = async (req, res) => {
   // get user details from the token ---> excluding the password
   const user = await User.findById(req.user._id).select("-password");
@@ -556,46 +564,47 @@ export const getUser = async (req, res) => {
   }
 };
 
-export const verifyUser = async (req, res) => {
-  const { verificationToken } = req.params;
+// export const verifyUser = async (req, res) => {
+//   const { verificationToken } = req.params;
 
-  if (!verificationToken) {
-    return res.status(400).json({ message: "Invalid verification token" });
-  }
-  // hash the verification token --> because it was hashed before saving
-  const hashedToken = hashToken(verificationToken);
+//   if (!verificationToken) {
+//     return res.status(400).json({ message: "Invalid verification token" });
+//   }
+//   // hash the verification token --> because it was hashed before saving
+//   const hashedToken = hashToken(verificationToken);
 
-  // find user with the verification token
-  const userToken = await Token.findOne({
-    verificationToken: hashedToken,
-    // check if the token has not expired
-    expiresAt: { $gt: Date.now() },
-  });
+//   // find user with the verification token
+//   const userToken = await Token.findOne({
+//     verificationToken: hashedToken,
+//     // check if the token has not expired
+//     expiresAt: { $gt: Date.now() },
+//   });
 
-  if (!userToken) {
-    return res
-      .status(400)
-      .json({ message: "Invalid or expired verification token" });
-  }
+//   if (!userToken) {
+//     return res
+//       .status(400)
+//       .json({ message: "Invalid or expired verification token" });
+//   }
 
-  //find user with the user id in the token
-  const user = await User.findById(userToken.userId);
+//   //find user with the user id in the token
+//   const user = await User.findById(userToken.userId);
 
-  if (user.isVerified) {
-    // 400 Bad Request
-    return res.status(400).json({ message: "User is already verified" });
-  }
+//   if (user.isVerified) {
+//     // 400 Bad Request
+//     return res.status(400).json({ message: "User is already verified" });
+//   }
 
-  // update user to verified
-  user.isVerified = true;
-  await user.save();
-  res.status(200).json({ message: "User verified" });
-};
+//   // update user to verified
+//   user.isVerified = true;
+//   await user.save();
+//   res.status(200).json({ message: "User verified" });
+// };
 
 // forgot password
 export const forgotPassowrd = async (req, res) => {
   const { email } = req.body;
 
+  // check if the email is entered or not
   if (!email) {
     res.status(400);
     return res.json({
@@ -710,6 +719,7 @@ export const resetPassword = async (req, res) => {
 // change password
 export const changePassword = async (req, res) => {
   try {
+    // to get the current password and the new password from the request body
     const { currentPassword, newPassword } = req.body;
 
     // Check for required fields
@@ -721,6 +731,7 @@ export const changePassword = async (req, res) => {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+    // check the password validation rules of the new password
     if (!passwordRegex.test(newPassword)) {
       return res.json({
         error:
@@ -774,12 +785,15 @@ export const uploadProfileImage = async (req, res) => {
   try {
     // Extract the image URL and user ID
     const { imageUrl } = req.body;
-    const userId = req.user.id; // Assuming this is coming from the token middleware
+    const userId = req.user.id;
 
     // Ensure imageUrl is provided
-    if (!imageUrl) return res.json({ message: "No image URL provided" });
+    if (!imageUrl)
+      return res.json({
+        message: "No image URL provided",
+      });
 
-    // Validate the image URL (simple check, can be more complex if needed)
+    // Validate the image URL
     const urlRegex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|tiff|webp))/i;
     if (!urlRegex.test(imageUrl)) {
       return res.json({ message: "Invalid image URL" });
@@ -796,7 +810,6 @@ export const uploadProfileImage = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Respond with success
     res.json({
       message: "Profile picture updated",
       image: updatedUser.image,
