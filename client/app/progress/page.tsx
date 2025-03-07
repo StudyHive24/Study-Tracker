@@ -28,7 +28,12 @@ const TimeBox: React.FC<TimeBoxProps> = ({ label, time, className }) => (
 //   monthlyTime?: string;
 // }
 
+<<<<<<< HEAD
 const serverURL = "https://study-hive-server-f6.vercel.app";
+=======
+
+
+>>>>>>> parent of 1e41dca (fixed progress page studytime not showing)
 
 const ProgressPage = () => {
   useRiderect("/login");
@@ -40,9 +45,14 @@ const ProgressPage = () => {
 
   // Fetch timers from the backend
   useEffect(() => {
+<<<<<<< HEAD
     axios
       .get(`${serverURL}/api/timer/`)
       .then((response) => {
+=======
+    axios.get('http://localhost:8000/api/timer/') 
+      .then(response => {
+>>>>>>> parent of 1e41dca (fixed progress page studytime not showing)
         setTimers(response.data.timers);
       })
       .catch((error) => {
