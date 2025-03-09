@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import User from "../Sidebar right/Components/User";
 
+// this is currently removed from the production code base
 export function UserProfileTab() {
   return (
     <Tabs defaultValue="account" className="w-full h-full">

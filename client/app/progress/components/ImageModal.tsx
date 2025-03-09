@@ -28,7 +28,7 @@ export function ImageModal() {
 
   const [formData, setFormData] = useState({
     name: name || "",
-    email: email || "", // Replace with dynamic data if needed
+    email: email || "", 
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +56,7 @@ export function ImageModal() {
           onSubmit={(e) => {
             e.preventDefault();
 
+            // update the user
             updateUser(e, {
               email: userState.email,
               name: userState.name,
@@ -73,6 +74,7 @@ export function ImageModal() {
 
           <div className="grid gap-4 py-4 -mt-3 mb-2">
             <div className="flex justify-center items-center relative">
+              {/* user's image */}
               <Image
                 src={user?.image}
                 alt="me"

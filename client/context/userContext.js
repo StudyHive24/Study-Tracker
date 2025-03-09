@@ -35,14 +35,14 @@ export const UserContextProvider = ({ children }) => {
       console.log("Error fetching user session:", error);
       setUser({});
       setLoading(false);
-      router.push("/login"); // Redirect to login if the session is invalid
+      router.push("/login"); // redirect to login if the session is invalid
     }
   };
 
-  // Call persistUserSession on initial load
+  // call persistUserSession on initial load
   useEffect(() => {
     persistUserSession();
-  }, []); // Empty dependency array ensures this runs only on mount
+  }, []); // empty dependency array ensures this runs only on mount
 
   // register user
   const registerUser = async (e) => {

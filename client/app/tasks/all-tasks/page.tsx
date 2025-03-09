@@ -42,6 +42,7 @@ function Page() {
         firstPhrase={"You have "}
       />
       <TasksSubHeader title={"All Tasks"} />
+      {/* display the all tasks of the user */}
       <motion.div className="mt-3 grid grid-cols-3 gap-2">
         {filtered.map((task: Task, i: number) => (
           <TaskItem key={i} task={task} />

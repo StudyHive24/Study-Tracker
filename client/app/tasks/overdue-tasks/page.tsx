@@ -34,7 +34,7 @@ function page() {
         Status={"Overdue Tasks"}
         firstPhrase={"There are "}
       />
-      <h1>Overdue Tasks</h1>
+      {/* <h1>Overdue Tasks</h1> */}
       <TasksSubHeader title={"All Tasks"} />
       <motion.div className="mt-3 grid grid-cols-3 gap-2">
         {filtered.map((task: Task, i: number) => (

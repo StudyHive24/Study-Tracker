@@ -4,6 +4,7 @@ import { useTimerContext } from "@/context/timerContext";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import blankImg from "@/public/blank_profile.webp";
+import useRiderect from "@/hooks/useUserRiderect";
 
 function Page() {
   const { topUsers } = useTasksContext();
@@ -15,6 +16,9 @@ function Page() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // riderect the user to the login page if user not logged in
+  useRiderect('/login')
 
   return (
     <div className="m-8 flex flex-row gap-5">
@@ -56,15 +60,19 @@ function Page() {
                     </div>
                   )}
                 </div>
+                {/* total tasks count of the specific user */}
                 <span className="p-6 text-center text-yellow-400 bg-gray-600 rounded-2xl">
                   {user.totalTasks}
                 </span>
+                {/* completed task count of the specific user */}
                 <span className="p-6 text-green-300 bg-gray-600 rounded-2xl">
                   {user.completedTasks}
                 </span>
+                {/* pending task count of the specific user */}
                 <span className="p-6 text-red-300 bg-gray-600 rounded-2xl">
                   {user.totalTasks - user.completedTasks}
                 </span>
+                {/* task completion percentage of the specific user */}
                 <span className="p-6 text-blue-300 bg-gray-600 rounded-2xl text-center">
                   {user.completionPercentage?.toFixed(2)}%
                 </span>
@@ -93,6 +101,7 @@ function Page() {
                   onMouseEnter={() => isClient && setTooltip(user.name)}
                   onMouseLeave={() => isClient && setTooltip(null)}
                 >
+                  {/* image of the user */}
                   <Image
                     src={user.image || blankImg}
                     width={60}

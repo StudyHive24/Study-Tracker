@@ -21,6 +21,7 @@ function page() {
     setPriority("All");
   }, []);
 
+  // count of the user's completed tasks
   let totalTasks = completedTasks.length;
 
   return (
@@ -31,6 +32,7 @@ function page() {
         firstPhrase={"There are "}
       />
       <TasksSubHeader title={"All Tasks"} />
+      {/* display the all completed tasks of the user */}
       <motion.div className="mt-3 grid grid-cols-3 gap-2">
         {filtered.map((task: Task, i: number) => (
           <TaskItem key={i} task={task} />

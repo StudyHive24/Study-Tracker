@@ -1,22 +1,27 @@
 import Task from '../models/tasks/task.model.js'
 import asyncHandler from 'express-async-handler'
 
+
+// create task
 export const createTask = asyncHandler(async (req, res) => {
     try {
         const { title, description, duedate, startTime, endTime, status, completed, priority, tags, attachments } =  req.body
-        
+
+            // check if there is a title or not
             if(!title) {
                 return res.json({
                     error: 'Title is required'
                 })
             }
 
+            // check if there a due date or not
             if (!duedate) {
                 return res.json({
                     error: 'Duedate is required'
                 })
             }
 
+            // check if there is an end time or not
             if (!endTime) {
                 return res.json({
                     error: 'End Time is required'
@@ -27,7 +32,7 @@ export const createTask = asyncHandler(async (req, res) => {
             
 
            
-
+            // assign task values to the newly created task
             const task = new Task({
                 title,
                 description,
@@ -55,16 +60,20 @@ export const createTask = asyncHandler(async (req, res) => {
     }
 })
 
+// get tasks
 export const getTasks = asyncHandler(async (req, res) => {
     try {
+        // assign user id which is get from the request
         const userID = req.user._id
 
+        // check if there is a user found or not
         if (!userID) {
             res.status(400).json({
                 message: 'User not found'
             })
         }
 
+        // find the tasks according to the user
         const tasks = await Task.find({user: userID})
 
         res.status(200).json({
@@ -81,6 +90,7 @@ export const getTasks = asyncHandler(async (req, res) => {
     }
 })
 
+// get a task
 export const getTask = async (req, res) => {
     try {
         const userID = req.user._id
@@ -94,8 +104,10 @@ export const getTask = async (req, res) => {
             })
         }
 
+        // find the task by it's id
         const task = await Task.findById(id)
 
+        // check if there is a task found or not
         if (!task) {
             res.status(404)
             res.json({
@@ -103,6 +115,7 @@ export const getTask = async (req, res) => {
             })
         }
 
+        // check the user's login status
         if (!task.user.equals(userID)) {
             res.status(401)
             res.json({
@@ -122,12 +135,16 @@ export const getTask = async (req, res) => {
     }
 }
 
+// update the task
 export const updateTask = async (req, res) => {
     try {
         const userID = req.user._id
 
         const {id} =  req.params
+
+        // get the task details from the reqeuest body
         const { title, description, duedate, startTime, endTime, status, completed, priority, tags, attachments } = req.body
+
 
         if(!id) {
             res.status(400)
@@ -136,6 +153,7 @@ export const updateTask = async (req, res) => {
             })
         }
 
+        // find the task by its task id
         const task = await Task.findById(id)
 
         if (!task) {
@@ -165,6 +183,7 @@ export const updateTask = async (req, res) => {
         task.tags = tags || task.tags
         task.attachments = attachments || task.attachments
 
+        // save the updated task
         await task.save()
 
         return res.status(201).json(task)
@@ -178,6 +197,7 @@ export const updateTask = async (req, res) => {
     }
 }
 
+// delete a task
 export const deleteTask = async (req, res) => {
     try {
         
@@ -185,6 +205,7 @@ export const deleteTask = async (req, res) => {
 
         const {id} = req.params
 
+        // find the task by its id
         const task = await Task.findById(id)
 
         if (!task) {
@@ -202,6 +223,7 @@ export const deleteTask = async (req, res) => {
             })
         }
 
+        // delete the task
         await Task.findByIdAndDelete(id)
 
         res.status(200)
@@ -217,11 +239,12 @@ export const deleteTask = async (req, res) => {
         })
     }
 }
-
+ // to delete all tasks (this function is currently removed from the production code base)
 export const deleteAllTasks = async (req, res) => {
     try {
         const userID = req.user._id;
 
+        // find the tasks which are created by a specific user
         const tasks = await Task.find({ user: userID });
 
         if (!tasks || tasks.length === 0) { // Also ensure tasks are not an empty array
@@ -244,13 +267,14 @@ export const deleteAllTasks = async (req, res) => {
     }
 };
 
+// get the top 10 users by task completion
 export const topUsers = async (req, res) => {
     try {
-        // Aggregate task count, completed tasks, and pending tasks by user
+        // aggregate task count, completed tasks, and pending tasks by user
         const usersWithTaskData = await Task.aggregate([
             {
                 $group: {
-                    _id: '$user',  // Group by user ID
+                    _id: '$user',  // group by user ID
                     totalTasks: { $sum: 1 },
                     completedTasks: { $sum: { $cond: [{ $eq: ['$completed', 'yes'] }, 1, 0] } },
                     pendingTasks: { $sum: { $cond: [{ $eq: ['$completed', 'no'] }, 1, 0] } }
@@ -258,20 +282,20 @@ export const topUsers = async (req, res) => {
             },
             {
                 $lookup: {
-                    from: 'users',  // Reference to the User model
-                    localField: '_id',  // Field to match
-                    foreignField: '_id',  // Field in User model
-                    as: 'userDetails'  // Name the field to store user data
+                    from: 'users',  
+                    localField: '_id', 
+                    foreignField: '_id',  
+                    as: 'userDetails'  
                 }
             },
             {
-                $unwind: '$userDetails'  // Unwind the array to get user details
+                $unwind: '$userDetails'  
             },
             {
                 $project: {
                     _id: 1,
-                    name: '$userDetails.name',  // Get the user's name
-                    image: '$userDetails.image',  // Get the user's image
+                    name: '$userDetails.name',  // get the user's name
+                    image: '$userDetails.image',  // get the user's image
                     totalTasks: 1,
                     completedTasks: 1,
                     pendingTasks: 1,
@@ -284,8 +308,8 @@ export const topUsers = async (req, res) => {
                     }
                 }
             },
-            { $sort: { completedTasks: -1 } },  // Sort by completed tasks in descending order
-            { $limit: 10 }  // Get the top 10 users
+            { $sort: { completedTasks: -1 } },  // sort completed tasks in descending order
+            { $limit: 10 }  // Get the top 10 users by task completion
         ]);
 
         return res.json({ topUsers: usersWithTaskData });

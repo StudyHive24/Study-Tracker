@@ -19,6 +19,7 @@ function CompletedTooltip({ task }: TaskProps) {
   }, []);
 
   const handleSubmit = () => {
+    // check the completion status of the task
     if (task.completed === 'no') {
       updateTask({ ...task, completed: 'yes' });
     } else if (task.completed === 'yes') {

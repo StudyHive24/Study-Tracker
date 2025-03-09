@@ -34,7 +34,7 @@ export function TaskAccordion() {
 
   // prevent rendering until the component has mounted on the client side
   if (!isMounted) {
-    return null; // or a loading spinner
+    return null; 
   }
 
   return (

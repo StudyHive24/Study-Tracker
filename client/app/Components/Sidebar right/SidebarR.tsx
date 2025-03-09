@@ -41,34 +41,34 @@ import Profile from "../Profile/Profile";
 import Chart from "../Chart/RadialChart";
 import RadialChart from "../Chart/RadialChart";
 
-// Menu items.
-const items = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: CircleGauge,
-  },
-  {
-    title: "Timer",
-    url: "/timer",
-    icon: Timer,
-  },
-  {
-    title: "Tasks",
-    url: "/tasks",
-    icon: ClipboardList,
-  },
-  {
-    title: "Time table",
-    url: "/time-table",
-    icon: Calendar,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-];
+// // Menu items.
+// const items = [
+//   {
+//     title: "Dashboard",
+//     url: "/dashboard",
+//     icon: CircleGauge,
+//   },
+//   {
+//     title: "Timer",
+//     url: "/timer",
+//     icon: Timer,
+//   },
+//   {
+//     title: "Tasks",
+//     url: "/tasks",
+//     icon: ClipboardList,
+//   },
+//   {
+//     title: "Time table",
+//     url: "/time-table",
+//     icon: Calendar,
+//   },
+//   {
+//     title: "Settings",
+//     url: "/settings",
+//     icon: Settings,
+//   },
+// ];
 
 export function SideBarR() {
   return (

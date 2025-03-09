@@ -21,13 +21,13 @@ function DeleteTaskModal({ task }: TaskProps) {
   const { deleteTask } = useTasksContext();
   const [isMounted, setIsMounted] = useState(false);
 
-  // Set state to true after the component mounts on the client
+  // set state to true after the component mounts on the client
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   if (!isMounted) {
-    // Render nothing or a loading state during SSR
+    // render nothing or a loading state during SSR
     return null;
   }
 
@@ -56,6 +56,7 @@ function DeleteTaskModal({ task }: TaskProps) {
               type="submit"
               className="bg-red-500 hover:bg-red-600"
               onClick={() => {
+                // delete the task
                 deleteTask(task._id);
               }}
             >

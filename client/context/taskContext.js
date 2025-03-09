@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 const TaskContext = createContext();
 
+// url of the server
 const serverUrl = "https://study-hive-server-f6.vercel.app";
 
 export const TasksProvider = ({ children }) => {
@@ -161,6 +162,7 @@ export const TasksProvider = ({ children }) => {
     }
   };
 
+  // get the top 10 users by task completion
   const getTopUsersByCompletion = async (req, res) => {
     try {
       const res = await axios.get(`${serverUrl}/api/tasks/topusers`);

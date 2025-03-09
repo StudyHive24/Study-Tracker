@@ -16,6 +16,7 @@ import Router from "next/router";
 import blankImage from "@/public/blank_profile.webp";
 import { ImageModal } from "@/app/progress/components/ImageModal";
 
+// this is currently removed from the production code base
 const ProfileSettings = () => {
   const router = useRouter();
 

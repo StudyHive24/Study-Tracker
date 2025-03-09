@@ -31,7 +31,9 @@ const TimeBox: React.FC<TimeBoxProps> = ({ label, time, className }) => (
 const serverURL = "https://study-hive-server-f6.vercel.app";
 
 const ProgressPage = () => {
+
   useRiderect("/login");
+  
   const { tasks } = useTasksContext();
   const [weeklyTaskGoal, setWeeklyTaskGoal] = useState(0);
   const [weeklyCompletionPercentage, setWeeklyCompletionPercentage] =

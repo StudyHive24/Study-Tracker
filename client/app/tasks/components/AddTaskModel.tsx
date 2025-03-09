@@ -22,12 +22,7 @@ function AddTaskModel() {
     task,
     handleInput,
     createTask,
-    isEditing,
-    closeModal,
-    modalMode,
-    activeTask,
-    updateTask,
-    getTask,
+
   } = useTasksContext();
 
   const ref = useRef(null);
@@ -40,14 +35,14 @@ function AddTaskModel() {
     setCurrentTime(time);
   }, []);
 
-  const handleRadioChange = (value: any) => {
-    setSelectedValue(value);
-  };
+  // const handleRadioChange = (value: any) => {
+  //   setSelectedValue(value);
+  // };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Ensure task is correctly set
+    // ensure task is correctly set
     const endDate = new Date(`${task?.duedate}T${task?.endTime}:00`);
 
     const updatedTask = { ...task, endTime: endDate };
@@ -55,7 +50,7 @@ function AddTaskModel() {
     createTask(updatedTask);
   };
 
-  const [tags, setTags] = useState(["Coding"]);
+  // const [tags, setTags] = useState(["Coding"]);
 
   return (
     <Dialog>

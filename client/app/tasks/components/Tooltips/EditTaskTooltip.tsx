@@ -10,6 +10,7 @@ interface TaskProps{
 
 }
 
+// this is removed from the application
 function EditTaskTooltip({task}: TaskProps) {
 
 const { deleteTask, getTask, updateTask, closeModal } = useTasksContext();

@@ -18,18 +18,20 @@ export const test = (req, res) => {
 // register user
 export const registerUser = async (req, res) => {
   try {
+
+    // get the user details from the request body
     const { name, email, password } = req.body;
 
-    // Check if name was entered
+    // check if name was entered
     if (!name) {
       return res.json({ error: "Name is required" });
     }
 
-    // Password validation regex
+    // password validation regex
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    // Check if password is valid
+    // check the validity of the password
     if (!password) {
       return res.json({ error: "Password is required" });
     }
@@ -40,24 +42,25 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    // Check email format
+    // check email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.json({ error: "Enter a valid email" });
     }
 
-    // Check if email exists
+    // check if email exists
     const exist = await User.findOne({ email });
     if (exist) {
       return res.json({ error: "Email is already taken" });
     }
 
-    // Check if username exists
+    // check if username exists
     const exist2 = await User.findOne({ name });
     if (exist2) {
       return res.json({ error: "Username is already taken" });
     }
 
+    // hashed the user password
     const hashedPassword = await hashPassword(password);
 
     // Create the user
@@ -67,14 +70,14 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    // Generate token with user ID
+    // generate token with user ID
     const token = generateToken(user._id);
 
-    // Send back the user and token in the response to the client
+    // send back the user and token in the response to the client
     res.cookie("token", token, {
       path: "/",
       httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      maxAge: 30 * 24 * 60 * 60 * 1000, // cookie's maxAge is set to 30 days
       sameSite: "none",
       secure: false,
     });
@@ -102,6 +105,7 @@ export const registerUser = async (req, res) => {
 // login endpoint
 export const loginUser = async (req, res) => {
   try {
+    // get user details from the request body
     const { name, email, password } = req.body;
 
     // check if user exists
@@ -122,12 +126,14 @@ export const loginUser = async (req, res) => {
 
     console.log(user.password);
 
+    // check the validation of the credentials
     if (!match) {
       return res.json({
         error: "Invalid Credentials",
       });
     }
 
+    // generate the user token
     const token = generateToken(user._id);
 
     const { _id, photo, bio, isVerifed } = user;
@@ -136,7 +142,7 @@ export const loginUser = async (req, res) => {
     res.cookie("token", token, {
       path: "/",
       httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      maxAge: 30 * 24 * 60 * 60 * 1000, // cookie's maxAge is set to 30 days
       sameSite: "none",
       secure: true,
     });
@@ -158,6 +164,7 @@ export const loginUser = async (req, res) => {
 
 // logout user
 export const logoutUser = async (req, res) => {
+  // clear the cookie from the browser
   res.clearCookie("token", {
     httpOnly: true,
     sameSite: "none",
@@ -177,20 +184,20 @@ export const updateUser = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (user) {
-      // properties to update
-
+      // user properties to update
       const email = req.body.email;
       const name = req.body.name;
       const bio = req.body.bio;
 
+      // check if the email is taken or not
       const exist = await User.findOne({ email });
-
       if (exist) {
         return res.json({
           error: "email is already taken",
         });
       }
 
+      // check if the username is taken or not
       const existName = await User.findOne({ name });
       if (existName) {
         return res.json({
@@ -198,8 +205,8 @@ export const updateUser = async (req, res) => {
         });
       }
 
-      // Check email format
       if (bio) {
+        // check the length of the bio
         if (bio.length > 50) {
           return res.json({ error: "Bio cannot be more than 50 characters" });
         }
@@ -238,6 +245,7 @@ export const updateUser = async (req, res) => {
 
 // login status
 export const userLoginStatus = async (req, res) => {
+  // get the token from the cookies
   const token = req.cookies.token;
 
   if (!token) {
@@ -263,7 +271,7 @@ export const userLoginStatus = async (req, res) => {
   }
 };
 
-// email verification
+// email verification (this function is currently removed from the production code base)
 export const emailVerify = async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -319,6 +327,7 @@ export const emailVerify = async (req, res) => {
   }
 };
 
+// (this function is currently removed from the production code base)
 export const emailVerificationCode = async (req, res) => {
   try {
     const { email } = req.body;
@@ -370,6 +379,7 @@ export const emailVerificationCode = async (req, res) => {
   }
 };
 
+// (this function is currently removed from the production code base)
 export const verifyCode = async (req, res) => {
   try {
     const { email, verificationCode } = req.body;
@@ -410,9 +420,10 @@ export const verifyCode = async (req, res) => {
 // reset password request
 export const requestPasswordReset = async (req, res) => {
   try {
+    // get the email from the request body
     const { email } = req.body;
 
-    // Find the user by email
+    // find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return res.json({ error: "User not found" });
@@ -556,6 +567,7 @@ export const getUser = async (req, res) => {
   }
 };
 
+// currently this is removed from the production code
 export const verifyUser = async (req, res) => {
   const { verificationToken } = req.params;
 
@@ -594,8 +606,10 @@ export const verifyUser = async (req, res) => {
 
 // forgot password
 export const forgotPassowrd = async (req, res) => {
+  // get the email from the request body
   const { email } = req.body;
 
+  // check if there is a email or not
   if (!email) {
     res.status(400);
     return res.json({
@@ -647,6 +661,7 @@ export const forgotPassowrd = async (req, res) => {
   const url = resetLink;
 
   try {
+    // send the email
     await emailSend(subject, send_to, send_from, reply_to, template, name, url);
     return res.json({
       message: "Email sent successfully",
@@ -770,22 +785,22 @@ export const changePassword = async (req, res) => {
   }
 };
 
+// update the profile image
 export const uploadProfileImage = async (req, res) => {
   try {
-    // Extract the image URL and user ID
+    // extract the image URL and user ID
     const { imageUrl } = req.body;
-    const userId = req.user.id; // Assuming this is coming from the token middleware
+    const userId = req.user.id; 
 
-    // Ensure imageUrl is provided
     if (!imageUrl) return res.json({ message: "No image URL provided" });
 
-    // Validate the image URL (simple check, can be more complex if needed)
+    // validate the image URL 
     const urlRegex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|tiff|webp))/i;
     if (!urlRegex.test(imageUrl)) {
       return res.json({ message: "Invalid image URL" });
     }
 
-    // Find the user and update their profile picture
+    // find the user and update their profile picture
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { image: imageUrl },
@@ -796,7 +811,6 @@ export const uploadProfileImage = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Respond with success
     res.json({
       message: "Profile picture updated",
       image: updatedUser.image,

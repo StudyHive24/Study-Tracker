@@ -21,7 +21,7 @@ function Profile() {
 
   // Prevent rendering until client-side data is available
   if (!isMounted) {
-    return null; // or a loading spinner
+    return null; 
   }
 
   return (

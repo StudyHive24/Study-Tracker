@@ -73,7 +73,7 @@ function TaskItem({ task }: TaskProps) {
           {task.priority}
         </span>
         <div className="flex flex-row gap-1">
-          {/* Only render tooltips and modals on the client-side */}
+          {/* only render tooltips and modals on the client-side */}
           {isClient && (
             <>
               <CompletedTooltip task={task} />

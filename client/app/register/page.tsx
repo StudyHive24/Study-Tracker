@@ -9,6 +9,7 @@ function Page() {
   const { user } = useUserContext();
   const router = useRouter();
 
+  // if user aready logged in, riderect the user to the main page
   useEffect(() => {
     if (user && user._id) {
       router.push("/");

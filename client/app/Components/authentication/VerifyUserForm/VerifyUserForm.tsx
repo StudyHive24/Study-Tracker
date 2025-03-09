@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 
+// this is currently removed from the production code
 function VerifyUserForm() {
     const { verifyCode } = useUserContext()
     

@@ -24,15 +24,9 @@ function AddTask() {
     task,
     handleInput,
     createTask,
-    isEditing,
-    closeModal,
-    modalMode,
-    activeTask,
-    updateTask,
-    getTask,
   } = useTasksContext();
 
-  const ref = useRef(null);
+  // const ref = useRef(null);
 
   useEffect(() => {
     // Set the current time only on the client side to avoid hydration issues
@@ -53,11 +47,13 @@ function AddTask() {
     const endDate = new Date(`${task.duedate}T${task.endTime}:00`);
     const updatedTask = { ...task, endTime: endDate };
 
+    // check if there is a title or not
     if (!task?.title) {
       toast.error("Enter a title");
       return;
     }
 
+    // create the task
     createTask(updatedTask);
   };
 
@@ -116,7 +112,7 @@ function AddTask() {
                   className="border-none bg-gray-200"
                   onChange={(e) => handleInput("duedate")(e)}
                   value={task?.duedate || ""}
-                  min={new Date().toISOString().split("T")[0]} // Disable past dates
+                  min={new Date().toISOString().split("T")[0]} // disable past dates
                 />
               </div>
               <div className="flex flex-col gap-2">

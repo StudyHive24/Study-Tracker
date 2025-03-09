@@ -30,6 +30,7 @@ router.patch("/update/:id", protect, updateTask);
 // to delete a task
 router.delete("/delete/:id", protect, deleteTask);
 
+// to get the top 10 users by task completion
 router.get("/topusers", topUsers);
 
 export default router;
