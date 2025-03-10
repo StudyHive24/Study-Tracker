@@ -1,19 +1,19 @@
-"use client"; // Enables client-side rendering
+"use client"; // enables client-side rendering
 
-import { useState, useEffect, ReactElement, Key, ReactNode } from "react"; // Importing React hooks
-import "./timer.css"; // Importing the CSS file for styling
-import useRiderect from "@/hooks/useUserRiderect";
-import { useTimerContext } from "@/context/timerContext"; // Import the context for handling timer data
+import { useState, useEffect, ReactElement, Key, ReactNode } from "react"; // importing React hooks
+import "./timer.css"; // importing the CSS file for styling
+import useRiderect from "@/hooks/useUserRiderect"; //for redirecting users
+import { useTimerContext } from "@/context/timerContext"; // import the context for handling timer data
 
-// Modal Component for reset confirmation
+// modal Component for reset confirmation
 function Modal({
   onConfirm,
   onCancel,
   message,
 }: {
-  onConfirm: () => void;
-  onCancel: () => void;
-  message: string;
+  onConfirm: () => void; //function to call when yes is clicked
+  onCancel: () => void; //function to call when no is clicked
+  message: string; //message that displays in the modal
 }) {
   return (
     <div className="timer-reset-modal">
@@ -22,13 +22,13 @@ function Modal({
         <div className="flex justify-center gap-3 mt-3">
           <button
             className="bg-blue-600 p-2 w-full rounded-lg"
-            onClick={onConfirm}
+            onClick={onConfirm} //triggers onConfirm
           >
             Yes
           </button>
           <button
             className="bg-red-600 p-2 w-full rounded-lg"
-            onClick={onCancel}
+            onClick={onCancel} //triggers onCancel
           >
             No
           </button>
@@ -38,15 +38,16 @@ function Modal({
   );
 }
 
+//main timerPage component
 export default function TimerPage() {
   useRiderect("/login");
 
   const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)
   const [breakTime, setBreakTime] = useState(5 * 60); // Default break time (5 mins)
   const [time, setTime] = useState(studyTime); // Current time in seconds
-  const [isRunning, setIsRunning] = useState(false);
+  const [isRunning, setIsRunning] = useState(false); //whether the timer is running
   const [isStudyPhase, setIsStudyPhase] = useState(true); // Toggle between study and break
-  const [message, setMessage] = useState(""); // Display message
+  const [message, setMessage] = useState(""); // message to display
   const [showResetConfirm, setShowResetConfirm] = useState(false); // Reset confirmation
   const [showTitleInput, setShowTitleInput] = useState(false); // Toggle title input visibility
   const [timerTitle, setTimerTitle] = useState("Study"); // Timer title (default)
@@ -55,6 +56,7 @@ export default function TimerPage() {
 
   const { createTimer, timers = [] } = useTimerContext(); // Ensure timers is initialized as an empty array
 
+  //To play an alarm sound
   const playAlarm = () => {
     const audioContext = new window.AudioContext();
 
@@ -65,15 +67,15 @@ export default function TimerPage() {
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
 
-      oscillator.frequency.value = 880; // Higher pitch for alarm sound
+      oscillator.frequency.value = 880; // set pitch for alarm sound
       gainNode.gain.setValueAtTime(0.5, audioContext.currentTime + timeOffset); // Start volume
       gainNode.gain.exponentialRampToValueAtTime(
         0.01,
         audioContext.currentTime + timeOffset + 0.2
       ); // Fade out
 
-      oscillator.start(audioContext.currentTime + timeOffset);
-      oscillator.stop(audioContext.currentTime + timeOffset + 0.3);
+      oscillator.start(audioContext.currentTime + timeOffset); //start the sound
+      oscillator.stop(audioContext.currentTime + timeOffset + 0.3); // stop the sound
     };
 
     // Repeat the beep multiple times to simulate an alarm
@@ -91,36 +93,42 @@ export default function TimerPage() {
     { label: "15 Seconds (Test)", study: 15, break: 5 }, // For testing
   ];
 
+  //function to format time
   const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+    const minutes = Math.floor(seconds / 60); //calculate mintes
+    const secs = seconds % 60; //calculate seconds
     return `${minutes.toString().padStart(2, "0")}:${secs
       .toString()
-      .padStart(2, "0")}`;
+      .padStart(2, "0")}`; //format
   };
 
+  //function to start
   const handleStart = () => {
     setIsRunning(true);
   };
 
+  //to handle reset button clicking
   const handleReset = () => {
-    setShowResetConfirm(true); // Show confirmation
+    setShowResetConfirm(true); // Show reset confirmation
   };
 
+  //to confirm reset
   const confirmReset = () => {
     setIsRunning(false);
     setIsStudyPhase(true);
     setTime(studyTime);
     setMessage(""); // Clear any messages
-    setShowResetConfirm(false); // Hide confirmation modal
+    setShowResetConfirm(false); // Hide reset confirmation modal
     setTimerTitle("Study"); // Reset title
     setShowTitleInput(false); // Hide title input
   };
 
+  //to cancel reset
   const cancelReset = () => {
     setShowResetConfirm(false); // Close confirmation modal
   };
 
+  //to handle timer dration drop down
   const handleTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOption = timeOptions.find(
       (option) => option.label === e.target.value
@@ -134,10 +142,12 @@ export default function TimerPage() {
     }
   };
 
+  //to handle title input
   const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTimerTitle(e.target.value); // Update title
   };
 
+  //to handle title inpt submission
   const handleEnterTitle = () => {
     setShowTitleInput(false); // Hide title input
   };
@@ -146,13 +156,14 @@ export default function TimerPage() {
     setShowTitleInput(!showTitleInput); // Toggle input visibility
   };
 
+  //to save timer info.
   const handleSaveTimer = () => {
     const timerRecord = {
       title: timerTitle,
       duration: formatTime(studyTime),
       date: new Date(),
     };
-    createTimer(timerRecord); // Call to create timer in the backend
+    createTimer(timerRecord); // save timer record
     setShowSaveConfirm(false); // Close save confirmation modal
   };
 
@@ -162,12 +173,12 @@ export default function TimerPage() {
 
   // Timer logic
   useEffect(() => {
-    let timer: NodeJS.Timeout | null = null;
+    let timer: NodeJS.Timeout | null = null; //variable to store the timer
     if (isRunning) {
       timer = setInterval(() => {
         setTime((prevTime) => {
           if (prevTime === 1) {
-            clearInterval(timer!);
+            clearInterval(timer!); //stop the timer
             setIsRunning(false);
 
             // Play the timer up sound
@@ -179,16 +190,16 @@ export default function TimerPage() {
             setTimeout(() => setMessage(""), 1000); // Clear message after 1 second
 
             if (isStudyPhase) {
-              // Show confirmation to save timer info
+              // Show confirmation modal
               setShowSaveConfirm(true);
             }
 
-            setIsStudyPhase(!isStudyPhase);
-            return isStudyPhase ? breakTime : studyTime;
+            setIsStudyPhase(!isStudyPhase); //toggle phases
+            return isStudyPhase ? breakTime : studyTime; //set time based on the phase
           }
-          return prevTime - 1;
+          return prevTime - 1; //- time by 1 second
         });
-      }, 1000);
+      }, 1000); //run every 1 second
     }
     return () => {
       if (timer) clearInterval(timer);
@@ -253,8 +264,8 @@ export default function TimerPage() {
           <select
             className="p-3 w-full rounded-lg"
             onChange={handleTimeChange}
-            disabled={isRunning}
-            defaultValue="25 Minutes" // Ensure this matches the label in timeOptions
+            disabled={isRunning} //disable timer duration drop down, when running
+            defaultValue="25 Minutes" // default option
           >
             {timeOptions.map((option) => (
               <option key={option.label} value={option.label}>
@@ -335,8 +346,8 @@ export default function TimerPage() {
       {showSaveConfirm && (
         <Modal
           message="Do you want to save this timer information?"
-          onConfirm={handleSaveTimer}
-          onCancel={cancelSaveTimer}
+          onConfirm={handleSaveTimer} //to handle save confirmation
+          onCancel={cancelSaveTimer} //to handle save cancellation
         />
       )}
 
@@ -344,8 +355,8 @@ export default function TimerPage() {
       {showResetConfirm && (
         <Modal
           message="Are you sure you want to reset?"
-          onConfirm={confirmReset}
-          onCancel={cancelReset}
+          onConfirm={confirmReset} //to handle reset confirmation
+          onCancel={cancelReset} //to handle reset cancellation
         />
       )}
     </div>
