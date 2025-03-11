@@ -109,7 +109,7 @@ const Dashboard = () => {
   useEffect(() => {
     setClientTimerHistory(timers.slice(-3));
   }, [timers]);
-  //const timerHistory = timers.slice(-3);
+  
 
   //notification
   const [isNotificationOpen, setIsNotificationOpen] = useState(false); // State for the notification menu
@@ -157,7 +157,9 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      {/* Top of the application. */} 
       <header className="header">
+        {/* User name and notification button */} 
         <h1>Hello {user.name}</h1>
         <button className="reminder-button" onClick={toggleNotificationMenu}>
           <img
@@ -167,6 +169,7 @@ const Dashboard = () => {
           />
         </button>
 
+        {/* After click notification button */}
         {isNotificationOpen && (
           <div
             className="background-blur"
@@ -182,13 +185,13 @@ const Dashboard = () => {
               {(() => {
                 const notifications = [];
 
-                // 1. Tasks today
+                // 1. How many Tasks today
                 notifications.push(
                   `You have ${notcompletedtodayTasks.length} task${
                     totalTodayTasks !== 1 ? "s" : ""
                   } scheduled for today.`
                 );
-
+                
                 // 2. Next task reminder
                 if (nextTask) {
                   const nextTaskDate = new Date(nextTask.endTime);
@@ -268,6 +271,8 @@ const Dashboard = () => {
         )}
       </header>
 
+
+      {/* Dashboard content Start*/}
       <div className="dashboard-content">
         {/* Chatbot Section */}
         <div className="grid-item chatbot">
@@ -349,7 +354,8 @@ const Dashboard = () => {
           </table>
         </div>
       </div>
-
+      
+      {/* Calender Section */}
       <div className="calendar-container">
         <div className="grid-item calendar">
           <Calendar
@@ -363,8 +369,7 @@ const Dashboard = () => {
               // Highlight tasks due on the calendar
               if (view === "month") {
                 const taskOnDate = tasks.find(
-                  // (task: { duedate: string | number | Date; }) =>
-                  //     new Date(task.duedate).toDateString() === date.toDateString()
+
                   (task: { duedate: string | number | Date }) =>
                     new Date(task.duedate).toDateString() ===
                     date.toDateString()
@@ -376,7 +381,8 @@ const Dashboard = () => {
             }}
           />
         </div>
-
+        
+        {/* show calender output section */}
         <div className="tasks-for-date">
           <h3>📌Tasks for {date.toDateString()}</h3>
           <table className="tasks-table">
