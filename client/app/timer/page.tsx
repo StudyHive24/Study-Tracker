@@ -1,9 +1,9 @@
 "use client"; // enables client-side rendering
 
-import { useState, useEffect, ReactElement, Key, ReactNode } from "react"; // importing React hooks
-import "./timer.css"; // importing the CSS file for styling
+import { useState, useEffect, ReactElement, Key, ReactNode } from "react"; 
+import "./timer.css";
 import useRiderect from "@/hooks/useUserRiderect"; //for redirecting users
-import { useTimerContext } from "@/context/timerContext"; // import the context for handling timer data
+import { useTimerContext } from "@/context/timerContext"; 
 
 // modal Component for reset confirmation
 function Modal({
@@ -42,21 +42,21 @@ function Modal({
 export default function TimerPage() {
   useRiderect("/login");
 
-  const [studyTime, setStudyTime] = useState(25 * 60); // Default study time (25 mins)
-  const [breakTime, setBreakTime] = useState(5 * 60); // Default break time (5 mins)
-  const [time, setTime] = useState(studyTime); // Current time in seconds
-  const [isRunning, setIsRunning] = useState(false); //whether the timer is running
-  const [isStudyPhase, setIsStudyPhase] = useState(true); // Toggle between study and break
-  const [message, setMessage] = useState(""); // message to display
-  const [showResetConfirm, setShowResetConfirm] = useState(false); // Reset confirmation
-  const [showTitleInput, setShowTitleInput] = useState(false); // Toggle title input visibility
-  const [timerTitle, setTimerTitle] = useState("Study"); // Timer title (default)
-  const [showSaveConfirm, setShowSaveConfirm] = useState(false); // Save confirmation
-  const [showWarning, setShowWarning] = useState(true); // Warning message visibility
+  const [studyTime, setStudyTime] = useState(25 * 60); //default s.t(25)
+  const [breakTime, setBreakTime] = useState(5 * 60); //defult b.t(5)
+  const [time, setTime] = useState(studyTime); 
+  const [isRunning, setIsRunning] = useState(false); 
+  const [isStudyPhase, setIsStudyPhase] = useState(true); //toggle between study and break
+  const [message, setMessage] = useState(""); //displaying message
+  const [showResetConfirm, setShowResetConfirm] = useState(false); 
+  const [showTitleInput, setShowTitleInput] = useState(false); 
+  const [timerTitle, setTimerTitle] = useState("Study"); 
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false); //save confirmation
+  const [showWarning, setShowWarning] = useState(true); //warning message visibility
 
-  const { createTimer, timers = [] } = useTimerContext(); // Ensure timers is initialized as an empty array
+  const { createTimer, timers = [] } = useTimerContext(); 
 
-  //To play an alarm sound
+  //to play an alarm sound
   const playAlarm = () => {
     const audioContext = new window.AudioContext();
 
@@ -68,23 +68,23 @@ export default function TimerPage() {
       gainNode.connect(audioContext.destination);
 
       oscillator.frequency.value = 880; // set pitch for alarm sound
-      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime + timeOffset); // Start volume
+      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime + timeOffset); // start volume
       gainNode.gain.exponentialRampToValueAtTime(
         0.01,
         audioContext.currentTime + timeOffset + 0.2
-      ); // Fade out
+      ); // fade out
 
       oscillator.start(audioContext.currentTime + timeOffset); //start the sound
       oscillator.stop(audioContext.currentTime + timeOffset + 0.3); // stop the sound
     };
 
-    // Repeat the beep multiple times to simulate an alarm
+    // repeat the beep multiple times to simulate an alarm
     for (let i = 0; i < 4; i++) {
-      playBeep(i * 0.4); // Play every 400ms
+      playBeep(i * 0.4); // play every 400ms
     }
   };
 
-  // Timer options
+  // timer options
   const timeOptions = [
     { label: "25 Minutes", study: 25 * 60, break: 5 * 60 },
     { label: "50 Minutes", study: 50 * 60, break: 10 * 60 },
@@ -109,7 +109,7 @@ export default function TimerPage() {
 
   //to handle reset button clicking
   const handleReset = () => {
-    setShowResetConfirm(true); // Show reset confirmation
+    setShowResetConfirm(true); // show reset confirmation
   };
 
   //to confirm reset
@@ -117,15 +117,15 @@ export default function TimerPage() {
     setIsRunning(false);
     setIsStudyPhase(true);
     setTime(studyTime);
-    setMessage(""); // Clear any messages
-    setShowResetConfirm(false); // Hide reset confirmation modal
-    setTimerTitle("Study"); // Reset title
-    setShowTitleInput(false); // Hide title input
+    setMessage(""); // clear any messages
+    setShowResetConfirm(false); // hide reset confirmation modal
+    setTimerTitle("Study"); // reset title
+    setShowTitleInput(false); // hide title input
   };
 
   //to cancel reset
   const cancelReset = () => {
-    setShowResetConfirm(false); // Close confirmation modal
+    setShowResetConfirm(false); // close confirmation modal
   };
 
   //to handle timer dration drop down
@@ -144,16 +144,16 @@ export default function TimerPage() {
 
   //to handle title input
   const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTimerTitle(e.target.value); // Update title
+    setTimerTitle(e.target.value); // update title
   };
 
   //to handle title inpt submission
   const handleEnterTitle = () => {
-    setShowTitleInput(false); // Hide title input
+    setShowTitleInput(false); // hide title input
   };
 
   const handleToggleTitleInput = () => {
-    setShowTitleInput(!showTitleInput); // Toggle input visibility
+    setShowTitleInput(!showTitleInput); // toggle input visibility
   };
 
   //to save timer info.
@@ -164,14 +164,14 @@ export default function TimerPage() {
       date: new Date(),
     };
     createTimer(timerRecord); // save timer record
-    setShowSaveConfirm(false); // Close save confirmation modal
+    setShowSaveConfirm(false); // close save confirmation modal
   };
 
   const cancelSaveTimer = () => {
     setShowSaveConfirm(false); // Close save confirmation modal
   };
 
-  // Timer logic
+  // timer logic
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null; //variable to store the timer
     if (isRunning) {
@@ -181,16 +181,16 @@ export default function TimerPage() {
             clearInterval(timer!); //stop the timer
             setIsRunning(false);
 
-            // Play the timer up sound
+            // play the timer up sound
             playAlarm();
 
-            // Switch between study and break
+            // switch between study and break
             const nextPhase = isStudyPhase ? "Break" : "Focus";
             setMessage(`Time's up! Switching to ${nextPhase} Time.`);
-            setTimeout(() => setMessage(""), 1000); // Clear message after 1 second
+            setTimeout(() => setMessage(""), 1000); // clear message after 1 second
 
             if (isStudyPhase) {
-              // Show confirmation modal
+              // show confirmation modal
               setShowSaveConfirm(true);
             }
 
@@ -206,7 +206,7 @@ export default function TimerPage() {
     };
   }, [isRunning, isStudyPhase, studyTime, breakTime, timerTitle]);
 
-  // Render Timer History
+  // render Timer History
   const renderTimerHistory = () => {
     return timers.map(
       (
@@ -237,7 +237,7 @@ export default function TimerPage() {
 
   return (
     <div className="timer-page gap-5">
-      {/* Warning Message */}
+      {/* warning Message */}
       {showWarning && (
         <div className="fixed bottom-50 left-100 w-full flex justify-center p-4 z-50">
           <div className="bg-gray-900  rounded-lg text-white font-semibold text-lg tracking-wide text-center max-w-md p-4">
@@ -319,7 +319,7 @@ export default function TimerPage() {
         </div>
       </div>
 
-      {/* Timer History */}
+      {/* timer History */}
       <div className="timer-history-container">
         <h1 className="text-gray-100 text-xl text-center p-2 mb-2 bg-gray-700 rounded-lg">
           Timer History
@@ -342,7 +342,7 @@ export default function TimerPage() {
         </table>
       </div>
 
-      {/* Save Confirmation Modal */}
+      {/* save Confirmation Modal */}
       {showSaveConfirm && (
         <Modal
           message="Do you want to save this timer information?"
@@ -351,7 +351,7 @@ export default function TimerPage() {
         />
       )}
 
-      {/* Reset Confirmation Modal */}
+      {/* reset Confirmation Modal */}
       {showResetConfirm && (
         <Modal
           message="Are you sure you want to reset?"
