@@ -27,11 +27,11 @@ const ProgressPage = () => {
 
   useRiderect("/login");
   
-  const { tasks } = useTasksContext();
-  const [weeklyTaskGoal, setWeeklyTaskGoal] = useState(0);
-  const [weeklyCompletionPercentage, setWeeklyCompletionPercentage] =
-    useState(0);
-  const [timers, setTimers] = useState<any[]>([]);
+  const { tasks } = useTasksContext(); //Accesses tasks from the context
+  const [weeklyTaskGoal, setWeeklyTaskGoal] = useState(0); //Stores the weekly task goal , set to 0 initially.
+  const [weeklyCompletionPercentage, setWeeklyCompletionPercentage] = 
+    useState(0); //Stores the completion percentage for weekly tasks set to 0 initially.
+  const [timers, setTimers] = useState<any[]>([]); //Stores an array of timers
 
   // Fetch timers from the backend
   useEffect(() => {
@@ -45,14 +45,14 @@ const ProgressPage = () => {
       });
   }, []);
 
-  // Convert duration to total minutes
+  // Convert duration to total minutes (calculate time)
   const calculateTotalTime = (
     period: "daily" | "weekly" | "monthly" | "lifetime"
   ) => {
     const now = new Date();
     let totalSeconds = 0; // Change to track total seconds instead of minutes
 
-    timers.forEach((timer) => {
+    timers.forEach((timer) => { //Loops over each timer in the timers array.
       const timerDate = new Date(timer.date);
       const duration = timer.duration.split(":");
       const minutes = parseInt(duration[0], 10);
@@ -67,7 +67,7 @@ const ProgressPage = () => {
       ) {
         totalSeconds += totalDurationInSeconds;
       } else if (period === "weekly") {
-        const { monday, sunday } = getCurrentWeekRange();
+        const { monday, sunday } = getCurrentWeekRange(); // run getCurrentWeekRange funtion
         if (timerDate >= monday && timerDate <= sunday) {
           totalSeconds += totalDurationInSeconds;
         }
@@ -83,10 +83,10 @@ const ProgressPage = () => {
       }
     });
 
-    return formatTimeFromSeconds(totalSeconds); // Format using seconds
+    return formatTimeFromSeconds(totalSeconds); // Run Format func using seconds
   };
 
-  // Format time from seconds to "Xh Ym"
+  // Format time from seconds to "h m"
   const formatTimeFromSeconds = (totalSeconds: number) => {
     const totalMinutes = Math.floor(totalSeconds / 60);
     const hours = Math.floor(totalMinutes / 60);
