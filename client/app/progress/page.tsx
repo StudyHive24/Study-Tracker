@@ -54,7 +54,7 @@ const ProgressPage = () => {
 
     timers.forEach((timer) => { //Loops over each timer in the timers array.
       const timerDate = new Date(timer.date);
-      const duration = timer.duration.split(":");
+      const duration = timer.duration.split(":"); // divide time
       const minutes = parseInt(duration[0], 10);
       const seconds = duration[1] ? parseInt(duration[1], 10) : 0;
 
