@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useTasksContext } from "@/context/taskContext.js";
 import { useTimerContext } from "@/context/timerContext";
 import axios from "axios";
-// import UserSection from "./components/UserSection";
 import UserSection from "./components/UserSection";
 
 // Reusable Sub-box Component
@@ -21,12 +20,6 @@ const TimeBox: React.FC<TimeBoxProps> = ({ label, time, className }) => (
     <p className="text-xl font-bold mt-2">{time}</p>
   </div>
 );
-
-// interface ProgressPageProps {
-//   dailyTime?: string;
-//   weeklyTime?: string;
-//   monthlyTime?: string;
-// }
 
 const serverURL = "https://study-hive-server-f6.vercel.app";
 
@@ -287,7 +280,7 @@ const ProgressPage = () => {
                   key={index}
                   className="hover:bg-gray-600 transition duration-300 "
                 >
-                  {/* <td className="p-1 text-center text-gray-100">{task.priority}</td> */}
+                  
                   <td
                     className={`p-1 text-center text-sm font-medium ${
                       task.priority === "High"
