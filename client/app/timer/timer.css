@@ -13,7 +13,7 @@
   padding: 30px;
 }
 
-.timer-page-title{
+/* .timer-page-title{
   font-size: 2rem; 
   font-weight: bold; 
   color: #333; 
@@ -23,7 +23,7 @@
   letter-spacing: 1px; 
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); 
   
-}
+} */
 
 .timer-container {
   background: none;
@@ -42,10 +42,6 @@
 .timer-title {
 font-size: 1.5rem;
 margin-bottom: 10px;
-/* font-family: 'Playfair Display', serif; */
-/* font-family: 'Montserrat', sans-serif; */
-/* font-family: 'Roboto', sans-serif; */
-/* font-family: 'Press Start 2P', cursive; */
 @apply bg-gray-700 p-2 rounded-lg text-gray-100
 }
 
@@ -63,11 +59,11 @@ font-weight: bold;
 }
 
 /* Time Selector */
-.timer-selector {
+/* .timer-selector {
 margin: 10px 0;
 font-size: 1rem;
 @apply p-2
-}
+} */
 
 /* Title Input */
 .timer-title-input-container {
@@ -78,15 +74,15 @@ gap: 10px;
 margin: 20px 0;
 }
 
-.timer-title-input {
+/* .timer-title-input {
 padding: 10px;
 font-size: 1rem;
 border: 1px solid #ccc;
 border-radius: 5px;
 width: 60%;
-}
+} */
 
-.timer-enter-button {
+/* .timer-enter-button {
 background-color: #3f9afc;
 color: white;
 border: none;
@@ -95,10 +91,10 @@ font-size: 1rem;
 border-radius: 90px;
 margin: 5px;
 cursor: pointer;
-}
+} */
 
 /* Toggle Title Button */
-.timer-toggle-title-button {
+/* .timer-toggle-title-button {
 background-color: #3f9afc;
 color: white;
 padding: 10px 15px;
@@ -107,14 +103,14 @@ margin: 10px 0;
 border: none;
 border-radius: 90px;
 cursor: pointer;
-}
+} */
 
 /* Timer Controls */
 .timer-controls {
 margin-top: 20px;
 }
 
-.timer-start-button,
+/* .timer-start-button,
 .timer-reset-button {
 padding: 10px 15px;
 font-size: 1rem;
@@ -122,9 +118,9 @@ border: none;
 border-radius: 5px;
 margin: 5px;
 cursor: pointer;
-}
+} */
 
-.timer-start-button {
+/* .timer-start-button {
 background-color: #3f9afc;
 color: white;
 border-radius: 90px;
@@ -136,7 +132,7 @@ margin: 5px;
 background-color: #dc3545;
 color: white;
 border-radius: 90px;
-}
+} */
 
 /* Reset Modal */
 .timer-reset-modal {
@@ -151,16 +147,16 @@ justify-content: center;
 align-items: center;
 }
 
-.timer-reset-modal-content {
+/* .timer-reset-modal-content {
 background: #fff;
 padding: 20px;
 border-radius: 8px;
 text-align: center;
 font-family: 'Playfair Display', serif;
 font-weight: bold;
-}
+} */
 
-.timer-confirm-button,
+/* .timer-confirm-button,
 .timer-cancel-button {
 padding: 10px 20px;
 margin: 5px;
@@ -168,9 +164,9 @@ border: none;
 border-radius: 5px;
 font-size: 1rem;
 cursor: pointer;
-}
+} */
 
-.timer-confirm-button {
+/* .timer-confirm-button {
 background-color: #3f9afc;
 color: white;
 }
@@ -178,7 +174,7 @@ color: white;
 .timer-cancel-button {
 background-color: #dc3545;
 color: white;
-}
+} */
 
 
 
@@ -188,61 +184,61 @@ color: white;
   padding: 15px;
    /* Light gray background */
  /* Subtle border */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow */
-  height: 80vh; /* Set a maximum height for the container */
-  overflow-y: auto; /* enable vertical scrolling if content exceeds height */
+  border-radius: 8px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  height: 80vh; 
+  overflow-y: auto; 
   width: 80%;
   @apply bg-gray-800
 }
 
 /* Styling for Timer History Table */
-.timer-history {
+/* .timer-history {
   width: 100%;
 
-  border-collapse: collapse; /* Remove space between cells */
+  border-collapse: collapse; 
 }
 
 .timer-history th, 
 .timer-history td {
   padding: 10px;
   text-align: left;
-  border-bottom: 1px solid #ddd; /* Light gray bottom border for rows */
-}
+  border-bottom: 1px solid #ddd; 
+} */
 
-Styling for Table Header
+/* Styling for Table Header
 .timer-history th {
   background-color: #939898; 
   color: rgb(0, 0, 1); 
   font-weight: bold;
-  text-transform: uppercase; /* Uppercase text for header */
-  border-top: 1px solid #ddd; /* Top border */
+  text-transform: uppercase; 
+  border-top: 1px solid #ddd;  */
   /* border-radius: 25px; */
-  text-align: center;
+  /* text-align: center;
   font-family: 'Playfair Display', serif;
-  font-size: 15px;
+  font-size: 15px; */
 /* font-family: 'Montserrat', sans-serif; */
 /* font-family: 'Roboto', sans-serif; */
-}
+/* } */
 
 /* Styling for Table Rows */
-.timer-history tr:nth-child(even) {
-  background-color: #f2f2f2; /* Alternate row color */
+/* .timer-history tr:nth-child(even) {
+  background-color: #f2f2f2; 
 }
 
 .timer-history tr:hover {
-  background-color: #e9ecef; /* Highlight row on hover */
-}
+  background-color: #e9ecef; 
+} */
 
 /* Styling for Table Cells */
-.timer-history td {
+/* .timer-history td {
   font-size: 14px; 
   color: #333; 
  
-}
+} */
 
 /* Responsive Table Styling */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .timer-history-container {
     padding: 10px;
   }
@@ -259,11 +255,11 @@ Styling for Table Header
   margin-bottom: 10px; 
   color: #333; 
   text-align: center; 
-}
+} */
 
 
 /* Modal styles */
-.modal {
+/* .modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -300,4 +296,4 @@ Styling for Table Header
   background-color: #f44336;
   color: white;
   border: none;
-}
+} */
